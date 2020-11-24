@@ -6,8 +6,8 @@ import styled from "styled-components";
 const RecentPending = () => {
   return (
     <PendingWrapper>
-      <div className="d-flex justify-content-between mr-4">
-        <h6 className="title">recent pending</h6>
+      <div className=" title d-flex justify-content-between mr-4">
+        <h6>recent pending</h6>
         <p>
           total <span>10</span>
         </p>
@@ -29,8 +29,20 @@ const PendingWrapper = styled.div`
   @media (max-width: 500px) {
     width: 100%;
   }
+  
   .title {
-    font-weight: bolder;
+    h6 {
+      letter-spacing: 0.44px;
+      font-family: MontserratBold;
+      color: #173049;
+      opacity: 1;
+    }
+    p {
+      letter-spacing: 0.44px;
+      font-family: MontserratRegular;
+      color: #173049;
+      opacity: 0.8;
+    }
   }
   .card {
     background: white;

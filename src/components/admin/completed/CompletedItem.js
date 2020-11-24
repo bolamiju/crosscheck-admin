@@ -57,9 +57,15 @@ const ItemWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-top: 0.1rem solid var(--mainWhite);
+    border-top: 0.2rem solid var(--mainWhite);
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+    p {
+      font-family: MontserratRegular;
+      letter-spacing: 0.28px;
+      color: #707070;
+      opacity: 1;
+    }
   }
   .image {
     width: 40px;

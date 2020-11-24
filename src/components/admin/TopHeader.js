@@ -75,12 +75,11 @@ const HeadContainer = styled.div`
   }
 
   h5 {
-    letter-spacing: 0.12px;
-    color: #171725;
+    font-family: MontserratRegular;
+    letter-spacing: 0.6px;
+    color: #173049;
     opacity: 1;
-    font-weight: 500;
     font-size: 14px;
-    font-family: "Rubik", sans-serif;
     margin-left: 15rem;
     text-transform: capitalize;
 

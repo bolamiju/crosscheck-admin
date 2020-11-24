@@ -1,6 +1,8 @@
 import React from "react";
 import { useRouteMatch } from "react-router-dom";
 import Overview from "./Overview";
+import Request from "./Request";
+import Requests from "./Requests";
 
 import styled from "styled-components";
 
@@ -13,14 +15,16 @@ const AdminContent = (props) => {
   return (
     <div>
       <>
-        {/* {" "}
-          {route && route.url === "/new" ? (
-            <NewVerification />
-          ) : route && route.url === "/transcript" ? (
-            <NewTranscript />
-          ) : ( */}
+        {" "}
+          {route && route.url === "/requests" ? (
+            <Requests />
+        )
+          // : route && route.url === "/requests" ? (
+          //   <Requests />
+          // )
+            : (
         <Overview history={history} />
-        {/* )} */}
+         )}
       </>
     </div>
   );

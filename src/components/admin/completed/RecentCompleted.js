@@ -6,8 +6,8 @@ import styled from "styled-components";
 const RecentPending = () => {
   return (
     <CompletedWrapper>
-      <div className="d-flex justify-content-between">
-        <h6 className="title">recent completed</h6>
+      <div className=" title d-flex justify-content-between">
+        <h6>recent completed</h6>
         <p>
           total <span>125</span>
         </p>
@@ -30,10 +30,23 @@ const CompletedWrapper = styled.div`
     width: 100%;
   }
   .title {
-    font-weight: bolder;
+    margin-left: 1rem;
+    h6 {
+      letter-spacing: 0.44px;
+      font-family: MontserratBold;
+      color: #173049;
+      opacity: 1;
+    }
+    p {
+      letter-spacing: 0.44px;
+      font-family: MontserratRegular;
+      color: #173049;
+      opacity: 0.8;
+    }
   }
   .card {
     background: white;
+    margin-left: 1rem;
   }
 `;
 export default RecentPending;

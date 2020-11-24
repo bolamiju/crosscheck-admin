@@ -23,7 +23,10 @@ const ColumnWrapper = styled.div`
   padding-left: 6rem;
   padding-right: 6rem;
   .heading {
-    font-weight: bolder;
+    font-family: MontserratBold;
+    letter-spacing: 0.32px;
+    color: #707070;
+    opacity: 1;
   }
 `;
 
