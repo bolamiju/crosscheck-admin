@@ -65,7 +65,6 @@ const OverviewWrapper = styled.div`
   margin-top: -1.25rem;
   overflow-y: scroll;
   height: 100%;
-  font-family: "Roboto";
   .container {
     padding: 3rem 3rem;
     display: block;
@@ -74,16 +73,34 @@ const OverviewWrapper = styled.div`
     width: 100%;
     background: white;
     h5 {
-      color: var(--lightBlue);
+      font-family: MontserratBold;
+      letter-spacing: 0.44px;
+      color: #0092E0;
+      opacity: 1;
       text-transform: capitalize;
     }
     p {
-      color: var(--lightDark);
+      letter-spacing: 0.32px; 
+      font-family: MontserratRegular;
+      color: #707070;
+      opacity: 1;
     }
   }
   .cards {
     display: flex;
-    /* padding: 0 2rem 0 0; */
+    h2 {
+      font-family: MontserratSemibold;
+      letter-spacing: 0px;
+      opacity: 1;
+      font-size: 32px;
+    }
+    p { 
+      font-family: MontserratRegular;
+      letter-spacing: 0.32px;
+      opacity: 0.8;
+      font-weight: lighter;
+      font-size: 16px;
+    }
     @media (max-width: 400px) {
       display: block;
       padding: 2rem 0;

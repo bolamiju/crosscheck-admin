@@ -14,24 +14,6 @@ function TopHeader({ setShow, show }) {
   return (
     <HeadContainer className="top-header">
       <h5>overview</h5>
-      <div className="right-con">
-        <div className="nots">
-          <img
-            src={Bell}
-            alt="bellimage"
-            style={{ fontSize: "0.8em", color: "#2C3E50", width: "18px" }}
-          />
-        </div>
-        <div className="user-avatar">
-          <img src={Avatar} alt="Avatar" />
-          <div className="user-info">
-            <p>
-              {user?.firstName} {user?.lastName}
-            </p>
-            <p>{user?.email}</p>
-          </div>
-        </div>
-      </div>
       {!show ? (
         <FontAwesomeIcon
           icon={faBars}
@@ -75,12 +57,11 @@ const HeadContainer = styled.div`
   }
 
   h5 {
-    letter-spacing: 0.12px;
-    color: #171725;
+    font-family: MontserratRegular;
+    letter-spacing: 0.6px;
+    color: #173049;
     opacity: 1;
-    font-weight: 500;
     font-size: 14px;
-    font-family: "Rubik", sans-serif;
     margin-left: 15rem;
     text-transform: capitalize;
 
