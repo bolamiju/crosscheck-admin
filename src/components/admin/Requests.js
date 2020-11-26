@@ -3,6 +3,8 @@ import AdminLayout from "./AdminLayout";
 import styled from 'styled-components';
 import Avatar from "../../asset/Avatar.png";
 import qualifications from "../../asset/qualification.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faLongArrowAltRight} from "@fortawesome/free-solid-svg-icons";
 
 
 
@@ -34,8 +36,8 @@ const Requests = ({ history }) => {
                   activeTab === "order-transcripts" ? "activeTab" : ""
                 }
               >
-                <img src={qualifications} alt="details" />
-                &nbsp; Order Transcript
+                <img className="active" src={qualifications} alt="details" />
+                &nbsp; Transcript Order
               </li>
               <li
                       onClick={() => {
@@ -160,10 +162,36 @@ const Requests = ({ history }) => {
                   <h6>details</h6>
                  </div>
                   <div className="card px-4 pt-3 pb-4">
-                    <h6>no order selected</h6>
-                    <div className="container">
-                    <p>please select an order to view details</p>
-                    </div>
+                    <h6>transcript order for</h6>
+                    <div className="comment">
+                    <form>
+                      <label>comments</label>
+                      <br/>
+                      <input />
+                    </form>
+                    <div className="select">
+                    <select name="todos" className="options">
+                    <option value="action">Action</option>
+                    <option value="completed">Completed</option>
+                    <option value="uncompleted">Uncompleted</option>
+                    </select>
+                      </div>
+                      <button
+                        className="btn"
+                        type="submmit"
+                        onClick={() => {
+                        setActiveTab("education-verification");
+                        setPay(true);
+                        }}
+                      >
+                        Finish
+                        <FontAwesomeIcon icon={faLongArrowAltRight} style={{marginLeft: "10px", fontSize: "20px"}} />
+                      </button>
+                
+                
+                
+                
+                   </div>
                 </div>
                 </DetailsWrapper>
               </div>
@@ -199,6 +227,9 @@ const RequestWrapper = styled.div`
     margin-right: 3rem;
     cursor: pointer;
     &.activeTab {
+      .active {
+        color: #0092E0;
+      }
           border-bottom: 2px solid #0092e0;
           letter-spacing: 0.44px;
           color: #0092E0;
@@ -298,13 +329,64 @@ const DetailsWrapper = styled.div`
   }
   }
   .card {
-    height: 96%;
+    height: 70%;
     .container {
       display: block;
       margin-left: auto;
       margin-right: auto;
     }
   }
+  .comment {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    margin-bottom: 20px;
+    font-family: MontserratRegular;
+      letter-spacing: 0.28px;
+      color: #707070;
+      opacity: 1;
+    input {
+      width: 250px;
+      height: 90px;
+      border: 0.1px solid #707070;
+      border-radius: 10px;
+      outline: none;
+      color: #707070;
+      padding: 5px;
+    }
+    .select {
+      margin-left: 1rem;
+      margin-top: 2rem;
+    }
+    .options {
+      font-family: MontserratRegular;
+      letter-spacing: 0.44px;
+      color: #0092E0;
+      opacity: 1;
+      width: 100px;
+      height: 35px;
+      outline: none;
+      border-radius: 5px;
+      padding: 0.4rem;
+    }
+    .btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    color: white;
+    margin-top: 5rem;
+    margin-left: -6rem;
+    padding: 1.3rem;
+    background: #0092e0;
+    border-radius: 25px;
+    opacity: 1;
+    height: 30px;
+    outline: none;
+    border-color: #0092e0;
+    }
+  }
+  
 `
 
 export default Requests;

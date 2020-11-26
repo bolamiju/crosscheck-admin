@@ -7,8 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   return (
     <Router>
-       <Route exact path="/admin" component={AdminContent} />
-       {/* <Route exact path="/request" component={AdminContent} /> */}
+       <Route exact path="/" component={AdminContent} />
        <Route exact path="/requests" component={AdminContent} />
    </Router>
   );

@@ -33,7 +33,7 @@ function Sidebar({ history }) {
       </LogoSection>
       <ListSection>
         <ul>
-          <Link className="link" to="/admin">
+          <Link className="link" to="/">
             {" "}
             <img src={dashboard} alt="dash" />
             <li>Overview</li>
