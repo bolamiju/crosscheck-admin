@@ -39,11 +39,9 @@ function Sidebar({ history }) {
             <li>Overview</li>
           </Link>
           <Link className="link" to="/requests">
-          {" "}
+            {" "}
             <img src={newVer} alt="verification" />
-            <li>
-                Requests
-            </li>
+            <li>Requests</li>
           </Link>
           {/* <div className="link" onClick={() => setShow(!show)}>
             {" "}
@@ -161,7 +159,7 @@ const ListSection = styled.div`
   li {
     color: white;
     letter-spacing: 0.4px;
-    /* font-size: 14px; */
+    font-size: 14px;
     font: normal normal normal 14px/16px Open Sans;
     letter-spacing: 0.4px;
     color: #ffffff;
