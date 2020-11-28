@@ -38,41 +38,46 @@ function Sidebar({ history }) {
             <img src={dashboard} alt="dash" />
             <li>Overview</li>
           </Link>
-          <Link className="link" to="/requests">
-            {" "}
-            <img src={newVer} alt="verification" />
-            <li>Requests</li>
-          </Link>
-          {/* <div className="link" onClick={() => setShow(!show)}>
-            {" "}
+          {/* <Link className="link" to="/requests">
+          {" "}
             <img src={newVer} alt="verification" />
             <li>
                 Requests
             </li>
+          </Link> */}
+          <div className="link" onClick={() => setShow(!show)}>
+            {" "}
+            <img src={newVer} alt="verification" />
+            <li>Requests</li>
             <FontAwesomeIcon
               icon={show ? faAngleDown : faAngleRight}
               style={{ marginLeft: "20px", color: "white", fontSize: "18px" }}
             />
-          </div> */}
-          {/* <div className="options">
+          </div>
+          <div className="options">
             <ul className={show ? "show" : "hide"}>
               <li>
-                <Link to="/new" className="option">
-                  Education Check
+                <Link to="/requests" className="option">
+                  Transcript Order
                 </Link>
               </li>
               <li>
-                <Link to="/transcript" className="option">
-                  Transcript
+                <Link to="/requests" className="option">
+                  Education Verification
                 </Link>
               </li>
               <li>
-                <Link to="/new" className="option">
+                <Link to="/requests" className="option">
                   Identity Verification
                 </Link>
               </li>
+              <li>
+                <Link to="/requests" className="option">
+                  Credit Check
+                </Link>
+              </li>
             </ul>
-          </div> */}
+          </div>
           <Link to="/dashboard/:id" className="link">
             {" "}
             <img src={histry} alt="history" />
