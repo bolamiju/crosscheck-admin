@@ -4,13 +4,14 @@ import styled from 'styled-components';
 import Avatar from "../../asset/Avatar.png";
 import qualifications from "../../asset/qualification.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faLongArrowAltRight} from "@fortawesome/free-solid-svg-icons";
+import { faLongArrowAltRight, faLongArrowAltDown } from "@fortawesome/free-solid-svg-icons";
 
 
 
 const Requests = ({ history }) => {
 
-  const [activeTab, setActiveTab] = useState("order-transcripts");
+  const [activeTab, setActiveTab] = useState("pending");
+  const [activeCard, setActiveCard] = useState("new");
   const [pay, setPay] = useState(false);
 
   const Requests = {
@@ -21,185 +22,246 @@ const Requests = ({ history }) => {
     date: "10 Nov 2020",
   };
 
-    return (
-            <AdminLayout history={history}>
-              <RequestWrapper>
-              <div className="container">
-            <div className="request-container ">
+  return (
+    <AdminLayout history={history}>
+      <RequestWrapper>
+        <div className="">
+          <div className="request-container p-5">
             <ul className=" list d-flex">
               <li
                 onClick={() => {
-                  setActiveTab("order-transcripts");
+                  setActiveTab("pending");
                   setPay(false);
                 }}
                 className={
-                  activeTab === "order-transcripts" ? "activeTab" : ""
+                  activeTab === "pending" ? "activeTab" : ""
                 }
               >
                 <img className="active" src={qualifications} alt="details" />
-                &nbsp; Transcript Order
+                &nbsp; Pending Order
               </li>
               <li
-                      onClick={() => {
-                        setActiveTab("education-verification");
-                        setPay(false);
-                      }}
-                className={activeTab === "education-verification" ? "activeTab" : ""}
+                onClick={() => {
+                  setActiveTab("processing");
+                  setPay(false);
+                }}
+                className={activeTab === "processing" ? "activeTab" : ""}
               >
                 <img src={qualifications} alt="details" />
-                &nbsp;  Education Verification
+                &nbsp;  Processing Order
               </li>
               <li
-                      onClick={() => {
-                        setActiveTab("identity-verification");
-                        setPay(false);
-                      }}
-                className={activeTab === "identity-verification" ? "activeTab" : ""}
+                onClick={() => {
+                  setActiveTab("completed");
+                  setPay(false);
+                }}
+                className={activeTab === "completed" ? "activeTab" : ""}
               >
                 <img src={qualifications} alt="details" />
-                &nbsp;  Identity Verification
+                &nbsp;  Completed Order
               </li>
-              <li
-                      onClick={() => {
-                        setActiveTab("credit-check");
-                        setPay(false);
-                      }}
-                className={activeTab === "credit-check" ? "activeTab" : ""}
-              >
-                <img src={qualifications} alt="details" />
-                &nbsp; Credit Check
-              </li>
+
             </ul>
-            </div>
-            {activeTab === "order-transcripts" && (
-              <div className="d-block d-lg-flex">
-                <OrderWrapper className="py-3">
-              <div className=" title d-flex justify-content-between">
-                <h6>new transcript orders</h6>
-              </div>
-              <div className="card px-4 pt-3 pb-4">
-              <div className="row justify-content-center">
-              <div className="heading mx-auto">
-               <p>requester</p>
-              </div>
-              <div className="heading mx-auto">
-                <p>type</p>
-              </div>
-              <div className="heading mx-auto">
-                <p>date</p>
-              </div>
-              </div>
-                  <ItemWrapper>
-                  <div className="row align-items-center">
-                <div className="d-flex justify-content-between">
-                  <img src={Requests.img} alt="request" className="image mr-2 mt-1" />
-                  <p className="pt-3">{Requests.name}</p>
-                </div>
-                <p className="pt-3">{Requests.type}</p>
-                <p className="pt-3">{Requests.date}</p>
-              </div>
-              <div className="row">
-                <div className="d-flex justify-content-between">
-                 <img src={Requests.img} alt="request" className="image mr-2 mt-1" />
-                 <p className="pt-3">{Requests.name}</p>
-                </div>
-                <p className="pt-3">{Requests.type}</p>
-                <p className="pt-3">{Requests.date}</p>
-              </div>
-              <div className="row">
-                <div className="d-flex justify-content-between align-items-center">
-                 <img src={Requests.img} alt="request" className="image mr-2 mt-1" />
-                  <p className="pt-3">{Requests.name}</p>
-                </div>
-                <p className="pt-3">{Requests.type}</p>
-                <p className="pt-3">{Requests.date}</p>
-              </div>
-              <div className="row">
-                <div className="d-flex justify-content-between">
-                <img src={Requests.img} alt="request" className="image mr-2 mt-1" />
-                <p className="pt-3">{Requests.name}</p>
-              </div>
-              <p className="pt-3">{Requests.type}</p>
-              <p className="pt-3">{Requests.date}</p>
-                </div>
-                <div className="row">
-                <div className="d-flex justify-content-between">
-                <img src={Requests.img} alt="request" className="image mr-2 mt-1" />
-                <p className="pt-3">{Requests.name}</p>
-              </div>
-              <p className="pt-3">{Requests.type}</p>
-              <p className="pt-3">{Requests.date}</p>
-                  </div>
-                  <div className="row">
-                <div className="d-flex justify-content-between">
-                <img src={Requests.img} alt="request" className="image mr-2 mt-1" />
-                <p className="pt-3">{Requests.name}</p>
-              </div>
-              <p className="pt-3">{Requests.type}</p>
-              <p className="pt-3">{Requests.date}</p>
-                  </div>
-                  <div className="row">
-                <div className="d-flex justify-content-between">
-                <img src={Requests.img} alt="request" className="image mr-2 mt-1" />
-                <p className="pt-3">{Requests.name}</p>
-              </div>
-              <p className="pt-3">{Requests.type}</p>
-              <p className="pt-3">{Requests.date}</p>
-                  </div>
-                  <div className="row">
-                <div className="d-flex justify-content-between">
-                <img src={Requests.img} alt="request" className="image mr-2 mt-1" />
-                <p className="pt-3">{Requests.name}</p>
-              </div>
-              <p className="pt-3">{Requests.type}</p>
-              <p className="pt-3">{Requests.date}</p>
-                </div>
-              </ItemWrapper>
-                </div>
-                </OrderWrapper>
-                <DetailsWrapper className="py-3">
-                  <div className=" title d-flex justify-content-between">
-                  <h6>details</h6>
-                 </div>
-                  <div className="card px-4 pt-3 pb-4">
-                    <h6>transcript order for</h6>
-                    <div className="comment">
-                    <form>
-                      <label>comments</label>
-                      <br/>
-                      <input />
-                    </form>
-                    <div className="select">
-                    <select name="todos" className="options">
-                    <option value="action">Action</option>
-                    <option value="completed">Completed</option>
-                    <option value="uncompleted">Uncompleted</option>
-                    </select>
-                      </div>
-                      <button
-                        className="btn"
-                        type="submmit"
-                        onClick={() => {
-                        setActiveTab("education-verification");
-                        setPay(true);
-                        }}
-                      >
-                        Finish
-                        <FontAwesomeIcon icon={faLongArrowAltRight} style={{marginLeft: "10px", fontSize: "20px"}} />
-                      </button>
-                
-                
-                
-                
-                   </div>
-                </div>
-                </DetailsWrapper>
-              </div>
-            )}
           </div>
-              </RequestWrapper>
-            </AdminLayout>
-    )
+          {activeTab === "pending" && (
+            <div className="box d-block d-lg-flex py-1">
+              <div>
+                <div className="cards px-5 py-5">
+                  <div
+                    onClick={() => {
+                      setActiveCard("new")
+
+                    }}
+                    className={activeCard === "new" ? "activeCard1" : "card1"}>
+                    <h6>new</h6>
+                    <div className="para-icon">
+                      <p>
+                        view new transcript <br /> orders
+                    </p>
+                      <div className="icon-box">
+                      <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    onClick={() => {
+                      setActiveCard("pendings")
+                    }}
+                    className={activeCard === "pendings" ? "activeCard2" : "card2"}>
+                    <h6>pendings</h6>
+                    <div className="para-icon">
+                      <p>
+                        take actions on <br /> pending activities
+                    </p>
+                      <div className="icon-box">
+                      <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
+                     </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  {activeCard === "new" ? <h6 className="transcript order">new transcript order</h6> : <h6 className="transcript-order"> pending order</h6>}
+                  <div className="new-table">
+                    <table
+                      cellSpacing="0"
+                      cellPadding="0"
+                      border="0"
+                      className="ideTable"
+                    >
+                      <thead className="table-headers">
+                        <tr>
+                          <th>Requester</th>
+                          <th>Type</th>
+                          <th>Date</th>
+                        </tr>
+                      </thead>
+                      <tbody className="table-body">
+                        <tr>
+                          <div>
+                            <td><img src={Requests.img} alt="" /></td>
+                            <td>{Requests.name}</td>
+                          </div>
+                          <td>{Requests.type}</td>
+                          <td>{Requests.date}</td>
+                        </tr>
+                        <tr>
+                          <div>
+                            <td><img src={Requests.img} alt="" /></td>
+                            <td>{Requests.name}</td>
+                          </div>
+                          <td>{Requests.type}</td>
+                          <td>{Requests.date}</td>
+                        </tr>
+                        <tr>
+                          <div>
+                            <td><img src={Requests.img} alt="" /></td>
+                            <td>{Requests.name}</td>
+                          </div>
+                          <td>{Requests.type}</td>
+                          <td>{Requests.date}</td>
+                        </tr>
+                        <tr>
+                          <div>
+                            <td><img src={Requests.img} alt="" /></td>
+                            <td>{Requests.name}</td>
+                          </div>
+                          <td>{Requests.type}</td>
+                          <td>{Requests.date}</td>
+                        </tr>
+                        <tr>
+                          <div>
+                            <td><img src={Requests.img} alt="" /></td>
+                            <td>{Requests.name}</td>
+                          </div>
+                          <td>{Requests.type}</td>
+                          <td>{Requests.date}</td>
+                        </tr>
+                        <tr>
+                          <div>
+                            <td><img src={Requests.img} alt="" /></td>
+                            <td>{Requests.name}</td>
+                          </div>
+                          <td>{Requests.type}</td>
+                          <td>{Requests.date}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div className="details">
+                <p>Details</p>
+                <div className="details-info">
+                  <p>Please select an order to view details</p>
+                </div>
+              </div>
+            </div>
+          )}
+           {activeTab === "pending" && (
+            <div className="box d-block d-lg-flex py-1">
+              <div>
+                <div>
+                  <h6 className="transcript-order">pending transcript order</h6>
+                  <div className="new-table">
+                    <table
+                      cellSpacing="0"
+                      cellPadding="0"
+                      border="0"
+                      className="ideTable"
+                    >
+                      <thead className="table-headers">
+                        <tr>
+                          <th>Requester</th>
+                          <th>Type</th>
+                          <th>Date</th>
+                        </tr>
+                      </thead>
+                      <tbody className="table-body">
+                        <tr>
+                          <div>
+                            <td><img src={Requests.img} alt="" /></td>
+                            <td>{Requests.name}</td>
+                          </div>
+                          <td>{Requests.type}</td>
+                          <td>{Requests.date}</td>
+                        </tr>
+                        <tr>
+                          <div>
+                            <td><img src={Requests.img} alt="" /></td>
+                            <td>{Requests.name}</td>
+                          </div>
+                          <td>{Requests.type}</td>
+                          <td>{Requests.date}</td>
+                        </tr>
+                        <tr>
+                          <div>
+                            <td><img src={Requests.img} alt="" /></td>
+                            <td>{Requests.name}</td>
+                          </div>
+                          <td>{Requests.type}</td>
+                          <td>{Requests.date}</td>
+                        </tr>
+                        <tr>
+                          <div>
+                            <td><img src={Requests.img} alt="" /></td>
+                            <td>{Requests.name}</td>
+                          </div>
+                          <td>{Requests.type}</td>
+                          <td>{Requests.date}</td>
+                        </tr>
+                        <tr>
+                          <div>
+                            <td><img src={Requests.img} alt="" /></td>
+                            <td>{Requests.name}</td>
+                          </div>
+                          <td>{Requests.type}</td>
+                          <td>{Requests.date}</td>
+                        </tr>
+                        <tr>
+                          <div>
+                            <td><img src={Requests.img} alt="" /></td>
+                            <td>{Requests.name}</td>
+                          </div>
+                          <td>{Requests.type}</td>
+                          <td>{Requests.date}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div className="details">
+                <p>Details</p>
+                <div className="details-info">
+                  <p>Please select an order to view details</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </RequestWrapper>
+    </AdminLayout>
+  )
 };
 const RequestWrapper = styled.div`
  background: var(--mainWhite);
@@ -207,11 +269,12 @@ const RequestWrapper = styled.div`
   margin-top: -1.25rem;
   overflow-y: scroll;
   height: 100%;
-  .container {
-    padding: 3rem 3rem;
-    display: block;
+  @media (max-width: 400px) {
+    padding: 3rem 0;
   }
-  
+  @media (max-width: 500px) {
+    padding: 3rem 0;
+  }
   .list {
     list-style: none;
     border-bottom: 1px solid var(--lighterDark);
@@ -221,15 +284,13 @@ const RequestWrapper = styled.div`
     font-family: MontserratBold;
     letter-spacing: 0.44px;
     color: #173049;
+    font-family: segoebold;
     opacity: 1;
     
     li {
     margin-right: 3rem;
     cursor: pointer;
     &.activeTab {
-      .active {
-        color: #0092E0;
-      }
           border-bottom: 2px solid #0092e0;
           letter-spacing: 0.44px;
           color: #0092E0;
@@ -247,146 +308,223 @@ const RequestWrapper = styled.div`
       display:none;
     }
   }
-`
-const OrderWrapper = styled.div`
-width: 50%;
-margin-right: 2rem;
-  text-transform: capitalize;
-  @media (max-width: 400px) {
-    width: 100%;
-  }
-  @media (max-width: 500px) {
-    width: 100%;
-  }
-  
-  .title {
-    h6 {
-      letter-spacing: 0.44px;
-      font-family: MontserratBold;
-      color: #173049;
-      opacity: 1;
-    }
-    .heading {
-    font-family: MontserratBold;
-    letter-spacing: 0.32px;
-    color: #707070;
-    opacity: 1;
-  }
-  }
-`
-const ItemWrapper = styled.div`
-  width: 100%;
-  padding-left: 1rem;
-  padding-right: 2rem;
-  font-size: 0.8rem;
-  align-items: center;
-  .row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 0.2rem solid var(--mainWhite);
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    p {
-      font-family: MontserratRegular;
-      letter-spacing: 0.28px;
-      color: #707070;
-      opacity: 1;
-    }
+  .box {
+    margin: -3rem 3rem;
     @media (max-width: 400px) {
+    padding: 0;
+    margin: 0;
+    }
+    @media (max-width: 500px) {
+    margin: 0;
+    padding: 0;
     }
   }
-  .image {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid #e2e2ea;
-    opacity: 1;
-  }
-`
-const DetailsWrapper = styled.div`
-  width: 50%;
-  text-transform: capitalize;
-  @media (max-width: 400px) {
-    width: 100%;
-  }
-  @media (max-width: 500px) {
-    width: 100%;
+  .cards {
+    display: flex;
+    margin-left: -3rem;
+    cursor: pointer;
+    @media (max-width: 400px) {
+      display: block;
+      padding: 2rem 0;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+
+    }
+    @media (max-width: 500px) {
+      display: block;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+      padding: 2rem 0;
+    }
   }
   
-  .title {
-    h6 {
-      letter-spacing: 0.44px;
-      font-family: MontserratBold;
-      color: #173049;
-      opacity: 1;
-    }
-    .heading {
-    font-family: MontserratBold;
-    letter-spacing: 0.32px;
-    color: #707070;
-    opacity: 1;
-  }
-  }
-  .card {
-    height: 70%;
-    .container {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  }
-  .comment {
-    display: flex;
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    margin-bottom: 20px;
-    font-family: MontserratRegular;
-      letter-spacing: 0.28px;
-      color: #707070;
-      opacity: 1;
-    input {
-      width: 250px;
-      height: 90px;
-      border: 0.1px solid #707070;
-      border-radius: 10px;
-      outline: none;
-      color: #707070;
-      padding: 5px;
-    }
-    .select {
-      margin-left: 1rem;
+  .card1 {
+    background: #E6E6E6;
+    padding: 1rem;
+    margin-left: 2rem;
+    width: 15rem;
+    height: 6rem;
+    margin-right: 1.5rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    @media (max-width: 500px) {
+      width: 100%;
+      margin-left: 0;
       margin-top: 2rem;
     }
-    .options {
-      font-family: MontserratRegular;
-      letter-spacing: 0.44px;
-      color: #0092E0;
+    h6 {
+      font-weight: bolder;
+      text-transform: capitalize;
+      font-family: MontserratBold;
+      color: #707070;
+      letter-spacing: 0px;
       opacity: 1;
-      width: 100px;
-      height: 35px;
-      outline: none;
-      border-radius: 5px;
-      padding: 0.4rem;
+      font-size: 16px;
     }
-    .btn {
+    p {
+      text-transform: capitalize;
+      font-weight: lighter;
+      color: #707070;
+      font-size: 16px;
+      letter-spacing: 0.32px;
+      font-family: MontserratRegular;
+    }
+  }
+  .card2 {
+    background: #E6E6E6;
+    padding: 1rem;
+    width: 15rem;
+    height: 6rem;
+    margin-right: 1.5rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    @media (max-width: 500px) {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 2rem;
+    }
+    h6 {
+      font-weight: bolder;
+      text-transform: capitalize;
+      font-family: MontserratBold;
+      letter-spacing: 0.32px;
+      color: #707070;
+      opacity: 1;
+      font-size: 16px;
+    }
+    p {
+      text-transform: capitalize;
+      font-weight: lighter;
+      letter-spacing: 0.32px;
+      font-size: 0.8rem;
+      color: #707070;
+      font-family: MontserratRegular;
+    }
+  }
+  .para-icon {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: space-around;
-    color: white;
-    margin-top: 5rem;
-    margin-left: -6rem;
-    padding: 1.3rem;
-    background: #0092e0;
-    border-radius: 25px;
-    opacity: 1;
-    height: 30px;
-    outline: none;
-    border-color: #0092e0;
+    .icon-box {
+      background: var(--lightTransparent);
+      padding: 0.4rem;
+      border-radius: 30px;
+      width: 2rem;
+      height: 2rem;
+    }
+    .icon {
+      color: #ffffff;
+      margin-left: 0.3rem;
     }
   }
   
+  .activeCard1 {
+    padding: 1rem;
+    width: 15rem;
+    height: 6rem;
+    margin-right: 1.5rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    color: #ffffff;
+      background-image: linear-gradient(
+      to right,
+      var(--lightBlue),
+      var(--mainBlue)
+    );
+    
+    h6 {
+      font-weight: bolder;
+      text-transform: capitalize;
+      font-family: MontserratSemibold;
+      letter-spacing: 0px;
+      opacity: 1;
+      font-size: 16px;
+    }
+    p {
+      text-transform: capitalize;
+      font-weight: lighter;
+      font-size: 0.8rem;
+    }
+    }
+    .activeCard2 {
+    padding: 1rem;
+    width: 15rem;
+    height: 6rem;
+    margin-right: 1.5rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    color: #ffffff;
+    background: red;
+    @media (max-width: 400px) {
+      margin-top: 3rem;
+    }
+    @media (max-width: 500px) {
+      margin-top: 3rem;
+    }
+    h6 {
+      font-weight: bolder;
+      text-transform: capitalize;
+      font-family: MontserratSemibold;
+      letter-spacing: 0px;
+      opacity: 1;
+      font-size: 16px;
+    }
+    p {
+      text-transform: capitalize;
+      font-weight: lighter;
+      font-size: 0.8rem;
+    }
+    }
+  .transcript-order {
+    text-transform: capitalize;
+    margin-bottom: 1rem;
+    letter-spacing: 0.44px;
+   color: #173049;
+   font-family: MontserratBold;
+   opacity: 1;
+  }
+  .new-table {
+    background: white;
+    text-align: center;
+    margin-right: 1.5rem;
+    align-items: center;
+    padding-left: 1.5rem;
+    border-radius: 10px;
+    width: 90%;
+    @media (max-width: 400px) {
+      width: 100%;
+    }
+
+    td,
+      th {
+        padding: 10px;
+      }
+      td {
+        font-size: 0.8rem;
+        border-top: 0.2rem solid var(--mainWhite);
+      }
+  }
+  .details {
+    margin-left: 1rem;
+    width: 70%;
+    @media (max-width: 400px) {
+      margin-top: 2rem;
+    }
+    @media (max-width: 500px) {
+      margin-top: 2rem;
+    }
+    .details-info {
+      background: white;
+      display: grid;
+      place-items: center;
+      height: 400px;
+      padding: 1rem;
+      border-radius: 10px;
+      p {
+        text-align: center;
+      }
+    }
+  }
 `
 
 export default Requests;

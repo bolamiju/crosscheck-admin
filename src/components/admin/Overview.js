@@ -1,19 +1,19 @@
 import React from "react";
 import AdminLayout from "./AdminLayout";
-import RecentPending from "./pending/RecentPending";
-import RecentCompleted from "./completed/RecentCompleted";
+import RecentPending from "../RecentPending";
+import RecentCompleted from "./RecentCompleted";
 import styled from "styled-components";
 
 const Overview = ({ history }) => {
   return (
     <AdminLayout history={history}>
       <OverviewWrapper>
-        <div className="container py-5">
-          <div className="welcome p-3 ">
+        <div className=" py-5">
+          <div className="welcome mx-5 p-3 ">
             <h5>welcome admin_name</h5>
             <p>what would you like to do today ?</p>
           </div>
-          <div className="cards py-5">
+          <div className="cards px-5 py-5">
             <div className="card1">
               <h2>10</h2>
               <p>
@@ -39,11 +39,11 @@ const Overview = ({ history }) => {
               </p>
             </div>
           </div>
-          <div className="d-block d-lg-flex justify-content-between">
+          <div className="box d-block d-lg-flex justify-content-between">
             <RecentPending />
             <RecentCompleted />
           </div>
-          <div className="cards py-5">
+          <div className="cards px-5 py-5">
             <div className="cardy">
               <h2>15</h2>
               <p>New signups this week</p>
@@ -65,12 +65,8 @@ const OverviewWrapper = styled.div`
   margin-top: -1.25rem;
   overflow-y: scroll;
   height: 100%;
-  .container {
-    padding: 3rem 3rem;
-    display: block;
-  }
   .welcome {
-    width: 100%;
+    /* width: 100%; */
     background: white;
     h5 {
       font-family: MontserratBold;
@@ -229,17 +225,13 @@ const OverviewWrapper = styled.div`
   .card4:hover {
     transform: scale(0.9);
   }
-
-  .recent-completed {
-    width: 50%;
-    text-transform: capitalize;
-    margin-right: 2rem;
-
+  .box {
+    padding: 0 3rem;
     @media (max-width: 400px) {
-      width: 100%;
+      padding: 0;
     }
     @media (max-width: 500px) {
-      width: 100%;
+      padding: 0;
     }
   }
   .cardy {
