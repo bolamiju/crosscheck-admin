@@ -48,9 +48,7 @@ function Sidebar({ history }) {
           <div className="link" onClick={() => setShow(!show)}>
             {" "}
             <img src={newVer} alt="verification" />
-            <li>
-                Requests
-            </li>
+            <li>Requests</li>
             <FontAwesomeIcon
               icon={show ? faAngleDown : faAngleRight}
               style={{ marginLeft: "20px", color: "white", fontSize: "18px" }}
