@@ -100,7 +100,7 @@ const Requests = ({ history }) => {
                   </div>
                 </div>
                 <div>
-                  {activeCard === "new" ? <h6 className="transcript order">new transcript order</h6> : <h6 className="transcript-order"> pending order</h6>}
+                  {activeCard === "new" ? <h6 className="transcript-order">new transcript order</h6> : <h6 className="transcript-order"> pending order</h6>}
                   <div className="new-table">
                     <table
                       cellSpacing="0"
