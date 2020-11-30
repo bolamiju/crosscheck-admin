@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminLayout from "./AdminLayout";
 import styled from 'styled-components';
 import Avatar from "../../asset/Avatar.png";
@@ -6,13 +6,18 @@ import qualifications from "../../asset/qualification.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLongArrowAltRight, faLongArrowAltDown } from "@fortawesome/free-solid-svg-icons";
 
-
+import { useDispatch, useSelector } from "react-redux";
+import { getPendingVerification } from "../../state/actions/verifications";
 
 const Requests = ({ history }) => {
 
   const [activeTab, setActiveTab] = useState("pending");
   const [activeCard, setActiveCard] = useState("new");
+  const [display, setDisplay] = useState("empty")
   const [pay, setPay] = useState(false);
+
+  const dispatch = useDispatch();
+  const { pending_verifications } = useSelector((state) => state.verifications)
 
   const Requests = {
     id: 1,
@@ -21,6 +26,10 @@ const Requests = ({ history }) => {
     type: "Identification Verification",
     date: "10 Nov 2020",
   };
+
+  useEffect(() => {
+    dispatch(getPendingVerification('pending'))
+  }, [dispatch])
 
   return (
     <AdminLayout history={history}>
@@ -76,10 +85,10 @@ const Requests = ({ history }) => {
                     <h6>new</h6>
                     <div className="para-icon">
                       <p>
-                        view new transcript <br /> orders
+                        View new transcript <br /> orders
                     </p>
                       <div className="icon-box">
-                      <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
+                        <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
                       </div>
                     </div>
                   </div>
@@ -91,11 +100,11 @@ const Requests = ({ history }) => {
                     <h6>pendings</h6>
                     <div className="para-icon">
                       <p>
-                        take actions on <br /> pending activities
+                        Take actions on <br /> pending activities
                     </p>
                       <div className="icon-box">
-                      <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
-                     </div>
+                        <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -115,149 +124,87 @@ const Requests = ({ history }) => {
                           <th>Date</th>
                         </tr>
                       </thead>
-                      <tbody className="table-body">
-                        <tr>
-                          <div>
-                            <td><img src={Requests.img} alt="" /></td>
-                            <td>{Requests.name}</td>
-                          </div>
-                          <td>{Requests.type}</td>
-                          <td>{Requests.date}</td>
-                        </tr>
-                        <tr>
-                          <div>
-                            <td><img src={Requests.img} alt="" /></td>
-                            <td>{Requests.name}</td>
-                          </div>
-                          <td>{Requests.type}</td>
-                          <td>{Requests.date}</td>
-                        </tr>
-                        <tr>
-                          <div>
-                            <td><img src={Requests.img} alt="" /></td>
-                            <td>{Requests.name}</td>
-                          </div>
-                          <td>{Requests.type}</td>
-                          <td>{Requests.date}</td>
-                        </tr>
-                        <tr>
-                          <div>
-                            <td><img src={Requests.img} alt="" /></td>
-                            <td>{Requests.name}</td>
-                          </div>
-                          <td>{Requests.type}</td>
-                          <td>{Requests.date}</td>
-                        </tr>
-                        <tr>
-                          <div>
-                            <td><img src={Requests.img} alt="" /></td>
-                            <td>{Requests.name}</td>
-                          </div>
-                          <td>{Requests.type}</td>
-                          <td>{Requests.date}</td>
-                        </tr>
-                        <tr>
-                          <div>
-                            <td><img src={Requests.img} alt="" /></td>
-                            <td>{Requests.name}</td>
-                          </div>
-                          <td>{Requests.type}</td>
-                          <td>{Requests.date}</td>
-                        </tr>
+                      <tbody >
+                        {pending_verifications.map(verification => (
+                          <tr onClick={() => {
+                            setDisplay("populated")
+                          }}
+                            key={verification._id}
+                            className={display === "populated" ? "activeOrder" : ""}
+                          >
+                            <td>{verification.firstName}    {verification.lastName}</td>
+                            <td>{verification.type}</td>
+                            <td>{verification.date}</td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
                 </div>
               </div>
               <div className="details">
-                <p>Details</p>
-                <div className="details-info">
-                  <p>Please select an order to view details</p>
-                </div>
-              </div>
-            </div>
-          )}
-           {activeTab === "pending" && (
-            <div className="box d-block d-lg-flex py-1">
-              <div>
-                <div>
-                  <h6 className="transcript-order">pending transcript order</h6>
-                  <div className="new-table">
-                    <table
-                      cellSpacing="0"
-                      cellPadding="0"
-                      border="0"
-                      className="ideTable"
-                    >
-                      <thead className="table-headers">
-                        <tr>
-                          <th>Requester</th>
-                          <th>Type</th>
-                          <th>Date</th>
-                        </tr>
-                      </thead>
-                      <tbody className="table-body">
-                        <tr>
-                          <div>
-                            <td><img src={Requests.img} alt="" /></td>
-                            <td>{Requests.name}</td>
-                          </div>
-                          <td>{Requests.type}</td>
-                          <td>{Requests.date}</td>
-                        </tr>
-                        <tr>
-                          <div>
-                            <td><img src={Requests.img} alt="" /></td>
-                            <td>{Requests.name}</td>
-                          </div>
-                          <td>{Requests.type}</td>
-                          <td>{Requests.date}</td>
-                        </tr>
-                        <tr>
-                          <div>
-                            <td><img src={Requests.img} alt="" /></td>
-                            <td>{Requests.name}</td>
-                          </div>
-                          <td>{Requests.type}</td>
-                          <td>{Requests.date}</td>
-                        </tr>
-                        <tr>
-                          <div>
-                            <td><img src={Requests.img} alt="" /></td>
-                            <td>{Requests.name}</td>
-                          </div>
-                          <td>{Requests.type}</td>
-                          <td>{Requests.date}</td>
-                        </tr>
-                        <tr>
-                          <div>
-                            <td><img src={Requests.img} alt="" /></td>
-                            <td>{Requests.name}</td>
-                          </div>
-                          <td>{Requests.type}</td>
-                          <td>{Requests.date}</td>
-                        </tr>
-                        <tr>
-                          <div>
-                            <td><img src={Requests.img} alt="" /></td>
-                            <td>{Requests.name}</td>
-                          </div>
-                          <td>{Requests.type}</td>
-                          <td>{Requests.date}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                <h6>Details</h6>
+                {display === "populated" && (
+                  <div className="container p-3">
+                    <h5>individual details</h5>
+                    <div className="individual-details">
+                      <div className="para pt-2">
+                        <p>first name: ayobami</p>
+                        <p className="p1">last name: tayo</p>
+                      </div>
+                      <div className="para">
+                        <p>matric number: 121629</p>
+                        <p className="p2">course: Food Engineering</p>
+                      </div>
+                      <div className="para">
+                        <p>grad year: 2018</p>
+                        <p className="p3">reference id: IDF33245</p>
+                      </div>
+                    </div>
+                    <h5>destination details</h5>
+                    <div className="individual-details">
+                      <div className="para pt-2">
+                        <p>destination country: ghana</p>
+                      </div>
+                      <div className="para">
+                        <p>address line: kwame nkrumah crescent, dowe road</p>
+                      </div>
+                      <div className="para">
+                        <p>Zip/Postcode: 100012</p>
+                        <p className="p4">destination no: +2345667</p>
+                        <p className="p5">city: +2345667</p>
+                      </div>
+                    </div>
+                    <div className="comment-section">
+                    <div className="field">
+                      <label htmlFor="message">comments</label>
+                      <textarea
+                        name="message"
+                        type="text"
+                        className="message"
+                      />
+                    </div>
+                    <div className="select">
+                      <select name="todos" className="options">
+                        <option value="action">Actions</option>
+                        <option value="pending">Mark as Pending</option>
+                        <option value="completed">Cancel Enquiry</option>
+                        </select>
+                         <button className="finish">finish <FontAwesomeIcon icon={faLongArrowAltRight} style={{marginLeft: '10px', fontSize: "20px" }} /></button>
+                    </div>
+                   </div>
                   </div>
-                </div>
-              </div>
-              <div className="details">
-                <p>Details</p>
-                <div className="details-info">
-                  <p>Please select an order to view details</p>
-                </div>
+
+                )
+                }
+                {display === "empty" && (<div className="details-info">
+                  <p>Please select an order to <br/> view details</p>
+                </div>)}
+
               </div>
             </div>
           )}
+
         </div>
       </RequestWrapper>
     </AdminLayout>
@@ -268,6 +215,7 @@ const RequestWrapper = styled.div`
   width: 100%;
   margin-top: -1.25rem;
   overflow-y: scroll;
+  overflow-x: hidden;
   height: 100%;
   @media (max-width: 400px) {
     padding: 3rem 0;
@@ -321,13 +269,15 @@ const RequestWrapper = styled.div`
   }
   .cards {
     display: flex;
+    justify-content: space-around;
     margin-left: -3rem;
     cursor: pointer;
+    margin-top: -1rem;
     @media (max-width: 400px) {
       display: block;
       padding: 2rem 0;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
+    margin-left: 0;
+    margin-right: 0;
 
     }
     @media (max-width: 500px) {
@@ -336,21 +286,23 @@ const RequestWrapper = styled.div`
     margin-right: 1.5rem;
       padding: 2rem 0;
     }
-  }
-  
-  .card1 {
+    .card1 {
     background: #E6E6E6;
-    padding: 1rem;
-    margin-left: 2rem;
-    width: 15rem;
-    height: 6rem;
-    margin-right: 1.5rem;
+    padding: 0.5rem;
+    width: 12rem;
+    height: 5rem;
+    margin-right: 0.8rem;
     border-radius: 0.2rem;
     cursor: pointer;
+    @media (max-width: 400px) {
+    margin-right: 0;
+    width: 15rem;
+    height: 5rem;
+  }
     @media (max-width: 500px) {
-      width: 100%;
-      margin-left: 0;
-      margin-top: 2rem;
+      margin-left: 0.8rem;
+      width: 15rem;
+    height: 5rem;
     }
     h6 {
       font-weight: bolder;
@@ -362,26 +314,30 @@ const RequestWrapper = styled.div`
       font-size: 16px;
     }
     p {
-      text-transform: capitalize;
       font-weight: lighter;
+      font-size: 0.8rem;
       color: #707070;
-      font-size: 16px;
       letter-spacing: 0.32px;
-      font-family: MontserratRegular;
     }
   }
   .card2 {
     background: #E6E6E6;
-    padding: 1rem;
-    width: 15rem;
-    height: 6rem;
-    margin-right: 1.5rem;
+    padding: 0.5rem;
+    width: 12rem;
+    height: 5rem;
+    margin-left: 0.7rem;
     border-radius: 0.2rem;
     cursor: pointer;
+  @media (max-width: 400px) {
+    margin-left: 0;
+    width: 15rem;
+    height: 5rem;
+  }
     @media (max-width: 500px) {
-      width: 100%;
-      margin-left: 0;
       margin-top: 2rem;
+      width: 15rem;
+    height: 5rem;
+      margin-left: 0.8rem;
     }
     h6 {
       font-weight: bolder;
@@ -393,18 +349,18 @@ const RequestWrapper = styled.div`
       font-size: 16px;
     }
     p {
-      text-transform: capitalize;
       font-weight: lighter;
-      letter-spacing: 0.32px;
       font-size: 0.8rem;
+      letter-spacing: 0.32px;
       color: #707070;
-      font-family: MontserratRegular;
+      
     }
   }
   .para-icon {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: -0.3rem;
     .icon-box {
       background: var(--lightTransparent);
       padding: 0.4rem;
@@ -417,12 +373,12 @@ const RequestWrapper = styled.div`
       margin-left: 0.3rem;
     }
   }
-  
+  }
   .activeCard1 {
-    padding: 1rem;
-    width: 15rem;
-    height: 6rem;
-    margin-right: 1.5rem;
+    padding: 0.5rem;
+    width: 12rem;
+    height: 5rem;
+    margin-right: 0.8rem;
     border-radius: 0.2rem;
     cursor: pointer;
     color: #ffffff;
@@ -431,7 +387,19 @@ const RequestWrapper = styled.div`
       var(--lightBlue),
       var(--mainBlue)
     );
-    
+    @media (max-width: 400px) {
+      margin-left: 0.8rem;
+      width: 15rem;
+      height: 5rem;
+      margin-right: 2;
+    }
+    @media (max-width: 500px) {
+    margin-left: 0.8rem;
+    width: 15rem;
+    height: 5rem;
+    margin-right: 0;
+
+    }
     h6 {
       font-weight: bolder;
       text-transform: capitalize;
@@ -441,25 +409,31 @@ const RequestWrapper = styled.div`
       font-size: 16px;
     }
     p {
-      text-transform: capitalize;
       font-weight: lighter;
+      letter-spacing: 0.32px;
       font-size: 0.8rem;
     }
-    }
-    .activeCard2 {
-    padding: 1rem;
-    width: 15rem;
-    height: 6rem;
-    margin-right: 1.5rem;
+  }
+  .activeCard2 {
+    padding: 0.5rem;
+    width: 12rem;
+    height: 5rem;
+    margin-left: 0.7rem;
     border-radius: 0.2rem;
     cursor: pointer;
     color: #ffffff;
     background: red;
     @media (max-width: 400px) {
-      margin-top: 3rem;
+      margin-left: 0.8rem;
+      width: 15rem;
+      height: 5rem;
+      margin-top: 2rem;
     }
     @media (max-width: 500px) {
-      margin-top: 3rem;
+      width: 15rem;
+    height: 5rem;
+      margin-left: 0.8rem;
+      margin-top: 2rem;
     }
     h6 {
       font-weight: bolder;
@@ -470,58 +444,219 @@ const RequestWrapper = styled.div`
       font-size: 16px;
     }
     p {
-      text-transform: capitalize;
       font-weight: lighter;
+      letter-spacing: 0.32px;
       font-size: 0.8rem;
     }
     }
+   
   .transcript-order {
+    margin-top: -1rem;
     text-transform: capitalize;
     margin-bottom: 1rem;
     letter-spacing: 0.44px;
-   color: #173049;
-   font-family: MontserratBold;
-   opacity: 1;
+    color: #173049;
+    font-family: MontserratBold;
+    opacity: 1;
+    @media (max-width: 400px) {
+      margin-left: 1rem;
+    }
+    @media (max-width: 500px) {
+      margin-left: 1rem;
+    }
   }
   .new-table {
+    display: flex;
     background: white;
     text-align: center;
-    margin-right: 1.5rem;
     align-items: center;
-    padding-left: 1.5rem;
     border-radius: 10px;
-    width: 90%;
+    justify-content: center;
+    padding-bottom: 1rem;
+    margin-right: 3rem;
+    /* width: 100%; */
+    min-width: 385px;
+    margin-bottom: 2rem;
     @media (max-width: 400px) {
+    margin-right: 0;
       width: 100%;
     }
-
+    @media (max-width: 500px) {
+    padding-left: 0.5rem;
+      width: 100%;
+    }
+    .table-headers {
+      font-family: MontserratBold;
+      letter-spacing: 0.32px;
+      color: #707070;
+      font-weight: normal;
+      opacity: 1;
+    }
+    /* tr{
+      &.activeOrder {
+          background: var(--lightDark);
+        }
+    } */
     td,
       th {
-        padding: 10px;
+        padding: 15px;
       }
       td {
-        font-size: 0.8rem;
+        font-family: MontserratRegular;
+        font-size: 12px;
         border-top: 0.2rem solid var(--mainWhite);
+        cursor: pointer;
+        font-weight: normal;
+        letter-spacing: 0.28px;
+        color: #707070;
+        opacity: 0.8;
+        
       }
   }
   .details {
-    margin-left: 1rem;
-    width: 70%;
+    margin-left: -1rem;
+    min-width: 470px;
+    margin-bottom: 2rem;
+    h6 {
+      text-transform: capitalize;
+    letter-spacing: 0.44px;
+    color: #173049;
+    font-family: MontserratBold;
+    margin-bottom: 1rem;
+    opacity: 1;
     @media (max-width: 400px) {
+    margin-left: 1rem;
+    }
+    @media (max-width: 500px) {
+    margin-left: 1rem;
+    }
+    }
+    @media (max-width: 400px) {
+    margin-left: 0;
       margin-top: 2rem;
     }
     @media (max-width: 500px) {
+    margin-left: 0;
       margin-top: 2rem;
+    }
+    .container {
+      display: block;
+      background: white;
+      min-height: 400px;
+      text-align: left;
+      border-radius: 10px;
+      h5 {
+          font-family: MontserratBold;
+          letter-spacing: 0.32px;
+          color: #707070;
+          opacity: 1;
+          text-transform : capitalize;
+          font-weight: normal;
+        }
+      .individual-details {
+        margin-top: 1rem;
+        border-top: 2px solid var(--lighterDark);
+      }
+      .para {
+        display: flex;
+        font-family: MontserratRegular;
+        font-weight: normal;
+        letter-spacing: 0.28px;
+        color: #707070;
+        opacity: 0.8;
+        justify-content: left;
+        font-size: 12px;
+        text-transform: capitalize;
+        .p1 {
+          padding-left: 3rem;
+        }
+        .p2 {
+          padding-left: 1.8rem;
+        }
+        .p3 {
+          padding-left: 5rem;
+        }
+        .p4 {
+          padding-left: 1rem;
+        }
+        .p5 {
+          padding-left: 1rem;
+        }
+      }
+      .comment-section {
+        display: flex;
+        align-items: center;
+      }
+      .field {
+        margin-top: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        label {
+            font-family: MontserratRegular;
+            font-weight: normal;
+            letter-spacing: 0.28px;
+            color: #707070;
+            opacity: 0.8;
+        }
+        textarea {
+            width: 220px;
+            height: 80px;
+            font-family: MontserratRegular;
+            font-weight: normal;
+            letter-spacing: 0.28px;
+            color: #707070;
+            opacity: 1;
+            margin-bottom: 0.5rem;
+            border-radius: 10px;
+            outline: none;
+            padding: 0.5rem;
+            font-size: 12px;
+        }
+      }
+      .select {
+        margin-left: 1rem;
+        display: flex;
+        flex-direction: column;
+      }
+      .options {
+        padding: 0.2rem;
+        margin-top: 2rem;
+        font-size: 12px;
+        color: #0092E0;
+        outline: none;
+        cursor: pointer;
+        width: 80px;
+        @media (max-width: 400px)  {
+          width: 90px;
+        }
+      }
+      .finish {
+        background: #0092E0;
+        margin-top: 1rem;
+        width: 100px;
+        height: 35px;
+        text-transform: capitalize;
+        border: none;
+        border-radius: 20px;
+        /* padding: 0.3rem; */
+        color: #ffffff;
+        outline: none;
+      }
     }
     .details-info {
       background: white;
       display: grid;
       place-items: center;
-      height: 400px;
+      min-height: 400px;
       padding: 1rem;
       border-radius: 10px;
       p {
         text-align: center;
+        font-family: MontserratRegular;
+        font-weight: normal;
+        letter-spacing: 0.28px;
+        color: #707070;
+        opacity: 0.2;
       }
     }
   }

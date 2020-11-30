@@ -6,7 +6,7 @@ const initialState = {
 
 export default function userReducer(state = initialState, action) {
   switch (action.type) {
-    case types.ADD_VERIFICATIONS:
+    case types.PENDING_VERIFICATIONS:
       return {
         ...state,
         pending_verifications: action.payload,
