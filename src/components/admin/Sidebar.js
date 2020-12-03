@@ -57,22 +57,22 @@ function Sidebar({ history }) {
           <div className="options">
             <ul className={show ? "show" : "hide"}>
               <li>
-                <Link to="/requests" className="option">
+                <Link to="/transcript" className="option">
                   Transcript Order
                 </Link>
               </li>
               <li>
-                <Link to="/requests" className="option">
+                <Link to="/education" className="option">
                   Education Verification
                 </Link>
               </li>
               <li>
-                <Link to="/requests" className="option">
+                <Link to="/identity" className="option">
                   Identity Verification
                 </Link>
               </li>
               <li>
-                <Link to="/requests" className="option">
+                <Link to="/check" className="option">
                   Credit Check
                 </Link>
               </li>

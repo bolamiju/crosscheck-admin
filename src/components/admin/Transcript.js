@@ -7,46 +7,47 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLongArrowAltRight, faLongArrowAltDown } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getVerificationsByStatus, updateVerificatonRequest } from "../../state/actions/verifications";
+import { getTranscriptsByStatus,updateTranscriptRequest } from "../../state/actions/verifications";
 
 const Requests = ({ history }) => {
 
   const [activeTab, setActiveTab] = useState("pending");
   const [activeCard, setActiveCard] = useState("new");
   const [display, setDisplay] = useState("empty");
-  const [background, setBackground] = useState("");
-  const [verificationStatus, setVerificationStatus] = useState('')
-  const [info,setInfo] = useState({})
+    const [background, setBackground] = useState("");
+    const [TranscriptStatus, setTranscriptStatus] = useState('')
+    const [info,setInfo] = useState({})
   const [pay, setPay] = useState(false);
 
   const dispatch = useDispatch();
-  const { verificationsby_status } = useSelector((state) => state.verifications)
+  const {  transcriptsby_status } = useSelector((state) => state.verifications)
 
   useEffect(() => {
-    if (activeTab === "pending") {
+    if(activeTab === "pending"){
 
-      dispatch(getVerificationsByStatus('pending'))
+      dispatch(getTranscriptsByStatus('pending'))
     }
-    else if (activeTab === "processing") {
-      dispatch(getVerificationsByStatus('processing'))
+    else if(activeTab === "processing"){
+      dispatch(getTranscriptsByStatus('processing'))
     }
-    else if (activeTab === "completed") {
-      dispatch(getVerificationsByStatus('completed'))
+    else if(activeTab === "completed"){
+      dispatch(getTranscriptsByStatus('completed'))
     }
   }, [dispatch, activeTab])
 
-  const handleBackground = background => {
-    setBackground(background);
+  const handleBackground = background =>  {
+      setBackground( background  );
   };
 
-  const handleVerificationStatus = (e) => {
+  const handleTranscriptStatus = (e) => {
     console.log('valueee', e.target.value)
-    setVerificationStatus(e.target.value)
+    setTranscriptStatus(e.target.value)
   }
 
-  const handleUpdateVerification = () => {
-    updateVerificatonRequest(info._id, { verificationStatus })
-  }
+  const handleUpdateTranscript = () => {
+    updateTranscriptRequest(info._id, { TranscriptStatus })
+    }
+    
   return (
     <AdminLayout history={history}>
       <RequestWrapper>
@@ -88,45 +89,45 @@ const Requests = ({ history }) => {
 
             </ul>
           </div>
-          <div className="box d-block d-lg-flex py-1">
-            <div>
-              <div className="cards px-5 py-5">
-                <div
-                  onClick={() => {
-                    setActiveCard("new")
-
-                  }}
-                  className={activeCard === "new" ? "activeCard1" : "card1"}>
-                  <h6>new</h6>
-                  <div className="para-icon">
-                    <p>
-                      View new education <br /> orders
-                    </p>
-                    <div className="icon-box">
-                      <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
-                    </div>
-                  </div>
-                </div>
-                <div
-                  onClick={() => {
-                    setActiveCard("pendings")
-                  }}
-                  className={activeCard === "pendings" ? "activeCard2" : "card2"}>
-                  <h6>pendings</h6>
-                  <div className="para-icon">
-                    <p>
-                      Take actions on <br /> pending activities
-                    </p>
-                    <div className="icon-box">
-                      <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="box d-block d-lg-flex py-1">
               <div>
-                {activeCard === "new" ? <h6 className="transcript-order">new education order</h6> : <h6 className="transcript-order"> pending order</h6>}
-                {activeCard === "new" ? (
-                  <div className="new-table">
+                <div className="cards px-5 py-5">
+                  <div
+                    onClick={() => {
+                      setActiveCard("new")
+
+                    }}
+                    className={activeCard === "new" ? "activeCard1" : "card1"}>
+                    <h6>new</h6>
+                    <div className="para-icon">
+                      <p>
+                        View new transcript <br /> orders
+                    </p>
+                      <div className="icon-box">
+                        <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    onClick={() => {
+                      setActiveCard("pendings")
+                    }}
+                    className={activeCard === "pendings" ? "activeCard2" : "card2"}>
+                    <h6>pendings</h6>
+                    <div className="para-icon">
+                      <p>
+                        Take actions on <br /> pending activities
+                    </p>
+                      <div className="icon-box">
+                        <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  {activeCard === "new" ? <h6 className="transcript-order">new transcript order</h6> : <h6 className="transcript-order"> pending order</h6>}
+                  {activeCard === "new" ? (
+                    <div className="new-table">
                     <table
                       cellSpacing="0"
                       cellPadding="0"
@@ -141,49 +142,63 @@ const Requests = ({ history }) => {
                         </tr>
                       </thead>
                       <tbody >
-                        {verificationsby_status.map(verification => (
+                        {transcriptsby_status.map(transcript => (
                           <tr
-                            key={verification._id}
+                            key={transcript._id}
                             onClick={() => {
-                              setDisplay("populated")
-                              setInfo(verification)
-                              handleBackground(verification._id)
-                            }}
-
-                            className={background === verification._id ? "activeOrder" : ""}
+                                setDisplay("populated")
+                                setInfo(transcript)
+                            handleBackground(transcript._id)
+                          }}
+                            
+                            className={background === transcript._id ? "activeOrder" : ""}
                           >
-                            <td>{`${verification.firstName} ${verification.lastName}`}</td>
-                            <td>{verification.institution}</td>
-                            <td>{verification.date}</td>
+                                <td>{`${transcript.firstName}    ${transcript.lastName}`}</td>
+                            <td>{transcript.institution}</td>
+                            <td>{transcript.date}</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
-                ) : <div className="details-info"> <p>No pending order</p></div>}
-
+                  ) : <div className="details-info"> <p>No pending order</p></div>}
+                  
+                </div>
               </div>
-            </div>
-            <div className="details">
-              <h6>Details</h6>
-              {display === "populated" && (
-                <div className="container p-3">
-                  <h5>individual details</h5>
-                  <div className="individual-details">
-                    <div className="para pt-2">
-                      <p>first name: {info.firstName}</p>
-                      <p className="p1">last name: {info.lastName}</p>
+              <div className="details">
+                <h6>Details</h6>
+                {display === "populated" && (
+                  <div className="container p-3">
+                    <h5>individual details</h5>
+                    <div className="individual-details">
+                      <div className="para pt-2">
+                         <p>first name: {info.firstName}</p>
+                        <p className="p1">last name: {info.lastName}</p>
+                      </div>
+                      <div className="para">
+                        <p>matric number: {info.studentId}</p>
+                        <p className="p2">course: {info.course}</p>
+                      </div>
+                      <div className="para">
+                        <p>grad year: {info.graduationYear}</p>
+                        <p className="p3">reference id: IDF33245</p>
+                      </div>
                     </div>
-                    <div className="para">
-                      <p>matric number: {info.studentId}</p>
-                      <p className="p2">course: {info.course}</p>
+                    <h5>destination details</h5>
+                    <div className="individual-details">
+                      <div className="para pt-2">
+                        <p>destination country: {info.destination}</p>
+                      </div>
+                      <div className="para">
+                        <p>address line: {info.address}</p>
+                      </div>
+                      <div className="para">
+                        <p>Zip/Postcode: {info.zipCode}</p>
+                        <p className="p4">destination no: {info.destinationNumber}</p>
+                        <p className="p5">city: {info.city}</p>
+                      </div>
                     </div>
-                    <div className="para">
-                      <p>grad year: {info.graduationYear}</p>
-                      <p className="p3">reference id: IDF33245</p>
-                    </div>
-                  </div>
-                  <div className="comment-section">
+                    <div className="comment-section">
                     <div className="field">
                       <label htmlFor="message">comments</label>
                       <textarea
@@ -193,26 +208,24 @@ const Requests = ({ history }) => {
                       />
                     </div>
                     <div className="select">
-                      <select name="verificationStatus" className="options" onClick={(e) => handleVerificationStatus(e)}>
+                                          <select name="transcriptStatus" className="options" onClick={(e) => handleTranscriptStatus(e)}>
                         {/* <option value="action">Actions</option> */}
                         <option value="processing">Processing</option>
                         <option value="completed">Completed</option>
-                      </select>
-                      <button onClick={handleUpdateVerification} className="finish">finish <FontAwesomeIcon icon={faLongArrowAltRight} style={{ marginLeft: '10px', fontSize: "20px" }} /></button>
+                        </select>
+                         <button  onClick={handleUpdateTranscript} className="finish">finish <FontAwesomeIcon icon={faLongArrowAltRight} style={{marginLeft: '10px', fontSize: "20px" }} /></button>
                     </div>
+                   </div>
                   </div>
-                </div>
 
-              )
-              }
-              {display === "empty" && (<div className="details-info">
-                <p>Please select an order to <br /> view details</p>
-              </div>)}
+                )
+                }
+                {display === "empty" && (<div className="details-info">
+                  <p>Please select an order to <br/> view details</p>
+                </div>)}
 
+              </div>
             </div>
-          </div>
-          {/* )} */}
-
         </div>
       </RequestWrapper>
     </AdminLayout>
@@ -568,7 +581,7 @@ const RequestWrapper = styled.div`
     .container {
       display: block;
       background: white;
-      /* min-height: 400px; */
+      min-height: 400px;
       text-align: left;
       border-radius: 10px;
       h5 {

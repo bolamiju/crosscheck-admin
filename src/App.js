@@ -12,6 +12,10 @@ function App() {
       <Router>
        <Route exact path="/" component={AdminContent} />
        <Route exact path="/requests" component={AdminContent} />
+       <Route exact path="/transcript" component={AdminContent} />
+       <Route exact path="/education" component={AdminContent} />
+       <Route exact path="/identity" component={AdminContent} />
+       <Route exact path="/check" component={AdminContent} />
    </Router>
     </Provider>
   );
