@@ -182,6 +182,7 @@ const Requests = ({ history }) => {
                       <p>grad year: {info.graduationYear}</p>
                       <p className="p3">reference id: IDF33245</p>
                     </div>
+                    <button><a href="https://croscheck.herokuapp.com/${info.certImage}"> view document</a></button>
                   </div>
                   <div className="comment-section">
                     <div className="field">
@@ -194,7 +195,6 @@ const Requests = ({ history }) => {
                     </div>
                     <div className="select">
                       <select name="verificationStatus" className="options" onClick={(e) => handleVerificationStatus(e)}>
-                        {/* <option value="action">Actions</option> */}
                         <option value="processing">Processing</option>
                         <option value="completed">Completed</option>
                       </select>
@@ -645,13 +645,14 @@ const RequestWrapper = styled.div`
         flex-direction: column;
       }
       .options {
-        padding: 0.2rem;
+        width: 8rem;
+        height: 2rem;
+        font-size: 1.2rem;
         margin-top: 2rem;
         font-size: 12px;
         color: #0092E0;
         outline: none;
         cursor: pointer;
-        width: 80px;
         @media (max-width: 400px)  {
           width: 90px;
         }

@@ -1,42 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from "./AdminLayout";
+import ReactToExcel from 'react-html-table-to-excel';
 import styled from 'styled-components';
-import Avatar from "../../asset/Avatar.png";
 import qualifications from "../../asset/qualification.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLongArrowAltRight, faLongArrowAltDown } from "@fortawesome/free-solid-svg-icons";
+import { DatePicker, Space } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getTranscriptsByStatus,updateTranscriptRequest } from "../../state/actions/verifications";
+import { getTranscriptsByStatus, updateTranscriptRequest } from "../../state/actions/verifications";
 
 const Requests = ({ history }) => {
 
   const [activeTab, setActiveTab] = useState("pending");
   const [activeCard, setActiveCard] = useState("new");
   const [display, setDisplay] = useState("empty");
-    const [background, setBackground] = useState("");
-    const [TranscriptStatus, setTranscriptStatus] = useState('')
-    const [info,setInfo] = useState({})
-  const [pay, setPay] = useState(false);
-
+  const [background, setBackground] = useState("");
+  const [transcriptStatus, setTranscriptStatus] = useState('');
+  const [info, setInfo] = useState({});
+  const [searchParameter, setSearchParameter] = useState("firstName")
+  const [firstNameInput, setFirstNameInput] = useState('')
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
   const dispatch = useDispatch();
-  const {  transcriptsby_status } = useSelector((state) => state.verifications)
+  const { transcriptsby_status } = useSelector((state) => state.verifications);
+  const { RangePicker } = DatePicker;
 
   useEffect(() => {
-    if(activeTab === "pending"){
+    if (activeTab === "pending") {
 
       dispatch(getTranscriptsByStatus('pending'))
     }
-    else if(activeTab === "processing"){
+    else if (activeTab === "processing") {
       dispatch(getTranscriptsByStatus('processing'))
     }
-    else if(activeTab === "completed"){
+    else if (activeTab === "completed") {
       dispatch(getTranscriptsByStatus('completed'))
     }
   }, [dispatch, activeTab])
 
-  const handleBackground = background =>  {
-      setBackground( background  );
+  const handleBackground = background => {
+    setBackground(background);
   };
 
   const handleTranscriptStatus = (e) => {
@@ -45,19 +49,80 @@ const Requests = ({ history }) => {
   }
 
   const handleUpdateTranscript = () => {
-    updateTranscriptRequest(info._id, { TranscriptStatus })
+    updateTranscriptRequest(info._id, { transcriptStatus })
+
+  }
+  const handleDateRange = (value, dateString) => {
+    setStartDate(dateString[0])
+    setEndDate(dateString[1])
+    console.log("date range", dateString);
+  }
+  const min = Date.parse(startDate);
+
+  const max = Date.parse(endDate);
+
+  const filterOrder =
+    transcriptsby_status.filter((transcript) =>
+      transcript[searchParameter].toLowerCase().includes(firstNameInput));
+
+  const dateFilter = transcriptsby_status.filter((transcript) => {
+    if (Date.parse(transcript[searchParameter]) >= min && Date.parse(transcript[searchParameter]) <= max) {
+      
+      console.log('oto ni', min, max, Date.parse(transcript[searchParameter]))
+      return transcript
     }
-    
+    else {
+      console.log('logsdd', min, max, Date.parse(transcript[searchParameter]))
+    }
+    //  
+  })
+
+  console.log('dateFilter',dateFilter)
+
+  console.log('object', searchParameter)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSearchParameter(e.target.value)
+    setFirstNameInput('')
+
+  }
+
+  const handleChange = (e) => {
+    setFirstNameInput(e.target.value)
+  }
+
+ 
   return (
     <AdminLayout history={history}>
       <RequestWrapper>
+        <div className="select col-12 mx-auto text-center my-3">
+          <select defaultValue='no-value' name="searchParameter" className="option mr-4" onChange={handleSubmit}>
+            <option value='no-value' disabled>Filter by</option>
+            <option value="firstName">Name</option>
+            <option value="date">Date</option>
+            <option value="_id">Id</option>
+          </select>
+          {
+            searchParameter === 'firstName' && (
+              <input type="text" name='firstNameInput' value={firstNameInput} onChange={handleChange} />
+            )
+          }
+          <Space direction="version">
+            <RangePicker
+              allowClear={false}
+              onChange={handleDateRange}
+              style={{ width: 350 }}
+            />
+          </Space>
+        </div>
+
+
         <div className="">
           <div className="request-container p-5">
             <ul className=" list d-flex">
               <li
                 onClick={() => {
                   setActiveTab("pending");
-                  setPay(false);
                 }}
                 className={
                   activeTab === "pending" ? "activeTab" : ""
@@ -69,7 +134,6 @@ const Requests = ({ history }) => {
               <li
                 onClick={() => {
                   setActiveTab("processing");
-                  setPay(false);
                 }}
                 className={activeTab === "processing" ? "activeTab" : ""}
               >
@@ -79,7 +143,6 @@ const Requests = ({ history }) => {
               <li
                 onClick={() => {
                   setActiveTab("completed");
-                  setPay(false);
                 }}
                 className={activeTab === "completed" ? "activeTab" : ""}
               >
@@ -89,46 +152,47 @@ const Requests = ({ history }) => {
 
             </ul>
           </div>
-            <div className="box d-block d-lg-flex py-1">
-              <div>
-                <div className="cards px-5 py-5">
-                  <div
-                    onClick={() => {
-                      setActiveCard("new")
+          <div className="box d-block d-lg-flex py-1">
+            <div>
+              <div className="cards px-5 py-5">
+                <div
+                  onClick={() => {
+                    setActiveCard("new")
 
-                    }}
-                    className={activeCard === "new" ? "activeCard1" : "card1"}>
-                    <h6>new</h6>
-                    <div className="para-icon">
-                      <p>
-                        View new transcript <br /> orders
+                  }}
+                  className={activeCard === "new" ? "activeCard1" : "card1"}>
+                  <h6>new</h6>
+                  <div className="para-icon">
+                    <p>
+                      View new transcript <br /> orders
                     </p>
-                      <div className="icon-box">
-                        <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    onClick={() => {
-                      setActiveCard("pendings")
-                    }}
-                    className={activeCard === "pendings" ? "activeCard2" : "card2"}>
-                    <h6>pendings</h6>
-                    <div className="para-icon">
-                      <p>
-                        Take actions on <br /> pending activities
-                    </p>
-                      <div className="icon-box">
-                        <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
-                      </div>
+                    <div className="icon-box">
+                      <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
                     </div>
                   </div>
                 </div>
-                <div>
-                  {activeCard === "new" ? <h6 className="transcript-order">new transcript order</h6> : <h6 className="transcript-order"> pending order</h6>}
-                  {activeCard === "new" ? (
-                    <div className="new-table">
+                <div
+                  onClick={() => {
+                    setActiveCard("pendings")
+                  }}
+                  className={activeCard === "pendings" ? "activeCard2" : "card2"}>
+                  <h6>pendings</h6>
+                  <div className="para-icon">
+                    <p>
+                      Take actions on <br /> pending activities
+                    </p>
+                    <div className="icon-box">
+                      <FontAwesomeIcon className="icon" icon={faLongArrowAltDown} style={{ fontSize: "20px" }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                {activeCard === "new" ? <h6 className="transcript-order">new transcript order</h6> : <h6 className="transcript-order"> pending order</h6>}
+                {activeCard === "new" ? (
+                  <div className="new-table">
                     <table
+                      id="table-to-xls"
                       cellSpacing="0"
                       cellPadding="0"
                       border="0"
@@ -142,63 +206,69 @@ const Requests = ({ history }) => {
                         </tr>
                       </thead>
                       <tbody >
-                        {transcriptsby_status.map(transcript => (
+                        { (searchParameter !== 'date' ? filterOrder : dateFilter).map(transcript => (
                           <tr
                             key={transcript._id}
                             onClick={() => {
-                                setDisplay("populated")
-                                setInfo(transcript)
-                            handleBackground(transcript._id)
-                          }}
-                            
+                              setDisplay("populated")
+                              setInfo(transcript)
+                              handleBackground(transcript._id)
+                            }}
+
                             className={background === transcript._id ? "activeOrder" : ""}
                           >
-                                <td>{`${transcript.firstName}    ${transcript.lastName}`}</td>
+                            <td>{`${transcript.firstName}    ${transcript.lastName}`}</td>
                             <td>{transcript.institution}</td>
                             <td>{transcript.date}</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
+                    <ReactToExcel
+                      table="table-to-xls"
+                      filename="excelFile"
+                      sheet="sheet 1"
+                      buttonText="EXPORT"
+                    />
                   </div>
-                  ) : <div className="details-info"> <p>No pending order</p></div>}
-                  
-                </div>
+                ) : <div className="details-info"> <p>No pending order</p></div>}
+
               </div>
-              <div className="details">
-                <h6>Details</h6>
-                {display === "populated" && (
-                  <div className="container p-3">
-                    <h5>individual details</h5>
-                    <div className="individual-details">
-                      <div className="para pt-2">
-                         <p>first name: {info.firstName}</p>
-                        <p className="p1">last name: {info.lastName}</p>
-                      </div>
-                      <div className="para">
-                        <p>matric number: {info.studentId}</p>
-                        <p className="p2">course: {info.course}</p>
-                      </div>
-                      <div className="para">
-                        <p>grad year: {info.graduationYear}</p>
-                        <p className="p3">reference id: IDF33245</p>
-                      </div>
+            </div>
+            <div className="details">
+              <h6>Details</h6>
+              {display === "populated" && (
+                <div className="container p-3">
+                  <h5>individual details</h5>
+                  <div className="individual-details">
+                    <div className="para pt-2">
+                      <p>first name: {info.firstName}</p>
+                      <p className="p1">last name: {info.lastName}</p>
                     </div>
-                    <h5>destination details</h5>
-                    <div className="individual-details">
-                      <div className="para pt-2">
-                        <p>destination country: {info.destination}</p>
-                      </div>
-                      <div className="para">
-                        <p>address line: {info.address}</p>
-                      </div>
-                      <div className="para">
-                        <p>Zip/Postcode: {info.zipCode}</p>
-                        <p className="p4">destination no: {info.destinationNumber}</p>
-                        <p className="p5">city: {info.city}</p>
-                      </div>
+                    <div className="para">
+                      <p>matric number: {info.studentId}</p>
+                      <p className="p2">course: {info.course}</p>
                     </div>
-                    <div className="comment-section">
+                    <div className="para">
+                      <p>grad year: {info.graduationYear}</p>
+                      <p className="p3">reference id: IDF33245</p>
+                    </div>
+                  </div>
+                  <h5>destination details</h5>
+                  <div className="individual-details">
+                    <div className="para pt-2">
+                      <p>destination country: {info.destination}</p>
+                    </div>
+                    <div className="para">
+                      <p>address line: {info.address}</p>
+                    </div>
+                    <div className="para">
+                      <p>Zip/Postcode: {info.zipCode}</p>
+                      <p className="p4">destination no: {info.destinationNumber}</p>
+                      <p className="p5">city: {info.city}</p>
+                    </div>
+                  </div>
+                  <div className="comment-section">
                     <div className="field">
                       <label htmlFor="message">comments</label>
                       <textarea
@@ -208,24 +278,23 @@ const Requests = ({ history }) => {
                       />
                     </div>
                     <div className="select">
-                                          <select name="transcriptStatus" className="options" onClick={(e) => handleTranscriptStatus(e)}>
-                        {/* <option value="action">Actions</option> */}
+                      <select name="transcriptStatus" className="options" onClick={(e) => handleTranscriptStatus(e)}>
                         <option value="processing">Processing</option>
                         <option value="completed">Completed</option>
-                        </select>
-                         <button  onClick={handleUpdateTranscript} className="finish">finish <FontAwesomeIcon icon={faLongArrowAltRight} style={{marginLeft: '10px', fontSize: "20px" }} /></button>
+                      </select>
+                      <button onClick={handleUpdateTranscript} className="finish">finish <FontAwesomeIcon icon={faLongArrowAltRight} style={{ marginLeft: '10px', fontSize: "20px" }} /></button>
                     </div>
-                   </div>
                   </div>
+                </div>
 
-                )
-                }
-                {display === "empty" && (<div className="details-info">
-                  <p>Please select an order to <br/> view details</p>
-                </div>)}
+              )
+              }
+              {display === "empty" && (<div className="details-info">
+                <p>Please select an order to <br /> view details</p>
+              </div>)}
 
-              </div>
             </div>
+          </div>
         </div>
       </RequestWrapper>
     </AdminLayout>
@@ -244,6 +313,20 @@ const RequestWrapper = styled.div`
   @media (max-width: 500px) {
     padding: 3rem 0;
   }
+  .select {
+    .option {
+        width: 12rem;
+        height: 2rem;
+        font-size: 1.2rem;
+        color: #0092E0;
+        outline: none;
+        cursor: pointer;
+      }
+      input {
+        padding: 0.2rem;
+        outline: none;
+      }
+      }
   .list {
     list-style: none;
     border-bottom: 1px solid var(--lighterDark);
@@ -656,9 +739,21 @@ const RequestWrapper = styled.div`
         margin-left: 1rem;
         display: flex;
         flex-direction: column;
+        .option {
+        width: 80%;
+        height: 4rem;
+        font-size: 2rem;
+        margin-top: 2rem;
+        font-size: 12px;
+        color: #0092E0;
+        outline: none;
+        cursor: pointer;
+      }
       }
       .options {
-        padding: 0.2rem;
+        width: 8rem;
+        height: 2rem;
+        font-size: 1.2rem;
         margin-top: 2rem;
         font-size: 12px;
         color: #0092E0;
@@ -669,6 +764,7 @@ const RequestWrapper = styled.div`
           width: 90px;
         }
       }
+      
       .finish {
         background: #0092E0;
         margin-top: 1rem;

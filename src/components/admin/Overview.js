@@ -1,12 +1,14 @@
 import React from "react";
 import AdminLayout from "./AdminLayout";
-import RecentPending from "../RecentPending";
+import RecentPending from "./RecentPending";
 import RecentCompleted from "./RecentCompleted";
 import styled from "styled-components";
 
+
+
 const Overview = ({ history }) => {
   return (
-    <AdminLayout history={history}>
+    <AdminLayout history={history}>     
       <OverviewWrapper>
         <div className=" py-5">
           <div className="welcome mx-5 p-3 ">
@@ -40,8 +42,9 @@ const Overview = ({ history }) => {
             </div>
           </div>
           <div className="box d-block d-lg-flex justify-content-between">
-            <RecentPending />
+           
             <RecentCompleted />
+            <RecentPending />
           </div>
           <div className="cards px-5 py-5">
             <div className="cardy">

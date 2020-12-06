@@ -57,7 +57,7 @@ export const updateVerificatonRequest = async (id, data) => {
 
 export const updateTranscriptRequest = async (id, data) => {
   console.log('dataaa',id,data)
-  axios.put(`https://croscheck.herokuapp.com/api/v1/transcripts/${id}`, data, {
+  axios.put(`https://croscheck.herokuapp.com/api/v1/transcript/${id}`, data, {
     headers: {
       "content-type":"application/json"
     }

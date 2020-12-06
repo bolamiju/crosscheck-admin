@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Avatar from "../asset/Avatar.png";
+
+import { useDispatch, useSelector } from "react-redux";
+import { getVerificationsByStatus, getTranscriptsByStatus } from "../../state/actions/verifications";
+
 
 
 const RecentPending = () => {
-    
-    const Request = {
-      id: 1,
-      img: Avatar,
-      name: "Nuzhat Yesmin",
-      type: "Identification Verification",
-      date: "10 Nov 2020",
-    };
 
+  const [activeTab] = useState("pending");
+
+
+  const dispatch = useDispatch();
+  const { verificationsby_status, transcriptsby_status } = useSelector((state) => state.verifications);
+
+ 
+
+  useEffect(() => {
+    dispatch(getVerificationsByStatus('pending'));
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(getTranscriptsByStatus('pending'));
+  }, [dispatch])
+  
+  const allHistory = verificationsby_status.concat(transcriptsby_status)
+    
   return (
     <PendingWrapper>
       <div className=" title d-flex justify-content-between mr-4">
@@ -21,7 +34,8 @@ const RecentPending = () => {
           total <span>10</span>
         </p>
       </div>
-      <div className="new-table">
+      {activeTab === "pending" ? (
+        <div className="new-table">
         <table 
           cellSpacing="0"
           cellPadding="0"
@@ -31,47 +45,23 @@ const RecentPending = () => {
           <thead className="table-headers">
             <tr>
             <th>Requester</th>
-            <th>Type</th>
+            <th>Institution</th>
             <th>Date</th>
             </tr>
           </thead>
-          <tbody className="table-body">
-            <tr>
-              <div>
-              <td><img src={Request.img} alt=""/></td>
-              <td>{Request.name}</td>
-              </div>
-              <td>{Request.type}</td>
-              <td>{Request.date}</td>
-            </tr>
-            <tr>
-              <div>
-              <td><img src={Request.img} alt=""/></td>
-              <td>{Request.name}</td>
-              </div>
-              <td>{Request.type}</td>
-              <td>{Request.date}</td>
-            </tr>
-            <tr>
-              <div>
-              <td><img src={Request.img} alt=""/></td>
-              <td>{Request.name}</td>
-              </div>
-              <td>{Request.type}</td>
-              <td>{Request.date}</td>
-            </tr>
-            <tr>
-              <div>
-              <td><img src={Request.img} alt=""/></td>
-              <td>{Request.name}</td>
-              </div>
-              <td>{Request.type}</td>
-              <td>{Request.date}</td>
-            </tr>
+            <tbody className="table-body">
+              {allHistory.map(history => (
+                <tr>
+                <td>{`${history.firstName}  ${history.lastName}`}</td>
+                <td>{history.institution}</td>
+                <td>{history.date}</td>
+              </tr>
+              ))}  
           </tbody>
           
           </table>
       </div>
+      ): <div className="details-info"> <p>No pending order</p></div>}
     </PendingWrapper>
   );
 };

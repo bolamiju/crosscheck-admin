@@ -5,6 +5,7 @@ import './App.css';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import AdminContent from "./components/admin/AdminContent";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'antd/dist/antd.css';
 
 function App() {
   return (
