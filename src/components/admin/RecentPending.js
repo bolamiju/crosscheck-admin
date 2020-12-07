@@ -2,44 +2,39 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getVerificationsByStatus, getTranscriptsByStatus } from "../../state/actions/verifications";
-
-
+import {
+  getVerificationsByStatus,
+  getTranscriptsByStatus,
+} from "../../state/actions/verifications";
 
 const RecentPending = () => {
-
   const [activeTab] = useState("pending");
   const [status] = useState("status");
 
-
   const dispatch = useDispatch();
-  const { verificationsby_status, transcriptsby_status } = useSelector((state) => state.verifications);
-
- 
-
-  useEffect(() => { 
-    // if (activeTab === "pending") {
-      dispatch(getVerificationsByStatus('pending'));
-    // }
-  }, [dispatch])
+  const { pendingVerifications } = useSelector((state) => state.verifications);
+  const { pendingTranscripts } = useSelector((state) => state.transcripts);
 
   useEffect(() => {
     // if (activeTab === "pending") {
-      dispatch(getTranscriptsByStatus('pending'));
+    dispatch(getVerificationsByStatus("pending"));
+    dispatch(getVerificationsByStatus("completed"));
     // }
-  }, [dispatch])
-  
-  const everyHistory = transcriptsby_status.concat(verificationsby_status);
+  }, [dispatch]);
+
+  useEffect(() => {
+    // if (activeTab === "pending") {
+    dispatch(getTranscriptsByStatus("pending"));
+    dispatch(getTranscriptsByStatus("completed"));
+    // }
+  }, [dispatch]);
+
+  const everyHistory = [...pendingVerifications, ...pendingTranscripts];
 
   const filteredPending = everyHistory.filter((history) =>
     history[status].toLowerCase().includes(activeTab)
-    
   );
-  console.log("o wrong now", filteredPending)
 
-   
-  
-    
   return (
     <PendingWrapper>
       <div className=" title d-flex justify-content-between mr-4">
@@ -50,32 +45,36 @@ const RecentPending = () => {
       </div>
       {activeTab === "pending" ? (
         <div className="new-table">
-        <table 
-          cellSpacing="0"
-          cellPadding="0"
-          border="0"
-          className="ideTable"
-        >
-          <thead className="table-headers">
-            <tr>
-            <th>Requester</th>
-            <th>Institution</th>
-            <th>Date</th>
-            </tr>
-          </thead>
-            <tbody className="table-body">
-              {filteredPending.map(history => (
-                <tr>
-                <td>{`${history.firstName}  ${history.lastName}`}</td>
-                <td>{history.institution}</td>
-                <td>{history.date}</td>
+          <table
+            cellSpacing="0"
+            cellPadding="0"
+            border="0"
+            className="ideTable"
+          >
+            <thead className="table-headers">
+              <tr>
+                <th>Requester</th>
+                <th>Institution</th>
+                <th>Date</th>
               </tr>
-              ))}  
-          </tbody>
-          
+            </thead>
+            <tbody className="table-body">
+              {filteredPending.map((history) => (
+                <tr>
+                  <td>{`${history.firstName}  ${history.lastName}`}</td>
+                  <td>{history.institution}</td>
+                  <td>{history.date}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
-      </div>
-      ): <div className="details-info"> <p>No pending order</p></div>}
+        </div>
+      ) : (
+        <div className="details-info">
+          {" "}
+          <p>No pending order</p>
+        </div>
+      )}
     </PendingWrapper>
   );
 };
@@ -119,12 +118,12 @@ const PendingWrapper = styled.div`
     text-align: center;
 
     td,
-      th {
-        padding: 10px;
-      }
-      td {
-        border-top: 0.2rem solid var(--mainWhite);
-      }
+    th {
+      padding: 10px;
+    }
+    td {
+      border-top: 0.2rem solid var(--mainWhite);
+    }
   }
-`
+`;
 export default RecentPending;

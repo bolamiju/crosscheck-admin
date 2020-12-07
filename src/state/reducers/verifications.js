@@ -1,22 +1,28 @@
 import * as types from "../actionTypes/verifications";
 
 const initialState = {
-  verificationsby_status: [],
-  transcriptsby_status: [],
+  pendingVerifications: [],
+  completedVerifications: [],
+  processingVerifications: [],
 };
 
 export default function userReducer(state = initialState, action) {
   switch (action.type) {
-    case types.VERIFICATIONSBY_STATUS:
+    case types.PENDING_VERIFICATION:
       return {
         ...state,
-        verificationsby_status: action.payload,
+        pendingVerifications: action.payload,
       };
-      case types.TRANSCRIPTSBY_STATUS:
-        return {
-          ...state,
-          transcriptsby_status: action.payload,
-        };
+    case types.COMPLETED_VERIFICATION:
+      return {
+        ...state,
+        completedVerifications: action.payload,
+      };
+    case types.PROCESSING_VERIFICATION:
+      return {
+        ...state,
+        processingVerifications: action.payload,
+      };
 
     default:
       return state;
