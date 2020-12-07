@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AdminLayout from "./AdminLayout";
 import styled from 'styled-components';
-import Avatar from "../../asset/Avatar.png";
+import { DatePicker, Space } from "antd";
+import ReactToExcel from 'react-html-table-to-excel';
 import qualifications from "../../asset/qualification.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLongArrowAltRight, faLongArrowAltDown } from "@fortawesome/free-solid-svg-icons";
@@ -16,7 +17,14 @@ const Requests = ({ history }) => {
   const [display, setDisplay] = useState("empty");
   const [background, setBackground] = useState("");
   const [verificationStatus, setVerificationStatus] = useState('')
-  const [info,setInfo] = useState({})
+  const [info, setInfo] = useState({});
+  const [searchParameter, setSearchParameter] = useState("firstName");
+  const [firstNameInput, setFirstNameInput] = useState("");
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+
+  const { RangePicker } = DatePicker;
+
   const [pay, setPay] = useState(false);
 
   const dispatch = useDispatch();
@@ -47,9 +55,66 @@ const Requests = ({ history }) => {
   const handleUpdateVerification = () => {
     updateVerificatonRequest(info._id, { verificationStatus })
   }
+
+  const handleDateRange = (value, dateString) => {
+    setStartDate(dateString[0])
+    setEndDate(dateString[1])
+    console.log("date range", dateString);
+  }
+
+  const filterOrder = verificationsby_status.filter((verification) => 
+    verification[searchParameter].toLowerCase().includes((firstNameInput))
+  )
+
+  const min = Date.parse(startDate);
+  const max = Date.parse(endDate);
+
+
+  const dateFilter = verificationsby_status.filter((verification) => {
+    if (Date.parse(verification[searchParameter]) >= min && Date.parse(verification[searchParameter]) <= max) {
+      return verification
+    }
+    else {
+      console.log('logsdd', min, max, Date.parse(verification[searchParameter]))
+    }
+  }
+  )
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSearchParameter(e.target.value);
+    setFirstNameInput('');
+  }
+  const handleChange = (e) => {
+    setFirstNameInput(e.target.value)
+  }
   return (
     <AdminLayout history={history}>
       <RequestWrapper>
+
+      <div className="select col-12 mx-auto text-center my-3">
+          <select defaultValue='no-value' name="searchParameter" className="option mr-4" onChange={handleSubmit}>
+            <option value='no-value' disabled>Filter by</option>
+            <option value="firstName">Name</option>
+            <option value="date">Date</option>
+            <option value="_id">Id</option>
+          </select>
+          {
+            searchParameter === 'firstName' && (
+              <input type="text" name='firstNameInput' value={firstNameInput} onChange={handleChange} />
+            )
+          }
+          {searchParameter === "date" && (
+            <Space direction="version">
+            <RangePicker
+              allowClear={false}
+              onChange={handleDateRange}
+              style={{ width: 350 }}
+            />
+          </Space>
+          )}
+        </div>
         <div className="">
           <div className="request-container p-5">
             <ul className=" list d-flex">
@@ -141,7 +206,7 @@ const Requests = ({ history }) => {
                         </tr>
                       </thead>
                       <tbody >
-                        {verificationsby_status.map(verification => (
+                        {(searchParameter !== dateFilter ? filterOrder: dateFilter).map(verification => (
                           <tr
                             key={verification._id}
                             onClick={() => {
@@ -159,6 +224,13 @@ const Requests = ({ history }) => {
                         ))}
                       </tbody>
                     </table>
+                    <ReactToExcel
+                    className="excel-sheet"
+                      table="table-to-xls"
+                      filename="excelFile"
+                      sheet="sheet 1"
+                      buttonText="EXPORT"
+                    />
                   </div>
                 ) : <div className="details-info"> <p>No pending order</p></div>}
 
@@ -231,6 +303,20 @@ const RequestWrapper = styled.div`
   @media (max-width: 500px) {
     padding: 3rem 0;
   }
+  .select {
+    .option {
+        width: 12rem;
+        height: 2rem;
+        font-size: 1.2rem;
+        color: #0092E0;
+        outline: none;
+        cursor: pointer;
+      }
+      input {
+        padding: 0.2rem;
+        outline: none;
+      }
+      }
   .list {
     list-style: none;
     border-bottom: 1px solid var(--lighterDark);
@@ -492,7 +578,8 @@ const RequestWrapper = styled.div`
       }
     }
   .new-table {
-    display: flex;
+    position: relative;
+    display: block;
     background: white;
     text-align: center;
     border-radius: 10px;
@@ -537,6 +624,15 @@ const RequestWrapper = styled.div`
         color: #707070;
         opacity: 0.8;
         
+      }
+      .excel-sheet {
+        position: absolute;
+        right: 5%;
+        bottom: 5%;
+        padding: 0.3rem;
+        border: none;
+        color: #ffffff;
+        background: #173049;
       }
   }
   .details {

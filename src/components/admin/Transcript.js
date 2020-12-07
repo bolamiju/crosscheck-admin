@@ -74,7 +74,6 @@ const Requests = ({ history }) => {
     else {
       console.log('logsdd', min, max, Date.parse(transcript[searchParameter]))
     }
-    //  
   })
 
   console.log('dateFilter',dateFilter)
@@ -107,13 +106,15 @@ const Requests = ({ history }) => {
               <input type="text" name='firstNameInput' value={firstNameInput} onChange={handleChange} />
             )
           }
-          <Space direction="version">
+          {searchParameter === "date" && (
+            <Space direction="version">
             <RangePicker
               allowClear={false}
               onChange={handleDateRange}
               style={{ width: 350 }}
             />
           </Space>
+          )}
         </div>
 
 
@@ -225,6 +226,7 @@ const Requests = ({ history }) => {
                       </tbody>
                     </table>
                     <ReactToExcel
+                    className="excel-sheet"
                       table="table-to-xls"
                       filename="excelFile"
                       sheet="sheet 1"
@@ -511,6 +513,7 @@ const RequestWrapper = styled.div`
       letter-spacing: 0px;
       opacity: 1;
       font-size: 16px;
+      color: #ffffff;
     }
     p {
       font-weight: lighter;
@@ -545,6 +548,7 @@ const RequestWrapper = styled.div`
       font-family: MontserratSemibold;
       letter-spacing: 0px;
       opacity: 1;
+      color: #ffffff;
       font-size: 16px;
     }
     p {
@@ -588,7 +592,8 @@ const RequestWrapper = styled.div`
       }
     }
   .new-table {
-    display: flex;
+    position: relative;
+    display: block;
     background: white;
     text-align: center;
     border-radius: 10px;
@@ -633,6 +638,15 @@ const RequestWrapper = styled.div`
         color: #707070;
         opacity: 0.8;
         
+      }
+      .excel-sheet {
+        position: absolute;
+        right: 5%;
+        bottom: 5%;
+        padding: 0.3rem;
+        border: none;
+        color: #ffffff;
+        background: #173049;
       }
   }
   .details {

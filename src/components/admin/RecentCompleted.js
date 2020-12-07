@@ -8,7 +8,8 @@ import { getVerificationsByStatus, getTranscriptsByStatus } from "../../state/ac
 
 const RecentPending = () => {
 
-  const [activeTab, setActiveTab] = useState("completed");
+  const [activeTab] = useState("completed");
+  const [status] = useState("status");
 
 
   const dispatch = useDispatch();
@@ -17,15 +18,24 @@ const RecentPending = () => {
  
 
   useEffect(() => {
-    dispatch(getVerificationsByStatus('completed'));
+    // if (activeTab === "completed") {
+      dispatch(getVerificationsByStatus('completed'));
+    // }
   }, [dispatch])
 
   useEffect(() => {
-    dispatch(getTranscriptsByStatus('completed'));
+    // if (activeTab === "completed") {
+      dispatch(getTranscriptsByStatus('completed'));
+    // }
   }, [dispatch])
   
-  const allHistory = verificationsby_status.concat(transcriptsby_status)
-    
+  const allHistory = verificationsby_status.concat(transcriptsby_status);
+
+  const filteredPending = allHistory.filter((history) =>
+    history[status].toLowerCase().includes(activeTab)
+  );
+  
+    console.log("o right now", filteredPending)
 
   return (
     <PendingWrapper>
@@ -51,7 +61,7 @@ const RecentPending = () => {
             </tr>
           </thead>
             <tbody className="table-body">
-              {allHistory.map(history => (
+              {filteredPending.map(history => (
                 <tr>
                 <td>{`${history.firstName}  ${history.lastName}`}</td>
                 <td>{history.institution}</td>

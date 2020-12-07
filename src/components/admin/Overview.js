@@ -42,9 +42,8 @@ const Overview = ({ history }) => {
             </div>
           </div>
           <div className="box d-block d-lg-flex justify-content-between">
-           
-            <RecentCompleted />
             <RecentPending />
+            <RecentCompleted />
           </div>
           <div className="cards px-5 py-5">
             <div className="cardy">
@@ -130,6 +129,7 @@ const OverviewWrapper = styled.div`
     }
     h2 {
       font-weight: bolder;
+      color: #ffffff;
     }
     p {
       text-transform: capitalize;
@@ -160,6 +160,7 @@ const OverviewWrapper = styled.div`
       margin-top: 2rem;
     }
     h2 {
+      color: #ffffff;
       font-weight: bolder;
     }
     p {
@@ -191,6 +192,7 @@ const OverviewWrapper = styled.div`
       margin-top: 2rem;
     }
     h2 {
+      color: #ffffff;
       font-weight: bolder;
     }
     p {
@@ -217,6 +219,7 @@ const OverviewWrapper = styled.div`
       margin-top: 2rem;
     }
     h2 {
+      color: #ffffff;
       font-weight: bolder;
     }
     p {

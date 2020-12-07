@@ -15,7 +15,6 @@ export const getTranscripts = (payload) => {
   };
 };
 
-
 export const getVerificationsByStatus = (status) => async (dispatch) => {
     await axios
         .get(`https://croscheck.herokuapp.com/api/v1/verifications/status/${status}`)
