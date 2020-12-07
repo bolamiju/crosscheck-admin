@@ -4,6 +4,7 @@ import store from "./store";
 import './App.css';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import AdminContent from "./components/admin/AdminContent";
+import Institution from './components/Institution'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
 
@@ -17,6 +18,7 @@ function App() {
        <Route exact path="/education" component={AdminContent} />
        <Route exact path="/identity" component={AdminContent} />
        <Route exact path="/check" component={AdminContent} />
+       <Route exact path="/instit" component={Institution} />
    </Router>
     </Provider>
   );
