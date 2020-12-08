@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllInstitutions } from "../state/actions/Institutions";
+import { getAllInstitutions, addAllInstitutions } from "../state/actions/Institutions";
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 
 const Institution = () => {
 
     const dispatch = useDispatch();
     const { institutions } = useSelector((state) => state.institutions);
+    // const { addInstitutions } = useSelector((state) => state.addInstitutions);
     
     const [currentPage, setCurrentPage] = useState(0);
     const [input, setInput] = useState("");
@@ -145,15 +148,103 @@ const Institution = () => {
                             </div>
                         )}
                     </div>
-                )}
-            </SelectSch>
+          )}
+          <Formik
+                    initialValues={{ name: "", country: "", category: "" }}
+                    onSubmit={(values, { setSubmitting }) => {
+                        console.log("submitting", values)
+                    }}
+                    validationSchema={Yup.object().shape({
+                        name: Yup.string()
+                            .required("Required !"),
+                        country: Yup.string()
+                            .email()
+                            .required("Required !"),
+                        category: Yup.string()
+                            .required("Required !")
+                    })}
+                >
+                    {
+                        props => {
+                            const {
+                                values,
+                                touched,
+                                errors,
+                                isSubmitting,
+                                handleChange,
+                                handleBlur,
+                                handleSubmit
+                            } = props;
+                            return (
+                                <form className="form" onSubmit={handleSubmit}>
+                                    <p>add an institution</p>
+                                    <div className="field">
+                                        <label htmlFor="name">name of institution</label>
+                                        <input
+                                            name="name"
+                                            type="text"
+                                            value={values.name}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            className={errors.name && touched.name && "error"}
+                                        />
+
+                                    </div>
+                                    {errors.name && touched.name && (
+                                        <div className="input-feedback">{errors.name}</div>
+                                    )}
+                                    <div className="field">
+                                        <label htmlFor="country">country</label>
+                                        <input
+                                            name="country"
+                                            type="country"
+                                            value={values.country}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            className={errors.country && touched.country && "error"}
+                                        />
+                                    </div>
+                                    {errors.country && touched.country && (
+                                        <div className="input-feedback">{errors.country}</div>
+                                    )}
+                                    <div className="field">
+                                        <label htmlFor="amount">amount</label>
+                                        <input
+                                            name="amount"
+                                            type="text"
+                                            value={values.amount}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                    </div>
+                                    <div className="field">
+                                        <label htmlFor="category">category</label>
+                                        <input
+                                            name="category"
+                                            type="text"
+                                            value={values.category}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            className={errors.category && touched.category && "error"}
+                                        />
+                                    </div>
+                                    {errors.category && touched.category && (
+                                        <div className="input-feedback">{errors.category}</div>
+                                    )}
+                                   
+                                </form>
+                            )
+                        }
+                    }
+                </Formik>
+        </SelectSch>
         </div>
     )
 };
 
 const SelectSch = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column; 
   width: 100%;
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 7px;
@@ -339,6 +430,57 @@ const SelectSch = styled.div`
       margin-left: 50px;
     }
   }
+  .form {
+    margin-top: 2rem;
+    width: 350px;
+    min-height: 460px;
+
+    p {
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+    padding: 0.3rem 0 0.5rem 0;
+    font-family: MontserratRegular;
+    font-size: 20px;
+    text-align: center !important;
+    font-weight: normal;
+    background: #0091DF;
+    letter-spacing: 0.6px;
+    color: #FFFFFF;
+    opacity: 1;
+    }
+    .field {
+        display: block;
+       
+        input, label {
+            display: block;
+            margin-left: 1rem;
+        }
+        label {
+          font-family: MontserratRegular;
+          letter-spacing: 0.32px;
+          color: #707070;
+          text-transform: capitalize;
+          opacity: 1;
+          padding-top: 0.5rem;
+        }
+        input {
+            width: 85%;
+            height: 30px;
+            color: #707070;
+            border-radius: 10px;
+            opacity: 0.8;
+            outline: none;
+            border: 0.5px solid #707070;
+            padding-left: 0.5rem;
+           
+        } 
+    }
+    .input-feedback {
+        color: red;
+        margin-left: 1rem;
+        font-size: 1rem;
+    }
+}
 `;
 
 export default Institution

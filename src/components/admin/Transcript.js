@@ -18,17 +18,16 @@ const Requests = ({ history }) => {
   const [background, setBackground] = useState("");
   const [transcriptStatus, setTranscriptStatus] = useState('');
   const [info, setInfo] = useState({});
-  const [searchParameter, setSearchParameter] = useState("firstName")
+  const [searchParameter, setSearchParameter] = useState("firstName");
   const [firstNameInput, setFirstNameInput] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
   const dispatch = useDispatch();
-  const { transcriptsby_status } = useSelector((state) => state.verifications);
+  const { pendingTranscripts, completedTranscripts, processingTranscripts } = useSelector((state) => state.transcripts);
   const { RangePicker } = DatePicker;
 
   useEffect(() => {
     if (activeTab === "pending") {
-
       dispatch(getTranscriptsByStatus('pending'))
     }
     else if (activeTab === "processing") {
@@ -57,28 +56,26 @@ const Requests = ({ history }) => {
     setEndDate(dateString[1])
     console.log("date range", dateString);
   }
-  const min = Date.parse(startDate);
 
+  const filterOrder = pendingTranscripts.filter((transcript) => 
+    transcript[searchParameter].toLowerCase().includes(firstNameInput.toLowerCase())
+  )
+
+
+  const min = Date.parse(startDate);
   const max = Date.parse(endDate);
 
-  const filterOrder =
-    transcriptsby_status.filter((transcript) =>
-      transcript[searchParameter].toLowerCase().includes(firstNameInput));
+ 
 
-  const dateFilter = transcriptsby_status.filter((transcript) => {
-    if (Date.parse(transcript[searchParameter]) >= min && Date.parse(transcript[searchParameter]) <= max) {
-      
-      console.log('oto ni', min, max, Date.parse(transcript[searchParameter]))
+  const dateFilter = pendingTranscripts.filter((transcript) => {
+    if (
+      Date.parse(transcript[searchParameter]) >= min &&
+      Date.parse(transcript[searchParameter]) <= max)
+    {
       return transcript
-    }
-    else {
-      console.log('logsdd', min, max, Date.parse(transcript[searchParameter]))
     }
   })
 
-  console.log('dateFilter',dateFilter)
-
-  console.log('object', searchParameter)
   const handleSubmit = (e) => {
     e.preventDefault();
     setSearchParameter(e.target.value)
@@ -189,11 +186,14 @@ const Requests = ({ history }) => {
                 </div>
               </div>
               <div>
-                {activeCard === "new" ? <h6 className="transcript-order">new transcript order</h6> : <h6 className="transcript-order"> pending order</h6>}
-                {activeCard === "new" ? (
+              {activeCard === "new" ? (
+                  <h6 className="transcript-order">new education order</h6>
+                ) : (
+                  <h6 className="transcript-order"> pending order</h6>
+                )}
+                {activeCard === "new" && activeTab === "pending" ? (
                   <div className="new-table">
                     <table
-                      id="table-to-xls"
                       cellSpacing="0"
                       cellPadding="0"
                       border="0"
@@ -206,36 +206,156 @@ const Requests = ({ history }) => {
                           <th>Date</th>
                         </tr>
                       </thead>
-                      <tbody >
-                        { (searchParameter !== 'date' ? filterOrder : dateFilter).map(transcript => (
-                          <tr
-                            key={transcript._id}
-                            onClick={() => {
-                              setDisplay("populated")
-                              setInfo(transcript)
-                              handleBackground(transcript._id)
-                            }}
-
-                            className={background === transcript._id ? "activeOrder" : ""}
-                          >
-                            <td>{`${transcript.firstName}    ${transcript.lastName}`}</td>
-                            <td>{transcript.institution}</td>
-                            <td>{transcript.date}</td>
-                          </tr>
-                        ))}
+                      <tbody>
+                        {(searchParameter !== dateFilter
+                          ? filterOrder
+                          : dateFilter
+                        ).length > 0 ? (
+                          (searchParameter !== dateFilter
+                            ? filterOrder
+                            : dateFilter
+                          ).map((verification) => (
+                            <tr
+                              key={verification._id}
+                              onClick={() => {
+                                setDisplay("populated");
+                                setInfo(verification);
+                                handleBackground(verification._id);
+                              }}
+                              className={
+                                background === verification._id
+                                  ? "activeOrder"
+                                  : ""
+                              }
+                            >
+                              <td>{`${verification.firstName} ${verification.lastName}`}</td>
+                              <td>{verification.institution}</td>
+                              <td>{verification.date}</td>
+                            </tr>
+                          ))
+                        ) : (
+                          <p>No pending verification requests</p>
+                        )}
                       </tbody>
                     </table>
                     <ReactToExcel
-                    className="excel-sheet"
+                      className="excel-sheet"
                       table="table-to-xls"
                       filename="excelFile"
                       sheet="sheet 1"
                       buttonText="EXPORT"
                     />
                   </div>
-                ) : <div className="details-info"> <p>No pending order</p></div>}
-
+                ) : (
+                  ""
+                )}
               </div>
+                {activeCard === "new" && activeTab === "processing" ? (
+                <div className="new-table">
+                  <table
+                    cellSpacing="0"
+                    cellPadding="0"
+                    border="0"
+                    className="ideTable"
+                  >
+                    <thead className="table-headers">
+                      <tr>
+                        <th>Requester</th>
+                        <th>Institution</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {processingTranscripts.length > 0 ? (
+                        processingTranscripts.map((transcript) => (
+                          <tr
+                            key={transcript._id}
+                            onClick={() => {
+                              setDisplay("populated");
+                              setInfo(transcript);
+                              handleBackground(transcript._id);
+                            }}
+                            className={
+                              background === transcript._id
+                                ? "activeOrder"
+                                : ""
+                            }
+                          >
+                            <td>{`${transcript.firstName} ${transcript.lastName}`}</td>
+                            <td>{transcript.institution}</td>
+                            <td>{transcript.date}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <p>No transcript is being processed</p>
+                      )}
+                    </tbody>
+                  </table>
+                  <ReactToExcel
+                    className="excel-sheet"
+                    table="table-to-xls"
+                    filename="excelFile"
+                    sheet="sheet 1"
+                    buttonText="EXPORT"
+                  />
+                </div>
+              ) : (
+                ""
+                  )}
+                
+                {activeCard === "new" && activeTab === "completed" ? (
+                <div className="new-table">
+                  <table
+                    cellSpacing="0"
+                    cellPadding="0"
+                    border="0"
+                    className="ideTable"
+                  >
+                    <thead className="table-headers">
+                      <tr>
+                        <th>Requester</th>
+                        <th>Institution</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {completedTranscripts.length > 0 ? (
+                        completedTranscripts.map((transcript) => (
+                          <tr
+                            key={transcript._id}
+                            onClick={() => {
+                              setDisplay("populated");
+                              setInfo(transcript);
+                              handleBackground(transcript._id);
+                            }}
+                            className={
+                              background === transcript._id
+                                ? "activeOrder"
+                                : ""
+                            }
+                          >
+                            <td>{`${transcript.firstName} ${transcript.lastName}`}</td>
+                            <td>{transcript.institution}</td>
+                            <td>{transcript.date}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <p>No completed verifications</p>
+                      )}
+                    </tbody>
+                  </table>
+                  <ReactToExcel
+                    className="excel-sheet"
+                    table="table-to-xls"
+                    filename="excelFile"
+                    sheet="sheet 1"
+                    buttonText="EXPORT"
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+
             </div>
             <div className="details">
               <h6>Details</h6>
