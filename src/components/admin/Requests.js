@@ -91,6 +91,7 @@ const Requests = ({ history }) => {
   const handleChange = (e) => {
     setFirstNameInput(e.target.value);
   };
+
   return (
     <AdminLayout history={history}>
       <RequestWrapper>
