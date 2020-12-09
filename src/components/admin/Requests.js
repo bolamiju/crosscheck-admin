@@ -211,8 +211,8 @@ const Requests = ({ history }) => {
                 {activeCard === "new" ? (
                   <h6 className="transcript-order">new education order</h6>
                 ) : (
-                  <h6 className="transcript-order"> pending order</h6>
-                )}
+                    <h6 className="transcript-order"> pending order</h6>
+                  )}
                 {activeCard === "new" && activeTab === "pending" ? (
                   <div className="new-table">
                     <table
@@ -220,6 +220,7 @@ const Requests = ({ history }) => {
                       cellPadding="0"
                       border="0"
                       className="ideTable"
+                      id="table-to-xls"
                     >
                       <thead className="table-headers">
                         <tr>
@@ -233,31 +234,33 @@ const Requests = ({ history }) => {
                           ? filterOrder
                           : dateFilter
                         ).length > 0 ? (
-                          (searchParameter !== dateFilter
-                            ? filterOrder
-                            : dateFilter
-                          ).map((verification) => (
-                            <tr
-                              key={verification._id}
-                              onClick={() => {
-                                setDisplay("populated");
-                                setInfo(verification);
-                                handleBackground(verification._id);
-                              }}
-                              className={
-                                background === verification._id
-                                  ? "activeOrder"
-                                  : ""
-                              }
-                            >
-                              <td>{`${verification.firstName} ${verification.lastName}`}</td>
-                              <td>{verification.institution}</td>
-                              <td>{verification.date}</td>
-                            </tr>
-                          ))
-                        ) : (
-                          <p>No pending verification requests</p>
-                        )}
+                            (searchParameter !== dateFilter
+                              ? filterOrder
+                              : dateFilter
+                            ).map((verification) => (
+                              <tr
+                                key={verification._id}
+                                onClick={() => {
+                                  setDisplay("populated");
+                                  setInfo(verification);
+                                  handleBackground(verification._id);
+                                }}
+                                className={
+                                  background === verification._id
+                                    ? "activeOrder"
+                                    : ""
+                                }
+                              >
+                                <td>{`${verification.firstName} ${verification.lastName}`}</td>
+                                <td>{verification.institution}</td>
+                                <td>{verification.date}</td>
+                              </tr>
+                            ))
+                          ) : (
+                            <div className="no-order">
+                              <p>No pending verification requests</p>
+                            </div>
+                          )}
                       </tbody>
                     </table>
                     <ReactToExcel
@@ -269,8 +272,8 @@ const Requests = ({ history }) => {
                     />
                   </div>
                 ) : (
-                  ""
-                )}
+                    ""
+                  )}
               </div>
 
               {activeCard === "new" && activeTab === "processing" ? (
@@ -280,6 +283,7 @@ const Requests = ({ history }) => {
                     cellPadding="0"
                     border="0"
                     className="ideTable"
+                    id="table-to-xls"
                   >
                     <thead className="table-headers">
                       <tr>
@@ -310,8 +314,10 @@ const Requests = ({ history }) => {
                           </tr>
                         ))
                       ) : (
-                        <p>No verifications is being processed</p>
-                      )}
+                          <div className="no-order">
+                            <p>No verifications is being processed</p>
+                          </div>
+                        )}
                     </tbody>
                   </table>
                   <ReactToExcel
@@ -323,8 +329,8 @@ const Requests = ({ history }) => {
                   />
                 </div>
               ) : (
-                ""
-              )}
+                  ""
+                )}
 
               {activeCard === "new" && activeTab === "completed" ? (
                 <div className="new-table">
@@ -333,6 +339,7 @@ const Requests = ({ history }) => {
                     cellPadding="0"
                     border="0"
                     className="ideTable"
+                    id="table-to-xls"
                   >
                     <thead className="table-headers">
                       <tr>
@@ -363,8 +370,10 @@ const Requests = ({ history }) => {
                           </tr>
                         ))
                       ) : (
-                        <p>No completed verifications</p>
-                      )}
+                          <div className="no-order">
+                            <p>No completed verifications</p>
+                          </div>
+                        )}
                     </tbody>
                   </table>
                   <ReactToExcel
@@ -376,8 +385,8 @@ const Requests = ({ history }) => {
                   />
                 </div>
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </div>
             <div className="details">
               <h6>Details</h6>
@@ -544,91 +553,92 @@ const RequestWrapper = styled.div`
       padding: 2rem 0;
     }
     .card1 {
-      background: #e6e6e6;
-      padding: 0.5rem;
-      width: 12rem;
-      height: 5rem;
-      margin-right: 0.8rem;
-      border-radius: 0.2rem;
-      cursor: pointer;
-      @media (max-width: 400px) {
-        margin-right: 0;
-        width: 15rem;
-        height: 5rem;
-      }
-      @media (max-width: 500px) {
-        margin-left: 0.8rem;
-        width: 15rem;
-        height: 5rem;
-      }
-      h6 {
-        font-weight: bolder;
-        text-transform: capitalize;
-        font-family: MontserratBold;
-        color: #707070;
-        letter-spacing: 0px;
-        opacity: 1;
-        font-size: 16px;
-      }
-      p {
-        font-weight: lighter;
-        font-size: 0.8rem;
-        color: #707070;
-        letter-spacing: 0.32px;
-      }
+    background: #E6E6E6;
+    padding: 0.5rem;
+    width: 12rem;
+    height: 5rem;
+    margin-right: 0.8rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    @media (max-width: 400px) {
+    margin-right: 0;
+    width: 15rem;
+    height: 5rem;
+  }
+    @media (max-width: 500px) {
+      margin-left: 0.8rem;
+      width: 15rem;
+    height: 5rem;
     }
-    .card2 {
-      background: #e6e6e6;
-      padding: 0.5rem;
-      width: 12rem;
-      height: 5rem;
-      margin-left: 0.7rem;
-      border-radius: 0.2rem;
-      cursor: pointer;
-      @media (max-width: 400px) {
-        margin-left: 0;
-        width: 15rem;
-        height: 5rem;
-      }
-      @media (max-width: 500px) {
-        margin-top: 2rem;
-        width: 15rem;
-        height: 5rem;
-        margin-left: 0.8rem;
-      }
-      h6 {
-        font-weight: bolder;
-        text-transform: capitalize;
-        font-family: MontserratBold;
-        letter-spacing: 0.32px;
-        color: #707070;
-        opacity: 1;
-        font-size: 16px;
-      }
-      p {
-        font-weight: lighter;
-        font-size: 0.8rem;
-        letter-spacing: 0.32px;
-        color: #707070;
-      }
+    h6 {
+      font-weight: bolder;
+      text-transform: capitalize;
+      font-family: MontserratBold;
+      color: #707070;
+      letter-spacing: 0px;
+      opacity: 1;
+      font-size: 16px;
     }
-    .para-icon {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: -0.3rem;
-      .icon-box {
-        background: var(--lightTransparent);
-        padding: 0.4rem;
-        border-radius: 30px;
-        width: 2rem;
-        height: 2rem;
-      }
-      .icon {
-        color: #ffffff;
-        margin-left: 0.3rem;
-      }
+    p {
+      font-weight: lighter;
+      font-size: 0.8rem;
+      color: #707070;
+      letter-spacing: 0.32px;
     }
+  }
+  .card2 {
+    background: #E6E6E6;
+    padding: 0.5rem;
+    width: 12rem;
+    height: 5rem;
+    margin-left: 0.7rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+  @media (max-width: 400px) {
+    margin-left: 0;
+    width: 15rem;
+    height: 5rem;
+  }
+    @media (max-width: 500px) {
+      margin-top: 2rem;
+      width: 15rem;
+    height: 5rem;
+      margin-left: 0.8rem;
+    }
+    h6 {
+      font-weight: bolder;
+      text-transform: capitalize;
+      font-family: MontserratBold;
+      letter-spacing: 0.32px;
+      color: #707070;
+      opacity: 1;
+      font-size: 16px;
+    }
+    p {
+      font-weight: lighter;
+      font-size: 0.8rem;
+      letter-spacing: 0.32px;
+      color: #707070;
+      
+    }
+  }
+  .para-icon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: -0.3rem;
+    .icon-box {
+      background: var(--lightTransparent);
+      padding: 0.4rem;
+      border-radius: 30px;
+      width: 2rem;
+      height: 2rem;
+    }
+    .icon {
+      color: #ffffff;
+      margin-left: 0.3rem;
+    }
+  }
   }
   .activeCard1 {
     padding: 0.5rem;
@@ -638,7 +648,7 @@ const RequestWrapper = styled.div`
     border-radius: 0.2rem;
     cursor: pointer;
     color: #ffffff;
-    background-image: linear-gradient(
+      background-image: linear-gradient(
       to right,
       var(--lightBlue),
       var(--mainBlue)
@@ -650,10 +660,11 @@ const RequestWrapper = styled.div`
       margin-right: 2;
     }
     @media (max-width: 500px) {
-      margin-left: 0.8rem;
-      width: 15rem;
-      height: 5rem;
-      margin-right: 0;
+    margin-left: 0.8rem;
+    width: 15rem;
+    height: 5rem;
+    margin-right: 0;
+
     }
     h6 {
       font-weight: bolder;
@@ -662,6 +673,7 @@ const RequestWrapper = styled.div`
       letter-spacing: 0px;
       opacity: 1;
       font-size: 16px;
+      color: #ffffff;
     }
     p {
       font-weight: lighter;
@@ -686,7 +698,7 @@ const RequestWrapper = styled.div`
     }
     @media (max-width: 500px) {
       width: 15rem;
-      height: 5rem;
+    height: 5rem;
       margin-left: 0.8rem;
       margin-top: 2rem;
     }
@@ -696,6 +708,7 @@ const RequestWrapper = styled.div`
       font-family: MontserratSemibold;
       letter-spacing: 0px;
       opacity: 1;
+      color: #ffffff;
       font-size: 16px;
     }
     p {
@@ -703,7 +716,8 @@ const RequestWrapper = styled.div`
       letter-spacing: 0.32px;
       font-size: 0.8rem;
     }
-  }
+    }
+   
 
   .transcript-order {
     margin-top: -1rem;
@@ -793,6 +807,21 @@ const RequestWrapper = styled.div`
       border: none;
       color: #ffffff;
       background: #173049;
+    }
+    .no-order {
+      background: white;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    border-radius: 10px;
+    p {
+      text-align: center;
+      font-family: MontserratRegular;
+      font-weight: normal;
+      letter-spacing: 0.28px;
+      color: #707070;
+      opacity: 0.2;
+    }
     }
   }
   .details {
