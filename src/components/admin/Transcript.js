@@ -219,6 +219,7 @@ const Requests = ({ history }) => {
                       cellPadding="0"
                       border="0"
                       className="ideTable"
+                      id="table-to-xls"
                     >
                       <thead className="table-headers">
                         <tr>
@@ -255,7 +256,9 @@ const Requests = ({ history }) => {
                             </tr>
                           ))
                         ) : (
-                          <p>No pending verification requests</p>
+                          <div className="no-order">
+                            <p>No pending verification requests</p>
+                          </div>
                         )}
                       </tbody>
                     </table>
@@ -278,6 +281,7 @@ const Requests = ({ history }) => {
                     cellPadding="0"
                     border="0"
                     className="ideTable"
+                    id="table-to-xls"
                   >
                     <thead className="table-headers">
                       <tr>
@@ -306,7 +310,9 @@ const Requests = ({ history }) => {
                           </tr>
                         ))
                       ) : (
-                        <p>No transcript is being processed</p>
+                        <div className="no-order">
+                          <p>No transcript is being processed</p>
+                        </div>
                       )}
                     </tbody>
                   </table>
@@ -329,6 +335,7 @@ const Requests = ({ history }) => {
                     cellPadding="0"
                     border="0"
                     className="ideTable"
+                    id="table-to-xls"
                   >
                     <thead className="table-headers">
                       <tr>
@@ -357,7 +364,9 @@ const Requests = ({ history }) => {
                           </tr>
                         ))
                       ) : (
-                        <p>No completed verifications</p>
+                        <div className="no-order">
+                          <p>No completed verifications</p>
+                        </div>
                       )}
                     </tbody>
                   </table>
@@ -529,6 +538,7 @@ const RequestWrapper = styled.div`
     display: flex;
     justify-content: space-around;
     margin-left: -3rem;
+    margin-right: 2rem;
     cursor: pointer;
     margin-top: -1rem;
     @media (max-width: 400px) {
@@ -544,38 +554,74 @@ const RequestWrapper = styled.div`
       padding: 2rem 0;
     }
     .card1 {
-      background: #e6e6e6;
-      padding: 0.5rem;
-      width: 12rem;
+    background: #E6E6E6;
+    padding: 0.5rem;
+    width: 12rem;
+    height: 5rem;
+    margin-right: 0.8rem;
+    border-radius: 0.2rem;
+    /* margin-left: -6rem; */
+    cursor: pointer;
+    @media (max-width: 400px) {
+    margin-right: 0;
+    width: 15rem;
+    height: 5rem;
+  }
+    @media (max-width: 500px) {
+      margin-left: 0.8rem;
+      width: 15rem;
       height: 5rem;
-      margin-right: 0.8rem;
-      border-radius: 0.2rem;
-      cursor: pointer;
-      @media (max-width: 400px) {
-        margin-right: 0;
-        width: 15rem;
-        height: 5rem;
-      }
-      @media (max-width: 500px) {
-        margin-left: 0.8rem;
-        width: 15rem;
-        height: 5rem;
-      }
-      h6 {
-        font-weight: bolder;
-        text-transform: capitalize;
-        font-family: MontserratBold;
-        color: #707070;
-        letter-spacing: 0px;
-        opacity: 1;
-        font-size: 16px;
-      }
-      p {
-        font-weight: lighter;
-        font-size: 0.8rem;
-        color: #707070;
-        letter-spacing: 0.32px;
-      }
+    }
+    h6 {
+      font-weight: bolder;
+      text-transform: capitalize;
+      font-family: MontserratBold;
+      color: #707070;
+      letter-spacing: 0px;
+      opacity: 1;
+      font-size: 16px;
+    }
+    p {
+      font-weight: lighter;
+      font-size: 0.8rem;
+      color: #707070;
+      letter-spacing: 0.32px;
+    }
+  }
+  .card2 {
+    background: #E6E6E6;
+    padding: 0.5rem;
+    width: 12rem;
+    height: 5rem;
+    margin-left: 0.7rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+  @media (max-width: 400px) {
+    margin-left: 0;
+    width: 15rem;
+    height: 5rem;
+  }
+    @media (max-width: 500px) {
+      margin-top: 2rem;
+      width: 15rem;
+    height: 5rem;
+      margin-left: 0.8rem;
+    }
+    h6 {
+      font-weight: bolder;
+      text-transform: capitalize;
+      font-family: MontserratBold;
+      letter-spacing: 0.32px;
+      color: #707070;
+      opacity: 1;
+      font-size: 16px;
+    }
+    p {
+      font-weight: lighter;
+      font-size: 0.8rem;
+      letter-spacing: 0.32px;
+      color: #707070;
+      
     }
     .card2 {
       background: #e6e6e6;
@@ -705,7 +751,8 @@ const RequestWrapper = styled.div`
       letter-spacing: 0.32px;
       font-size: 0.8rem;
     }
-  }
+    }
+   
 
   .transcript-order {
     margin-top: -1rem;
@@ -796,6 +843,21 @@ const RequestWrapper = styled.div`
       color: #ffffff;
       background: #173049;
     }
+    .no-order {
+      background: white;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    border-radius: 10px;
+    p {
+      text-align: center;
+      font-family: MontserratRegular;
+      font-weight: normal;
+      letter-spacing: 0.28px;
+      color: #707070;
+      opacity: 0.2;
+    }
+    }
   }
   .details {
     margin-left: -1rem;
@@ -826,7 +888,7 @@ const RequestWrapper = styled.div`
     .container {
       display: block;
       background: white;
-      min-height: 400px;
+      /* min-height: 400px; */
       text-align: left;
       border-radius: 10px;
       h5 {
@@ -901,16 +963,6 @@ const RequestWrapper = styled.div`
         margin-left: 1rem;
         display: flex;
         flex-direction: column;
-        .option {
-          width: 80%;
-          height: 4rem;
-          font-size: 2rem;
-          margin-top: 2rem;
-          font-size: 12px;
-          color: #0092e0;
-          outline: none;
-          cursor: pointer;
-        }
       }
       .options {
         width: 8rem;
@@ -921,12 +973,10 @@ const RequestWrapper = styled.div`
         color: #0092e0;
         outline: none;
         cursor: pointer;
-        width: 80px;
         @media (max-width: 400px) {
           width: 90px;
         }
       }
-
       .finish {
         background: #0092e0;
         margin-top: 1rem;
