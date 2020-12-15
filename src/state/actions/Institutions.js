@@ -8,7 +8,7 @@ const getInstitutes = (payload) => {
     payload,
   };
 };
-const addInstitutes =  (payload) =>{
+const fetchInstitutes =  (payload) =>{
   return{
     type: types.ADD_INSTITUTIONS,
     payload,
@@ -18,20 +18,21 @@ export const getAllInstitutions = () => (dispatch) => {
   axios
     .get(`${BASE_URL}/api/v1/institutions`)
     .then(({ data }) => {
-      dispatch(getInstitutes(data.institution));
+      dispatch(fetchInstitutes(data.institution));
     })
     .catch((err) => {
       return err;
     });
 };
 
-export const addAllInstitutions = () => (dispatch) => {
+export const addAllInstitutions = (institution) => {
+  console.log('instty',institution)
   axios
-    .post(`${BASE_URL}/api/v1/institutions/add`)
+    .post(`${BASE_URL}/api/v1/institutions/add`, institution)
     .then(({ data }) => {
-      dispatch(addInstitutes(data.institution));
+      console.log(data)
     })
     .catch((err) => {
       return err;
     });
-};
+}

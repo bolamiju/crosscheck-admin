@@ -12,9 +12,7 @@ const RecentPending = () => {
   const [status] = useState("status");
 
   const dispatch = useDispatch();
-  const { completedVerifications } = useSelector(
-    (state) => state.verifications
-  );
+  const { completedVerifications } = useSelector((state) => state.verifications);
   const { completedTranscripts } = useSelector((state) => state.transcripts);
 
   useEffect(() => {

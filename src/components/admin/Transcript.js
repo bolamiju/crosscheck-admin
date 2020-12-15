@@ -50,7 +50,6 @@ const Requests = ({ history }) => {
   };
 
   const handleTranscriptStatus = (e) => {
-    console.log("valueee", e.target.value);
     setTranscriptStatus(e.target.value);
   };
 
@@ -60,19 +59,53 @@ const Requests = ({ history }) => {
   const handleDateRange = (value, dateString) => {
     setStartDate(dateString[0]);
     setEndDate(dateString[1]);
-    console.log("date range", dateString);
   };
 
-  const filterOrder = pendingTranscripts.filter((transcript) =>
+  const min = Date.parse(startDate);
+  const max = Date.parse(endDate);
+
+  // pending name filter
+  const pendingFilterOrder = pendingTranscripts.filter((transcript) =>
     transcript[searchParameter]
       .toLowerCase()
       .includes(firstNameInput.toLowerCase())
   );
 
-  const min = Date.parse(startDate);
-  const max = Date.parse(endDate);
+  // pending date filter
+  const pendingDateFilter = pendingTranscripts.filter((transcript) => {
+    if (
+      Date.parse(transcript[searchParameter]) >= min &&
+      Date.parse(transcript[searchParameter]) <= max
+    ) {
+      return transcript;
+    }
+  });
 
-  const dateFilter = pendingTranscripts.filter((transcript) => {
+  // processsing name filter
+  const processingFilterOrder = processingTranscripts.filter((transcript) =>
+    transcript[searchParameter]
+      .toLowerCase()
+      .includes(firstNameInput.toLowerCase())
+  );
+  // processing date filter
+  const processingDateFilter = processingTranscripts.filter((transcript) => {
+    if (
+      Date.parse(transcript[searchParameter]) >= min &&
+      Date.parse(transcript[searchParameter]) <= max
+    ) {
+      return transcript;
+    }
+  });
+
+  // completed name filter
+  const completedFilterOrder = completedTranscripts.filter((transcript) =>
+    transcript[searchParameter]
+      .toLowerCase()
+      .includes(firstNameInput.toLowerCase())
+  );
+
+  // completed date filter
+  const completedDateFilter = completedTranscripts.filter((transcript) => {
     if (
       Date.parse(transcript[searchParameter]) >= min &&
       Date.parse(transcript[searchParameter]) <= max
@@ -229,12 +262,12 @@ const Requests = ({ history }) => {
                       </thead>
                       <tbody>
                         {(searchParameter === "firstName"
-                          ? filterOrder
-                          : dateFilter
+                          ? pendingFilterOrder
+                          : pendingDateFilter
                         ).length > 0 ? (
                           (searchParameter === "firstName"
-                            ? filterOrder
-                            : dateFilter
+                            ? pendingFilterOrder
+                            : pendingFilterOrder
                           ).map((verification) => (
                             <tr
                               key={verification._id}
@@ -290,8 +323,14 @@ const Requests = ({ history }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {processingTranscripts.length > 0 ? (
-                        processingTranscripts.map((transcript) => (
+                      {(searchParameter === "firstName"
+                        ? processingFilterOrder
+                        : processingDateFilter
+                      ).length > 0 ? (
+                        (searchParameter === "firstName"
+                          ? processingFilterOrder
+                          : processingDateFilter
+                        ).map((transcript) => (
                           <tr
                             key={transcript._id}
                             onClick={() => {
@@ -344,8 +383,14 @@ const Requests = ({ history }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {completedTranscripts.length > 0 ? (
-                        completedTranscripts.map((transcript) => (
+                      {(searchParameter === "firstName"
+                        ? completedFilterOrder
+                        : completedDateFilter
+                      ).length > 0 ? (
+                        (searchParameter === "firstName"
+                          ? completedFilterOrder
+                          : completedDateFilter
+                        ).map((transcript) => (
                           <tr
                             key={transcript._id}
                             onClick={() => {

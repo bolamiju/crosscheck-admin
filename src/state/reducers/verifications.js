@@ -4,6 +4,9 @@ const initialState = {
   pendingVerifications: [],
   completedVerifications: [],
   processingVerifications: [],
+  messages: [],
+  userVerifications: [],
+  newTranscript: [],
 };
 
 export default function userReducer(state = initialState, action) {
@@ -23,8 +26,23 @@ export default function userReducer(state = initialState, action) {
         ...state,
         processingVerifications: action.payload,
       };
-
+      case types.GET_MESSAGES: 
+      return {
+        ...state,
+        messages: [...action.payload]
+      }
+      case types.USER_VERIFICATIONS: 
+      return {
+        ...state,
+        userVerifications: [...action.payload]
+      }
+      case types.GET_TRANSCRIPT: 
+      return {
+        ...state,
+        newTranscript: [...action.payload]
+      }
     default:
       return state;
   }
+
 }

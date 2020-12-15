@@ -67,18 +67,18 @@ function Sidebar({ history }) {
                 </Link>
               </li>
               <li>
-                <Link to="/identity" className="option">
+                <Link to="/" className="option">
                   Identity Verification
                 </Link>
               </li>
               <li>
-                <Link to="/check" className="option">
+                <Link to="/" className="option">
                   Credit Check
                 </Link>
               </li>
             </ul>
           </div>
-          <Link to="/dashboard/:id" className="link">
+          <Link to="/history" className="link">
             {" "}
             <img src={histry} alt="history" />
             <li>History</li>

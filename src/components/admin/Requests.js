@@ -15,11 +15,13 @@ import {
   getVerificationsByStatus,
   updateVerificatonRequest,
 } from "../../state/actions/verifications";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Requests = ({ history }) => {
   const [activeTab, setActiveTab] = useState("pending");
   const [activeCard, setActiveCard] = useState("new");
-  const [display, setDisplay] = useState("empty");
+  const [display, setDisplay] = useState("populated");
   const [background, setBackground] = useState("");
   const [verificationStatus, setVerificationStatus] = useState("");
   const [info, setInfo] = useState({});
@@ -27,6 +29,7 @@ const Requests = ({ history }) => {
   const [firstNameInput, setFirstNameInput] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { RangePicker } = DatePicker;
 
@@ -58,8 +61,16 @@ const Requests = ({ history }) => {
     setVerificationStatus(e.target.value);
   };
 
-  const handleUpdateVerification = () => {
-    updateVerificatonRequest(info._id, { verificationStatus });
+  const handleUpdateVerification = async () => {
+    setLoading(true);
+    const response = await updateVerificatonRequest(info._id, {
+      verificationStatus,
+    });
+    setLoading(false);
+    console.log("response", response);
+    if (response.data.message === "verification updated") {
+      toast.success("update sucessful !!");
+    }
   };
 
   const handleDateRange = (value, dateString) => {
@@ -67,14 +78,42 @@ const Requests = ({ history }) => {
     setEndDate(dateString[1]);
   };
 
-  const filterOrder = pendingVerifications.filter((verification) =>
+  const pendingFilterOrder = pendingVerifications.filter((verification) =>
     verification[searchParameter].toLowerCase().includes(firstNameInput)
   );
 
   const min = Date.parse(startDate);
   const max = Date.parse(endDate);
 
-  const dateFilter = pendingVerifications.filter((verification) => {
+  const pendingDateFilter = pendingVerifications.filter((verification) => {
+    if (
+      Date.parse(verification[searchParameter]) >= min &&
+      Date.parse(verification[searchParameter]) <= max
+    ) {
+      return verification;
+    }
+  });
+
+  const processingFilterOrder = processingVerifications.filter((verification) =>
+    verification[searchParameter].toLowerCase().includes(firstNameInput)
+  );
+
+  const processingDateFilter = processingVerifications.filter(
+    (verification) => {
+      if (
+        Date.parse(verification[searchParameter]) >= min &&
+        Date.parse(verification[searchParameter]) <= max
+      ) {
+        return verification;
+      }
+    }
+  );
+
+  const completedFilterOrder = completedVerifications.filter((verification) =>
+    verification[searchParameter].toLowerCase().includes(firstNameInput)
+  );
+
+  const completedDateFilter = completedVerifications.filter((verification) => {
     if (
       Date.parse(verification[searchParameter]) >= min &&
       Date.parse(verification[searchParameter]) <= max
@@ -95,6 +134,18 @@ const Requests = ({ history }) => {
   return (
     <AdminLayout history={history}>
       <RequestWrapper>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          style={{ marginTop: "20px" }}
+        />
         <div className="select col-12 mx-auto text-center my-3">
           <select
             defaultValue="no-value"
@@ -231,13 +282,13 @@ const Requests = ({ history }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {(searchParameter !== dateFilter
-                          ? filterOrder
-                          : dateFilter
+                        {(searchParameter === "firstName"
+                          ? pendingFilterOrder
+                          : pendingDateFilter
                         ).length > 0 ? (
-                          (searchParameter !== dateFilter
-                            ? filterOrder
-                            : dateFilter
+                          (searchParameter === "firstName"
+                            ? pendingFilterOrder
+                            : pendingDateFilter
                           ).map((verification) => (
                             <tr
                               key={verification._id}
@@ -294,8 +345,14 @@ const Requests = ({ history }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {processingVerifications.length > 0 ? (
-                        processingVerifications.map((verification) => (
+                      {(searchParameter === "firstName"
+                        ? processingFilterOrder
+                        : processingDateFilter
+                      ).length > 0 ? (
+                        (searchParameter === "firstName"
+                          ? processingFilterOrder
+                          : processingDateFilter
+                        ).map((verification) => (
                           <tr
                             key={verification._id}
                             onClick={() => {
@@ -350,8 +407,14 @@ const Requests = ({ history }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {completedVerifications.length > 0 ? (
-                        completedVerifications.map((verification) => (
+                      {(searchParameter === "firstName"
+                        ? completedFilterOrder
+                        : completedDateFilter
+                      ).length > 0 ? (
+                        (searchParameter === "firstName"
+                          ? completedFilterOrder
+                          : completedDateFilter
+                        ).map((verification) => (
                           <tr
                             key={verification._id}
                             onClick={() => {
@@ -432,17 +495,28 @@ const Requests = ({ history }) => {
                         className="options"
                         onClick={(e) => handleVerificationStatus(e)}
                       >
-                        <option value="processing">Processing</option>
-                        <option value="completed">Completed</option>
+                        <option className="option" value="no value">
+                          choose status
+                        </option>
+                        <option className="option" value="processing">
+                          Processing
+                        </option>
+                        <option className="option" value="completed">
+                          Completed
+                        </option>
                       </select>
                       <button
                         onClick={handleUpdateVerification}
                         className="finish"
                       >
-                        finish{" "}
+                        {loading ? "updating.." : "submit"}{" "}
                         <FontAwesomeIcon
                           icon={faLongArrowAltRight}
-                          style={{ marginLeft: "10px", fontSize: "20px" }}
+                          style={{
+                            marginLeft: "5px",
+                            fontSize: "20px",
+                            paddingTop: "0.3rem",
+                          }}
                         />
                       </button>
                     </div>
@@ -684,7 +758,7 @@ const RequestWrapper = styled.div`
     padding: 0.5rem;
     width: 12rem;
     height: 5rem;
-    margin-left: 0.7rem;
+    margin-left: -2rem;
     border-radius: 0.2rem;
     cursor: pointer;
     color: #ffffff;
@@ -929,14 +1003,21 @@ const RequestWrapper = styled.div`
         flex-direction: column;
       }
       .options {
-        width: 8rem;
-        height: 2rem;
-        font-size: 1.2rem;
+        width: 13rem;
         margin-top: 2rem;
-        font-size: 12px;
-        color: #0092e0;
         outline: none;
         cursor: pointer;
+        padding: 0.5rem;
+        color: #707070;
+        text-transform: capitalize;
+        .option {
+          color: #707070;
+          padding-bottom: 1rem;
+        }
+        input {
+          padding: 1rem;
+          font-size: 0.5rem;
+        }
         @media (max-width: 400px) {
           width: 90px;
         }
@@ -944,7 +1025,7 @@ const RequestWrapper = styled.div`
       .finish {
         background: #0092e0;
         margin-top: 1rem;
-        width: 100px;
+        width: 7.5rem;
         height: 35px;
         text-transform: capitalize;
         border: none;
@@ -952,6 +1033,7 @@ const RequestWrapper = styled.div`
         /* padding: 0.3rem; */
         color: #ffffff;
         outline: none;
+        /* padding: 0.5rem; */
       }
     }
     .details-info {

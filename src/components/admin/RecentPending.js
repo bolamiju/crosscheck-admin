@@ -16,17 +16,13 @@ const RecentPending = () => {
   const { pendingTranscripts } = useSelector((state) => state.transcripts);
 
   useEffect(() => {
-    // if (activeTab === "pending") {
     dispatch(getVerificationsByStatus("pending"));
     dispatch(getVerificationsByStatus("completed"));
-    // }
   }, [dispatch]);
 
   useEffect(() => {
-    // if (activeTab === "pending") {
     dispatch(getTranscriptsByStatus("pending"));
     dispatch(getTranscriptsByStatus("completed"));
-    // }
   }, [dispatch]);
 
   const everyHistory = [...pendingVerifications, ...pendingTranscripts];

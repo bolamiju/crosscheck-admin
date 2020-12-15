@@ -1,4 +1,5 @@
 import * as types from "../actionTypes/verifications";
+import { BASE_URL } from "../constant/constants";
 import axios from "axios";
 
 export const pendingVerifications = (payload) => {
@@ -41,6 +42,46 @@ export const completedTranscripts = (payload) => {
   };
 };
 
+export const messages = (payload) => {
+  return {
+    type: types.GET_MESSAGES,
+    payload,
+  };
+};
+
+export const getOneUserVerifications = (payload) => {
+  return {
+    type: types.USER_VERIFICATIONS,
+    payload,
+  };
+};
+
+export const getOneUserTranscript = (payload) => {
+  return {
+    type: types.GET_TRANSCRIPT,
+    payload,
+  };
+};
+
+export const delMessages = (payload) => {
+  return {
+    type: types.DELETE_MESSAGES,
+    payload,
+  };
+};
+export const updateRequest = (payload) => {
+  return {
+    type: types.UPDATE_REQUEST,
+    payload,
+  };
+};
+export const updateTranscript = (payload) => {
+  return {
+    type: types.UPDATE_TRANSCRIPT,
+    payload,
+  };
+};
+
 export const getVerificationsByStatus = (status) => async (dispatch) => {
   await axios
     .get(
@@ -79,23 +120,19 @@ export const getTranscriptsByStatus = (status) => async (dispatch) => {
     });
 };
 
-export const updateVerificatonRequest = async (id, data) => {
-  console.log("dataaa", id, data);
-  axios
-    .put(`https://croscheck.herokuapp.com/api/v1/verifications/${id}`, data, {
+export const updateVerificatonRequest = (id, data) =>
+  axios.put(
+    `https://croscheck.herokuapp.com/api/v1/verifications/${id}`,
+    data,
+    {
       headers: {
         "content-type": "application/json",
       },
-    })
-    .then(({ data }) => {
-      console.log("pending data", data);
-    })
-    .catch((err) => {
-      console.log("error", err);
-    });
-};
+    }
+  );
 
-export const updateTranscriptRequest = async (id, data) => {
+export const updateTranscriptRequest = (id, data) => async (dispatch) => {
+  console.log("dataaa", id, data);
   axios
     .put(`https://croscheck.herokuapp.com/api/v1/transcript/${id}`, data, {
       headers: {
@@ -104,6 +141,54 @@ export const updateTranscriptRequest = async (id, data) => {
     })
     .then(({ data }) => {
       console.log("pending data", data);
+      dispatch(updateTranscript(data.message));
+    })
+    .catch((err) => {
+      console.log("error", err);
+    });
+};
+
+export const getMessages = (value) => async (dispatch) => {
+  await axios
+    .get(`${BASE_URL}/api/v1/message`, value)
+    .then(({ data }) => {
+      console.log("messages", data);
+      dispatch(messages(data.message));
+    })
+    .catch((err) => {
+      console.log("error", err);
+    });
+};
+
+export const deleteMessages = (id) => async (dispatch) => {
+  await axios
+    .delete(`${BASE_URL}/api/v1/message/${id}`)
+    .then(({ data }) => {
+      console.log("deleted", data);
+      dispatch(delMessages(data.message));
+    })
+    .catch((err) => {
+      console.log("error", err);
+    });
+};
+
+export const getUserVerification = (email) => async (dispatch) => {
+  await axios
+    .get(`${BASE_URL}/api/v1/verifications/byemail/${email}`)
+    .then(({ data }) => {
+      console.log("verifications data", data);
+      dispatch(getOneUserVerifications(data.verifications));
+    })
+    .catch((err) => {
+      console.log("error", err);
+    });
+};
+export const getUserTranscript = (email) => async (dispatch) => {
+  await axios
+    .get(`${BASE_URL}/api/v1/transcript/byemail/${email}`)
+    .then(({ data }) => {
+      console.log("transcript data", data);
+      dispatch(getOneUserTranscript(data.transcripts));
     })
     .catch((err) => {
       console.log("error", err);

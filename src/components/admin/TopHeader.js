@@ -1,20 +1,86 @@
-import React, { useState } from "react";
-// import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import Bell from "../../asset/bell.svg";
 import Avatar from "../../asset/Avatar.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { getMessages, deleteMessages } from '../../state/actions/verifications';
+import { BellFilled } from "@ant-design/icons";
+
 
 function TopHeader({ setShow, show }) {
+
+  const dispatch = useDispatch();
+  const { messages } = useSelector((state) => state.verifications);
+  const [open, setOpen] = useState(true);
+  const [font, setFont] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
+
   const handleMenuIcon = () => {
     setShow(!show);
+  };
+
+  useEffect(() => {
+    dispatch(getMessages("value"))
+  }, [dispatch]);
+
+
+  const handleFontChange = (font) => {
+    setFont(font);
   };
   
   return (
     <HeadContainer className="top-header">
       <h5>overview</h5>
+      <div className="right-con">
+        <div className="nots">
+           <BellFilled
+              style={{
+                fontSize: "1.5em",
+                color: "#2C3E50",
+                width: "20px",
+                cursor: "pointer",
+              }}
+              onClick={() => setOpen(!open)}
+            />
+             {!open && messages.length > 0 ? (
+              <div className="messages">
+                 {messages.map(message => (
+                   <div 
+                     key={message.id}
+                     className="message">
+                     <h2>{message.subject}</h2>
+                      <p>{message.message}</p>
+                     <button
+                        onClick={() => {
+                         dispatch(deleteMessages(message.id))
+                         handleFontChange(message.id);
+                        }}
+                        className={
+                          font === message.id
+                            ? "read"
+                            : ""
+                        }
+                     >
+                       mark as read</button>
+                    </div>
+                    ))}
+                
+       </div>
+          ) : null}
+          {messages.length > 0 && <div className="red-circle"></div>}
+        </div>
+        <div className="user-avatar">
+          <img 
+            src={Avatar} alt="Avatar" />
+          <div className="user-info">
+            <p>
+              {user?.firstName} {user?.lastName}
+            </p>
+            <p>{user?.email}</p>
+          </div>
+        </div>
+      </div>
       {!show ? (
         <FontAwesomeIcon
           icon={faBars}
@@ -27,7 +93,7 @@ function TopHeader({ setShow, show }) {
           className="menu-icon"
           onClick={handleMenuIcon}
         />
-      )}
+        )}
     </HeadContainer>
   );
 }
@@ -92,6 +158,54 @@ const HeadContainer = styled.div`
     margin-left: 20px;
     margin-right: 20px;
     display: inline-block;
+    .anticon.anticon-bell {
+      outline: none !important;
+    }
+    .red-circle {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #f42753;
+      border: 2.2px solid #fff;
+    }
+    .messages {
+      position: absolute;
+      right: 30%;
+      background: #ffffff;
+      max-height: 230px;
+      overflow-y: scroll;
+      padding: 0.5rem 1rem;
+      color: #707070;
+      width: 400px;
+      text-align: left;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px #00000029;
+      z-index: 1;
+      .message {
+        border-bottom: 1px solid #707070;
+        padding-bottom: 1.2rem;
+        button {
+          float: right;
+          background: transparent;
+          border: none;
+          color: #0092E0;
+          text-transform: capitalize;
+          cursor: pointer;
+          outline: none;
+          &.read {
+        font-weight: bolder;
+      }
+        }
+         p {
+           letter-spacing: 0.32px;
+           opacity: 1;
+           font-weight: normal;
+         }
+      }
+    }
   }
 
   .profile-icon {
