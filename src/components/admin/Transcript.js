@@ -90,7 +90,6 @@ const Requests = ({ history }) => {
   const handleChange = (e) => {
     setFirstNameInput(e.target.value);
   };
-  console.log("gettete", searchParameter, dateFilter);
 
   return (
     <AdminLayout history={history}>
@@ -501,7 +500,6 @@ const RequestWrapper = styled.div`
     color: #173049;
     font-family: segoebold;
     opacity: 1;
-
     li {
       margin-right: 3rem;
       cursor: pointer;
@@ -554,74 +552,39 @@ const RequestWrapper = styled.div`
       padding: 2rem 0;
     }
     .card1 {
-    background: #E6E6E6;
-    padding: 0.5rem;
-    width: 12rem;
-    height: 5rem;
-    margin-right: 0.8rem;
-    border-radius: 0.2rem;
-    /* margin-left: -6rem; */
-    cursor: pointer;
-    @media (max-width: 400px) {
-    margin-right: 0;
-    width: 15rem;
-    height: 5rem;
-  }
-    @media (max-width: 500px) {
-      margin-left: 0.8rem;
-      width: 15rem;
+      background: #e6e6e6;
+      padding: 0.5rem;
+      width: 12rem;
       height: 5rem;
-    }
-    h6 {
-      font-weight: bolder;
-      text-transform: capitalize;
-      font-family: MontserratBold;
-      color: #707070;
-      letter-spacing: 0px;
-      opacity: 1;
-      font-size: 16px;
-    }
-    p {
-      font-weight: lighter;
-      font-size: 0.8rem;
-      color: #707070;
-      letter-spacing: 0.32px;
-    }
-  }
-  .card2 {
-    background: #E6E6E6;
-    padding: 0.5rem;
-    width: 12rem;
-    height: 5rem;
-    margin-left: 0.7rem;
-    border-radius: 0.2rem;
-    cursor: pointer;
-  @media (max-width: 400px) {
-    margin-left: 0;
-    width: 15rem;
-    height: 5rem;
-  }
-    @media (max-width: 500px) {
-      margin-top: 2rem;
-      width: 15rem;
-    height: 5rem;
-      margin-left: 0.8rem;
-    }
-    h6 {
-      font-weight: bolder;
-      text-transform: capitalize;
-      font-family: MontserratBold;
-      letter-spacing: 0.32px;
-      color: #707070;
-      opacity: 1;
-      font-size: 16px;
-    }
-    p {
-      font-weight: lighter;
-      font-size: 0.8rem;
-      letter-spacing: 0.32px;
-      color: #707070;
-      
+      margin-right: 0.8rem;
+      border-radius: 0.2rem;
+      /* margin-left: -6rem; */
+      cursor: pointer;
+      @media (max-width: 400px) {
+        margin-right: 0;
+        width: 15rem;
+        height: 5rem;
+      }
+      @media (max-width: 500px) {
+        margin-left: 0.8rem;
+        width: 15rem;
+        height: 5rem;
+      }
+      h6 {
+        font-weight: bolder;
+        text-transform: capitalize;
+        font-family: MontserratBold;
+        color: #707070;
+        letter-spacing: 0px;
+        opacity: 1;
+        font-size: 16px;
+      }
+      p {
+        font-weight: lighter;
+        font-size: 0.8rem;
+        color: #707070;
+        letter-spacing: 0.32px;
+      }
     }
     .card2 {
       background: #e6e6e6;
@@ -751,8 +714,7 @@ const RequestWrapper = styled.div`
       letter-spacing: 0.32px;
       font-size: 0.8rem;
     }
-    }
-   
+  }
 
   .transcript-order {
     margin-top: -1rem;
@@ -845,18 +807,18 @@ const RequestWrapper = styled.div`
     }
     .no-order {
       background: white;
-    display: grid;
-    place-items: center;
-    padding: 1rem;
-    border-radius: 10px;
-    p {
-      text-align: center;
-      font-family: MontserratRegular;
-      font-weight: normal;
-      letter-spacing: 0.28px;
-      color: #707070;
-      opacity: 0.2;
-    }
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+      border-radius: 10px;
+      p {
+        text-align: center;
+        font-family: MontserratRegular;
+        font-weight: normal;
+        letter-spacing: 0.28px;
+        color: #707070;
+        opacity: 0.2;
+      }
     }
   }
   .details {
