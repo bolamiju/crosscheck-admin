@@ -8,7 +8,7 @@ const getInstitutes = (payload) => {
     payload,
   };
 };
-const addInstitutes =  (payload) =>{
+const fetchInstitutes =  (payload) =>{
   return{
     type: types.ADD_INSTITUTIONS,
     payload,
@@ -18,7 +18,7 @@ export const getAllInstitutions = () => (dispatch) => {
   axios
     .get(`${BASE_URL}/api/v1/institutions`)
     .then(({ data }) => {
-      dispatch(getInstitutes(data.institution));
+      dispatch(fetchInstitutes(data.institution));
     })
     .catch((err) => {
       return err;

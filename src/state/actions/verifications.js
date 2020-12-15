@@ -69,6 +69,18 @@ export const delMessages = (payload) => {
     payload,
   };
 };
+export const updateRequest = (payload) => {
+  return {
+    type: types.UPDATE_REQUEST,
+    payload,
+  };
+};
+export const updateTranscript = (payload) => {
+  return {
+    type: types.UPDATE_TRANSCRIPT,
+    payload,
+  };
+};
 
 export const getVerificationsByStatus = (status) => async (dispatch) => {
   await axios
@@ -108,32 +120,27 @@ export const getTranscriptsByStatus = (status) => async (dispatch) => {
     });
 };
 
-export const updateVerificatonRequest = async (id, data) => {
-  console.log("dataaa", id, data);
+export const updateVerificatonRequest = (id, data) =>
   axios
     .put(`https://croscheck.herokuapp.com/api/v1/verifications/${id}`, data, {
       headers: {
         "content-type": "application/json",
       },
     })
-    .then(({ data }) => {
-      console.log("pending data", data);
-    })
-    .catch((err) => {
-      console.log("error", err);
-    });
-};
+  
 
-export const updateTranscriptRequest = async (id, data) => {
+
+export const updateTranscriptRequest =  (id, data) => async(dispatch) => {
   console.log("dataaa", id, data);
   axios
     .put(`https://croscheck.herokuapp.com/api/v1/transcript/${id}`, data, {
       headers: {
-        "content-type": "application/json",
+        "content-type": "application/json",    
       },
     })
     .then(({ data }) => {
       console.log("pending data", data);
+      dispatch(updateTranscript(data.message))
     })
     .catch((err) => {
       console.log("error", err);

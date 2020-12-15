@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import Bell from "../../asset/bell.svg";
 import Avatar from "../../asset/Avatar.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { getMessages, deleteMessages } from '../../state/actions/verifications';
+import { BellFilled } from "@ant-design/icons";
+
 
 function TopHeader({ setShow, show }) {
 
   const dispatch = useDispatch();
-  const { getMessage } = useSelector((state) => state.verifications);
+  const { messages } = useSelector((state) => state.verifications);
   const [open, setOpen] = useState(true);
   const [font, setFont] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
@@ -33,16 +34,18 @@ function TopHeader({ setShow, show }) {
       <h5>overview</h5>
       <div className="right-con">
         <div className="nots">
-          <img
-            onClick={
-              () => setOpen(!open)}
-            src={Bell}
-            alt="bellimage"
-            style={{ fontSize: "0.8em", color: "#2C3E50", width: "18px", cursor: "pointer" }}
+           <BellFilled
+              style={{
+                fontSize: "1.5em",
+                color: "#2C3E50",
+                width: "20px",
+                cursor: "pointer",
+              }}
+              onClick={() => setOpen(!open)}
             />
-             {!open ? (
+             {!open && messages.length > 0 ? (
               <div className="messages">
-                 {getMessage.map(message => (
+                 {messages.map(message => (
                    <div 
                      key={message.id}
                      className="message">
@@ -64,7 +67,8 @@ function TopHeader({ setShow, show }) {
                     ))}
                 
        </div>
-     ): null}
+          ) : null}
+          {messages.length > 0 && <div className="red-circle"></div>}
         </div>
         <div className="user-avatar">
           <img 
@@ -154,6 +158,19 @@ const HeadContainer = styled.div`
     margin-left: 20px;
     margin-right: 20px;
     display: inline-block;
+    .anticon.anticon-bell {
+      outline: none !important;
+    }
+    .red-circle {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #f42753;
+      border: 2.2px solid #fff;
+    }
     .messages {
       position: absolute;
       right: 30%;

@@ -1,99 +1,87 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-import AdminLayout from './AdminLayout';
-import { getAllInstitutions } from "../../state/actions/institutions";
+import AdminLayout from "./AdminLayout";
+import styled from 'styled-components';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import chat from "../../asset/comment.svg";
-import styled from "styled-components";
-import { getUserVerification, getUserTranscript } from "../../state/actions/verifications";
+import { getAllInstitutions } from "../../state/actions/Institutions";
 
+import {
+  getUserVerification,
+  getUserTranscript,
+} from "../../state/actions/verifications";
 
 const History = ({ history }) => {
-    
+  const [currentPage, setCurrentPage] = useState(0);
+  const dispatch = useDispatch();
+  const { userVerifications, newTranscript } = useSelector(
+    (state) => state.verifications
+  );
+  
 
-    const [currentPage, setCurrentPage] = useState(0);
+  const [input, setInput] = useState("");
+  const [searchParameter] = useState("status");
+  const user = JSON.parse(localStorage.getItem("user"));
 
-    const dispatch = useDispatch();
-    const { userVerifications, newTranscript } = useSelector(
-      (state) => state.verifications
-    );
-    const [open, setOpen] = useState(false);
-    const [input, setInput] = useState("");
-    const [id, setId] = useState("");
-    const [searchParameter] = useState("status");
-    const user = JSON.parse(localStorage.getItem("user"));
-  
-    useEffect(() => {
-      dispatch(getUserTranscript(user.email));
-    }, [dispatch]);
-  
-    const allHistory = userVerifications.concat(newTranscript);
-    useEffect(() => {
-      dispatch(getUserVerification(user.email));
-    }, [dispatch]);
-  
-    useEffect(() => {
-      dispatch(getAllInstitutions());
-      dispatch(getUserVerification(user.email));
-    }, [dispatch]);
-  
-  
-  
-  
-    const verificationsNavigation = (e, index) => {
-      e.preventDefault();
-      if (index < 0 || index >= verificationsCount) {
-        return;
-      } else {
-        setCurrentPage(index);
-      }
-    };
-  
-    const filteredItems = allHistory.filter((history) =>
-      history[searchParameter]
-        .toLocaleLowerCase()
-        .includes(input.toLocaleLowerCase())
-    );
-  
-    const pageSize = 10;
-  
-    const verificationsCount = Math.ceil(filteredItems.length / pageSize);
-  
-    const handleOpen = (id) => {
-      setOpen(true);
-      setId(id)
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
-  
-    function handleInputChange(e) {
-      setInput(e.target.value);
+  useEffect(() => {
+    console.log("hello", user.email)
+    dispatch(getUserTranscript(user.email));
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log("hi", user.email)
+    dispatch(getUserVerification(user.email));
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log("hey")
+    dispatch(getAllInstitutions());
+    // dispatch(getUserVerification(user.email));
+  }, [dispatch]);
+
+  const allHistory = userVerifications.concat(newTranscript);
+  console.log("please", allHistory)
+
+  const verificationsNavigation = (e, index) => {
+    e.preventDefault();
+    if (index < 0 || index >= verificationsCount) {
+      return;
+    } else {
+      setCurrentPage(index);
     }
-  
-    const truncateString = (str) => {
-      if (str.length <= 24) {
-        return str;
-      }
-      return str.slice(0, 32) + "...";
-    };
+  };
+  const pageSize = 10;
 
+  const filteredItems = allHistory.filter((history) =>
+  history[searchParameter]
+    .toLocaleLowerCase()
+    .includes(input.toLocaleLowerCase())
+);
 
-    return (
-        <AdminLayout history={history}>
-            <HistoryWrapper>
-                <div className="py-5 mx-5">
-                    <h6>Request history</h6>
-                      {/* <Table> */}
-        <div className="new-table" id="tableScroll">
+  const verificationsCount = Math.ceil(filteredItems.length / pageSize);
+  function handleInputChange(e) {
+    setInput(e.target.value);
+  }
+
+  const truncateString = (str) => {
+    if (str.length <= 24) {
+      return str;
+    }
+    return str.slice(0, 32) + "...";
+  };
+
+  return (
+    <AdminLayout history={history}>
+      <HistoryWrapper className=" col-12 p-5">
+        <h6>request history</h6>
+         {/* <Table> */}
+         <div className="new-table" id="tableScroll">
           <p
             className="history"
             style={{ marginBottom: "45px", marginTop: "25px" }}
           >
-            Verification history
+            Request History
           </p>
           <div className="showing-search">
             <p className="showing">Showing ({filteredItems.length}) entries</p>
@@ -120,7 +108,6 @@ const History = ({ history }) => {
                 <th>Name</th>
                 <th>Institution</th>
                 <th>Status</th>
-                <th>message</th>
               </tr>
             </thead>
             <tbody className="t-body">
@@ -146,9 +133,6 @@ const History = ({ history }) => {
                           >
                             {status}
                           </td>
-                          <td onClick={() => handleOpen(_id)}>
-                            <img src={chat} alt="message" />
-                          </td>
                         </tr>
                         <tr className="space"></tr>
                       </>
@@ -156,9 +140,8 @@ const History = ({ history }) => {
                   )
                 : ""}
             </tbody>
-            <Modal open={open} onClose={handleClose} id={id} />
           </table>
-          <div className="pagination-line">
+          <div className="pagination-line mx-4 my-4 ">
             <p>
               Showing{" "}
               {
@@ -198,20 +181,18 @@ const History = ({ history }) => {
           </div>
         </div>
         {/* </Table> */}
-                </div>
-            
-            </HistoryWrapper>
-        </AdminLayout>
-    )
-}
+      </HistoryWrapper>
+    </AdminLayout>
+  )
+};
 
 const HistoryWrapper = styled.div`
- background: var(--mainWhite);
-  width: 100%;
-  margin-top: -1.25rem;
-  overflow-y: scroll;
-  height: 100%;
-  h6 {
+background: var(--mainWhite);
+width: 100%;
+margin-top: -1.25rem;
+overflow-y: scroll;
+height: 100%;
+h6 {
     font-family: MontserratRegular;
     letter-spacing: 0px;
     color: #0092e0;
@@ -222,7 +203,7 @@ const HistoryWrapper = styled.div`
     opacity: 1;
     padding-bottom: -1.5rem;
   }
-  .new-table {
+.new-table {
     /* margin-top: 10px; */
     width: 100%;
     background: #ffffff 0% 0% no-repeat padding-box;
@@ -301,12 +282,13 @@ const HistoryWrapper = styled.div`
       }
       .search-input {
         position: relative;
-        padding: 0.5rem;
+        padding: 0.3rem;
 
         input {
-        height: 1rem;
-        padding: 0.2rem;
+        height: 1.5rem;
+        padding: 1rem;
         outline: none;
+        border: 1px solid black;
       }
       .icon {
         position: absolute;
@@ -317,6 +299,14 @@ const HistoryWrapper = styled.div`
       }
     }
       
+    }
+  }
+  .pagination-line {
+    display: flex;
+    justify-content: space-between;
+    p{
+      font-size: 1.2rem;
+      font-weight: normal;
     }
   }
 `
