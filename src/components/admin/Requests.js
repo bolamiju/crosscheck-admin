@@ -67,14 +67,42 @@ const Requests = ({ history }) => {
     setEndDate(dateString[1]);
   };
 
-  const filterOrder = pendingVerifications.filter((verification) =>
+  const pendingFilterOrder = pendingVerifications.filter((verification) =>
     verification[searchParameter].toLowerCase().includes(firstNameInput)
   );
 
   const min = Date.parse(startDate);
   const max = Date.parse(endDate);
 
-  const dateFilter = pendingVerifications.filter((verification) => {
+  const pendingDateFilter = pendingVerifications.filter((verification) => {
+    if (
+      Date.parse(verification[searchParameter]) >= min &&
+      Date.parse(verification[searchParameter]) <= max
+    ) {
+      return verification;
+    }
+  });
+
+  const processingFilterOrder = processingVerifications.filter((verification) =>
+    verification[searchParameter].toLowerCase().includes(firstNameInput)
+  );
+
+
+  const processingDateFilter = processingVerifications.filter((verification) => {
+    if (
+      Date.parse(verification[searchParameter]) >= min &&
+      Date.parse(verification[searchParameter]) <= max
+    ) {
+      return verification;
+    }
+  });
+
+  const completedFilterOrder = completedVerifications.filter((verification) =>
+    verification[searchParameter].toLowerCase().includes(firstNameInput)
+  );
+
+
+  const completedDateFilter = completedVerifications.filter((verification) => {
     if (
       Date.parse(verification[searchParameter]) >= min &&
       Date.parse(verification[searchParameter]) <= max
@@ -230,14 +258,15 @@ const Requests = ({ history }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {(searchParameter !== dateFilter
-                          ? filterOrder
-                          : dateFilter
+                        {(searchParameter === "firstName"
+                          ? pendingFilterOrder
+                          : pendingDateFilter
                         ).length > 0 ? (
-                            (searchParameter !== dateFilter
-                              ? filterOrder
-                              : dateFilter
-                            ).map((verification) => (
+                            (searchParameter === "firstName"
+                              ? pendingFilterOrder
+                              : pendingDateFilter
+                            )
+                            .map((verification) => (
                               <tr
                                 key={verification._id}
                                 onClick={() => {
@@ -293,8 +322,14 @@ const Requests = ({ history }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {processingVerifications.length > 0 ? (
-                        processingVerifications.map((verification) => (
+                      {(searchParameter === "firstName"
+                        ? processingFilterOrder
+                        : processingDateFilter
+                      ).length > 0 ? (
+                          (searchParameter === "firstName"
+                            ? processingFilterOrder
+                          :processingDateFilter)
+                          .map((verification) => (
                           <tr
                             key={verification._id}
                             onClick={() => {
@@ -349,8 +384,13 @@ const Requests = ({ history }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {completedVerifications.length > 0 ? (
-                        completedVerifications.map((verification) => (
+                      {(searchParameter === "firstName"
+                        ? completedFilterOrder
+                      : completedDateFilter).length > 0 ? (
+                          (searchParameter === "firstName"
+                            ? completedFilterOrder
+                          : completedDateFilter)
+                          .map((verification) => (
                           <tr
                             key={verification._id}
                             onClick={() => {
@@ -685,7 +725,7 @@ const RequestWrapper = styled.div`
     padding: 0.5rem;
     width: 12rem;
     height: 5rem;
-    margin-left: 0.7rem;
+    margin-left: -2rem;
     border-radius: 0.2rem;
     cursor: pointer;
     color: #ffffff;

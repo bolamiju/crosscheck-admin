@@ -9,248 +9,267 @@ import * as Yup from 'yup';
 
 const Institution = () => {
 
-    const dispatch = useDispatch();
-    const { institutions } = useSelector((state) => state.institutions);
-    // const { addInstitutions } = useSelector((state) => state.addInstitutions);
-    
-    const [currentPage, setCurrentPage] = useState(0);
-    const [input, setInput] = useState("");
-    const [hideTable, setHideTable] = useState(false);
+  const dispatch = useDispatch();
+  const { institutions, addInstitutions } = useSelector((state) => state.institutions);
 
-    useEffect(() => {
-        dispatch(getAllInstitutions());
-    }, [dispatch]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [input, setInput] = useState("");
+  const [hideTable, setHideTable] = useState(false);
 
-    const  handleInputChange = (e) =>{
-        setInput(e.target.value);
-      }
-    
-      const filteredItems = institutions.filter((item) =>
-        item.name.toLocaleLowerCase().includes(input.toLocaleLowerCase())
-      );
-    
-      const pageSize = 10;
-      const pagesCount = Math.ceil(filteredItems.length / pageSize);
-    
-    // const verificationsCount = Math.ceil(allHistory.length / pageSize);
-    
-    const handleNavigation = (e, index) => {
-        e.preventDefault();
-        if (index < 0 || index >= pagesCount) {
-          return;
-        } else {
-          setCurrentPage(index);
-        }
-    };
-    
-    const handleSelected = (institute) => {
-        // dispatch(selectSchool(institute));
-        setHideTable(true);
-        setInput(institute.name);
-        // history.push("/new");
-      };
-    
+  useEffect(() => {
+    dispatch(getAllInstitutions());
+  }, [dispatch]);
 
-    return (
-        <div className=" col-12 mx-auto text-center">
-            <SelectSch>
-                <div className="selects">
-                    <div className="sch-select">
-                        <label style={{ paddingLeft: "5px" }}>Select Institution</label>
-                        <input
-                            type="text"
-                            className="schl-input"
-                            onChange={handleInputChange}
-                            value={input}
-                            name="input"
-                            placeholder="Search for a school"
-                        />
-                    </div>
-                </div>
-                {filteredItems.length > 0 && input.length > 0 && (
-                    <div className="new-table">
-                        <table
-                            cellSpacing="0"
-                            cellPadding="0"
-                            border="0"
-                            className={hideTable ? "hide-table" : ""}
-                        >
-                            <thead className="table-headers">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Country</th>
-                                    <th>category rate</th>
-                                    <th>amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredItems
-                                    .slice(currentPage * pageSize, (currentPage + 1) * pageSize)
-                                    .map((ite) => (
-                                        <tr onClick={() => handleSelected(ite)} key={ite.name}>
-                                            <th className="mobile-header">Number</th>
-                                            <td>{ite.name}</td>
-                                            <th className="mobile-header">Market rate</th>
-                                            <td>{ite.country}</td>
-                                            <th className="mobile-header">Weight</th>
-                                            <td>{ite.category}</td>
-                                            <th className="mobile-header">Value</th>
-                                            <td>{ite.amount}</td>
-                                        </tr>
-                                        // <tr className="space"></tr>
-                                    ))}
-                            </tbody>
-                        </table>
-                        {!hideTable && (
-                            <div className="pagination-line">
-                                <p>
-                                    Showing{" "}
-                                    {
-                                        filteredItems.slice(
-                                            currentPage * pageSize,
-                                            (currentPage + 1) * pageSize
-                                        ).length
-                                    }{" "}
+ 
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+  }
+
+  const filteredItems = institutions.filter((item) =>
+    item.name.toLocaleLowerCase().includes(input.toLocaleLowerCase())
+  );
+
+  const pageSize = 10;
+  const pagesCount = Math.ceil(filteredItems.length / pageSize);
+
+  // const verificationsCount = Math.ceil(allHistory.length / pageSize);
+
+  const handleNavigation = (e, index) => {
+    e.preventDefault();
+    if (index < 0 || index >= pagesCount) {
+      return;
+    } else {
+      setCurrentPage(index);
+    }
+  };
+
+  const handleSelected = (institute) => {
+    // dispatch(selectSchool(institute));
+    setHideTable(true);
+    setInput(institute.name);
+    // history.push("/new");
+  };
+
+
+  return (
+    <div className=" col-12 mx-auto text-center">
+      <SelectSch>
+        <div className="selects mx-auto text-center">
+          <div className="sch-select">
+            <label style={{ paddingLeft: "5px" }}>Select Institution</label>
+            <input
+              type="text"
+              className="schl-input"
+              onChange={handleInputChange}
+              value={input}
+              name="input"
+              placeholder="Search for a school"
+            />
+          </div>
+        </div>
+        {filteredItems.length > 0 && input.length > 0 && (
+          <div className="new-table">
+            <table
+              cellSpacing="0"
+              cellPadding="0"
+              border="0"
+              className={hideTable ? "hide-table" : ""}
+            >
+              <thead className="table-headers">
+                <tr>
+                  <th>Name</th>
+                  <th>Country</th>
+                  <th>category rate</th>
+                  <th>amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredItems
+                  .slice(currentPage * pageSize, (currentPage + 1) * pageSize)
+                  .map((ite) => (
+                    <tr onClick={() => handleSelected(ite)} key={ite.name}>
+                      <th className="mobile-header">Number</th>
+                      <td>{ite.name}</td>
+                      <th className="mobile-header">Market rate</th>
+                      <td>{ite.country}</td>
+                      <th className="mobile-header">Weight</th>
+                      <td>{ite.category}</td>
+                      <th className="mobile-header">Value</th>
+                      <td>{ite.amount}</td>
+                    </tr>
+                    // <tr className="space"></tr>
+                  ))}
+              </tbody>
+            </table>
+            {!hideTable && (
+              <div className="pagination-line">
+                <p>
+                  Showing{" "}
+                  {
+                    filteredItems.slice(
+                      currentPage * pageSize,
+                      (currentPage + 1) * pageSize
+                    ).length
+                  }{" "}
                     of {pagesCount} of entries
                   </p>
-                                <Pagination aria-label="Page navigation example">
-                                    <PaginationItem
-                                        disabled={currentPage <= 0}
-                                        className="prev"
-                                        onClick={(e) => handleNavigation(e, currentPage - 1)}
-                                    >
-                                        <PaginationLink previous href={() => false} />
-                                    </PaginationItem>
+                <Pagination aria-label="Page navigation example">
+                  <PaginationItem
+                    disabled={currentPage <= 0}
+                    className="prev"
+                    onClick={(e) => handleNavigation(e, currentPage - 1)}
+                  >
+                    <PaginationLink previous href={() => false} />
+                  </PaginationItem>
 
-                                    {[...Array(pagesCount)].map((page, i) => (
-                                        <PaginationItem
-                                            active={i === currentPage}
-                                            key={i}
-                                            onClick={(e) => handleNavigation(e, i)}
-                                        >
-                                            <PaginationLink href={() => false}>
-                                                {i + 1}
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                    ))}
+                  {[...Array(pagesCount)].map((page, i) => (
+                    <PaginationItem
+                      active={i === currentPage}
+                      key={i}
+                      onClick={(e) => handleNavigation(e, i)}
+                    >
+                      <PaginationLink href={() => false}>
+                        {i + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
 
-                                    <PaginationItem
-                                        disabled={currentPage >= pagesCount - 1}
-                                        onClick={(e) => handleNavigation(e, currentPage + 1)}
-                                    >
-                                        <PaginationLink
-                                            next
-                                            href={() => false}
-                                            className="next"
-                                        />
-                                    </PaginationItem>
-                                </Pagination>
-                            </div>
-                        )}
-                    </div>
-          )}
-          <Formik
-                    initialValues={{ name: "", country: "", category: "" }}
-                    onSubmit={(values, { setSubmitting }) => {
-                        console.log("submitting", values)
-                    }}
-                    validationSchema={Yup.object().shape({
-                        name: Yup.string()
-                            .required("Required !"),
-                        country: Yup.string()
-                            .email()
-                            .required("Required !"),
-                        category: Yup.string()
-                            .required("Required !")
-                    })}
-                >
-                    {
-                        props => {
-                            const {
-                                values,
-                                touched,
-                                errors,
-                                isSubmitting,
-                                handleChange,
-                                handleBlur,
-                                handleSubmit
-                            } = props;
-                            return (
-                                <form className="form" onSubmit={handleSubmit}>
-                                    <p>add an institution</p>
-                                    <div className="field">
-                                        <label htmlFor="name">name of institution</label>
-                                        <input
-                                            name="name"
-                                            type="text"
-                                            value={values.name}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            className={errors.name && touched.name && "error"}
-                                        />
+                  <PaginationItem
+                    disabled={currentPage >= pagesCount - 1}
+                    onClick={(e) => handleNavigation(e, currentPage + 1)}
+                  >
+                    <PaginationLink
+                      next
+                      href={() => false}
+                      className="next"
+                    />
+                  </PaginationItem>
+                </Pagination>
+              </div>
+            )}
+          </div>
+        )}
+        <Formik
+          initialValues={{ name: "", country: "", category: "", amount: "",state:'' }}
+          onSubmit={( values, {resetForm}) => {
+            console.log("submitting", values)  
+            addAllInstitutions(values);
+            resetForm({values: ""})
+          }}
+          validationSchema={Yup.object().shape({
+            name: Yup.string()
+              .required("Required !"),
+            country: Yup.string()
+              .required("Required !"),
+            category: Yup.string()
+              .required("Required !")
+          })}
+        >
+          {
+            props => {
+              const {
+                values,
+                touched,
+                errors,
+                isSubmitting,
+                handleChange,
+                handleBlur,
+                handleSubmit, 
+                resetForm,
+              } = props;
+              return (
+                <form className="form" onSubmit={handleSubmit}>
+                  <p>add an institution</p>
+                  <div className="field">
+                    <label htmlFor="name">name of institution</label>
+                    <input
+                      name="name"
+                      type="text"
+                      value={values.name}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={errors.name && touched.name && "error"}
+                    />
 
-                                    </div>
-                                    {errors.name && touched.name && (
-                                        <div className="input-feedback">{errors.name}</div>
-                                    )}
-                                    <div className="field">
-                                        <label htmlFor="country">country</label>
-                                        <input
-                                            name="country"
-                                            type="country"
-                                            value={values.country}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            className={errors.country && touched.country && "error"}
-                                        />
-                                    </div>
-                                    {errors.country && touched.country && (
-                                        <div className="input-feedback">{errors.country}</div>
-                                    )}
-                                    <div className="field">
-                                        <label htmlFor="amount">amount</label>
-                                        <input
-                                            name="amount"
-                                            type="text"
-                                            value={values.amount}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                        />
-                                    </div>
-                                    <div className="field">
-                                        <label htmlFor="category">category</label>
-                                        <input
-                                            name="category"
-                                            type="text"
-                                            value={values.category}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            className={errors.category && touched.category && "error"}
-                                        />
-                                    </div>
-                                    {errors.category && touched.category && (
-                                        <div className="input-feedback">{errors.category}</div>
-                                    )}
-                                   
-                                </form>
-                            )
-                        }
-                    }
-                </Formik>
-        </SelectSch>
-        </div>
-    )
+                  </div>
+                  {errors.name && touched.name && (
+                    <div className="input-feedback">{errors.state}</div>
+                  )}
+                    <div className="field">
+                    <label htmlFor="name">state</label>
+                    <input
+                      name="state"
+                      type="text"
+                      value={values.state}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={errors.state && touched.state && "error"}
+                    />
+
+                  </div>
+                  {errors.name && touched.state && (
+                    <div className="input-feedback">{errors.state}</div>
+                  )}
+                  <div className="field">
+                    <label htmlFor="country">country</label>
+                    <input
+                      name="country"
+                      type="country"
+                      value={values.country}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={errors.country && touched.country && "error"}
+                    />
+                  </div>
+                  {errors.country && touched.country && (
+                    <div className="input-feedback">{errors.country}</div>
+                  )}
+                  <div className="field">
+                    <label htmlFor="amount">amount</label>
+                    <input
+                      name="amount"
+                      type="text"
+                      value={values.amount}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="category">category</label>
+                    <input
+                      name="category"
+                      type="text"
+                      value={values.category}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={errors.category && touched.category && "error"}
+                    />
+                  </div>
+                  {errors.category && touched.category && (
+                    <div className="input-feedback">{errors.category}</div>
+                  )}
+                  <button>Add Institution</button>
+
+                </form>
+              )
+            }
+          }
+        </Formik>
+      </SelectSch>
+    </div>
+  )
 };
 
 const SelectSch = styled.div`
   display: flex;
   flex-direction: column; 
+  align-items: center;
   width: 100%;
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 7px;
   padding-bottom: 25px;
-  box-shadow: 0px 0px 10px #00000029;
   margin-top: 20px;
+ 
   .selects {
     display: flex;
     margin-top: 25px;
@@ -434,6 +453,8 @@ const SelectSch = styled.div`
     margin-top: 2rem;
     width: 350px;
     min-height: 460px;
+    box-shadow: 0px 0px 10px #00000029;
+
 
     p {
     margin-top: 0 !important;
@@ -447,6 +468,7 @@ const SelectSch = styled.div`
     letter-spacing: 0.6px;
     color: #FFFFFF;
     opacity: 1;
+    text-transform: capitalize
     }
     .field {
         display: block;
@@ -480,7 +502,17 @@ const SelectSch = styled.div`
         margin-left: 1rem;
         font-size: 1rem;
     }
-}
+    button {
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+      background: #0091DF;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.5rem;
+      border-radius: 0.3rem;
+      font-size: 1rem;
+    }
+  }
 `;
 
 export default Institution

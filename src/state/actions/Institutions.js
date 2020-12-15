@@ -25,13 +25,14 @@ export const getAllInstitutions = () => (dispatch) => {
     });
 };
 
-export const addAllInstitutions = () => (dispatch) => {
+export const addAllInstitutions = (institution) => {
+  console.log('instty',institution)
   axios
-    .post(`${BASE_URL}/api/v1/institutions/add`)
+    .post(`${BASE_URL}/api/v1/institutions/add`, institution)
     .then(({ data }) => {
-      dispatch(addInstitutes(data.institution));
+      console.log(data)
     })
     .catch((err) => {
       return err;
     });
-};
+}

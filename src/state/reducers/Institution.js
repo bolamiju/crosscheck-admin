@@ -2,7 +2,7 @@ import * as types from "../actionTypes/verifications";
 
 const initialState = {
   institutions: [],
-  addInstitutions: "",
+  addInstitutions: {},
 };
 
 export default function userReducer(state = initialState, action) {

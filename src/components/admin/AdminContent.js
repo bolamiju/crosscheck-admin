@@ -3,8 +3,9 @@ import { useRouteMatch } from "react-router-dom";
 import Overview from "./Overview";
 import Requests from "./Requests";
 import Transcript from './Transcript';
-import Identity from './Identity';
-import Check from './Check';
+// import Identity from './Identity';
+// import Check from './Check';
+import History from './History';
 
 
 const AdminContent = (props) => {
@@ -26,12 +27,15 @@ const AdminContent = (props) => {
             : route && route.url === "/education" ? (
             <Requests />
             )
-            : route && route.url === "/identity" ? (
-              <Identity />
-              )
-              : route && route.url === "/check" ? (
-                <Check />
-              )
+            // : route && route.url === "/" ? (
+            //   <Identity />
+            //   )
+            //   : route && route.url === "/" ? (
+            //     <Check />
+            //     )
+                  : route && route.url === "/history" ? (
+                    <History />
+                  )
             : (
         <Overview history={history} />
          )}

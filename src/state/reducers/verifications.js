@@ -4,6 +4,10 @@ const initialState = {
   pendingVerifications: [],
   completedVerifications: [],
   processingVerifications: [],
+  getMessage: [],
+  deleteMessage: [],
+  userVerifications: [],
+  newTranscript: [],
 };
 
 export default function userReducer(state = initialState, action) {
@@ -23,8 +27,18 @@ export default function userReducer(state = initialState, action) {
         ...state,
         processingVerifications: action.payload,
       };
-
+      case types.GET_MESSAGES: 
+      return {
+        ...state,
+        getMessage: [...action.payload]
+      }
+      case types.DELETE_MESSAGES: 
+      return {
+        ...state,
+        deleteMessage: [...action.payload]
+      }
     default:
       return state;
   }
+
 }
