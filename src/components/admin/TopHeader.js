@@ -109,6 +109,9 @@ const HeadContainer = styled.div`
   border-bottom: 1px solid #eaeaea;
   opacity: 1;
   height: 50px;
+  ::-webkit-scrollbar {
+    display: none;
+  }
   @media screen and (max-width: 500px) {
     display: flex;
     padding: 10px 40px 10px 40px;
@@ -184,6 +187,9 @@ const HeadContainer = styled.div`
       border-radius: 5px;
       box-shadow: 0px 0px 10px #00000029;
       z-index: 1;
+      ::-webkit-scrollbar {
+         display: none;
+      }
       .message {
         border-bottom: 1px solid #707070;
         padding-bottom: 1.2rem;

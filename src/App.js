@@ -16,7 +16,6 @@ function App() {
        <Route exact path="/requests" component={AdminContent} />
        <Route exact path="/transcript" component={AdminContent} />
        <Route exact path="/education" component={AdminContent} />
-       <Route exact path="/" component={AdminContent} />
        <Route exact path="/history" component={AdminContent} />
        <Route exact path="/check" component={AdminContent} />
        <Route exact path="/instit" component={Institution} />

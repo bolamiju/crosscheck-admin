@@ -67,6 +67,9 @@ const OverviewWrapper = styled.div`
   margin-top: -1.25rem;
   overflow-y: scroll;
   height: 100%;
+  ::-webkit-scrollbar {
+    display: none;
+  }
   .welcome {
     /* width: 100%; */
     background: white;

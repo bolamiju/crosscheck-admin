@@ -21,7 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 const Requests = ({ history }) => {
   const [activeTab, setActiveTab] = useState("pending");
   const [activeCard, setActiveCard] = useState("new");
-  const [display, setDisplay] = useState("populated");
+  const [display, setDisplay] = useState("empty");
   const [background, setBackground] = useState("");
   const [verificationStatus, setVerificationStatus] = useState("");
   const [info, setInfo] = useState({});
@@ -32,8 +32,6 @@ const Requests = ({ history }) => {
   const [loading, setLoading] = useState(false);
 
   const { RangePicker } = DatePicker;
-
-  const [pay, setPay] = useState(false);
 
   const dispatch = useDispatch();
   const {
@@ -62,6 +60,9 @@ const Requests = ({ history }) => {
   };
 
   const handleUpdateVerification = async () => {
+    if (!verificationStatus) {
+      return toast.error('select an option')
+    }
     setLoading(true)
     const response = await
       updateVerificatonRequest(info._id, { verificationStatus });
@@ -69,6 +70,11 @@ const Requests = ({ history }) => {
     console.log("response", response)
     if (response.data.message === "verification updated") {
       toast.success("update sucessful !!")
+      setVerificationStatus("")
+    }
+    else {
+      toast.error("update Unsucessful. Try again !")
+
     }
   };
 
@@ -182,7 +188,6 @@ const Requests = ({ history }) => {
               <li
                 onClick={() => {
                   setActiveTab("pending");
-                  setPay(false);
                 }}
                 className={activeTab === "pending" ? "activeTab" : ""}
               >
@@ -192,7 +197,6 @@ const Requests = ({ history }) => {
               <li
                 onClick={() => {
                   setActiveTab("processing");
-                  setPay(false);
                 }}
                 className={activeTab === "processing" ? "activeTab" : ""}
               >
@@ -202,7 +206,6 @@ const Requests = ({ history }) => {
               <li
                 onClick={() => {
                   setActiveTab("completed");
-                  setPay(false);
                 }}
                 className={activeTab === "completed" ? "activeTab" : ""}
               >
@@ -505,7 +508,7 @@ const Requests = ({ history }) => {
                         {" "}
                         <FontAwesomeIcon
                           icon={faLongArrowAltRight}
-                          style={{ marginLeft: "5px", fontSize: "20px", paddingTop: "0.3rem"}}
+                          style={{ marginLeft: "5px", fontSize: "20px", paddingTop: "0.3rem" }}
                         />
                       </button>
                     </div>
@@ -534,6 +537,9 @@ const RequestWrapper = styled.div`
   overflow-y: scroll;
   overflow-x: hidden;
   height: 100%;
+  ::-webkit-scrollbar {
+    display: none;
+  }
   @media (max-width: 400px) {
     padding: 3rem 0;
   }
@@ -602,6 +608,7 @@ const RequestWrapper = styled.div`
     display: flex;
     justify-content: space-around;
     margin-left: -3rem;
+    margin-right: 2rem;
     cursor: pointer;
     margin-top: -1rem;
     @media (max-width: 400px) {
@@ -621,7 +628,7 @@ const RequestWrapper = styled.div`
     padding: 0.5rem;
     width: 12rem;
     height: 5rem;
-    margin-right: 0.8rem;
+    /* margin-right: 0.8rem; */
     border-radius: 0.2rem;
     cursor: pointer;
     @media (max-width: 400px) {
@@ -749,7 +756,7 @@ const RequestWrapper = styled.div`
     padding: 0.5rem;
     width: 12rem;
     height: 5rem;
-    margin-left: -2rem;
+    margin-left: 11.2px;
     border-radius: 0.2rem;
     cursor: pointer;
     color: #ffffff;
@@ -1021,10 +1028,8 @@ const RequestWrapper = styled.div`
         text-transform: capitalize;
         border: none;
         border-radius: 20px;
-        /* padding: 0.3rem; */
         color: #ffffff;
         outline: none;
-        /* padding: 0.5rem; */
       }
     }
     .details-info {

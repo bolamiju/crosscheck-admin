@@ -130,22 +130,14 @@ export const updateVerificatonRequest = (id, data) =>
   
 
 
-export const updateTranscriptRequest =  (id, data) => async(dispatch) => {
-  console.log("dataaa", id, data);
+export const updateTranscriptRequest =  (id, data)  => 
   axios
     .put(`https://croscheck.herokuapp.com/api/v1/transcript/${id}`, data, {
       headers: {
         "content-type": "application/json",    
       },
     })
-    .then(({ data }) => {
-      console.log("pending data", data);
-      dispatch(updateTranscript(data.message))
-    })
-    .catch((err) => {
-      console.log("error", err);
-    });
-};
+    
 
 export const getMessages = (value) => async(dispatch) => {
   await axios

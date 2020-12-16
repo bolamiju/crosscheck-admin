@@ -192,6 +192,9 @@ width: 100%;
 margin-top: -1.25rem;
 overflow-y: scroll;
 height: 100%;
+::-webkit-scrollbar {
+    display: none;
+  }
 h6 {
     font-family: MontserratRegular;
     letter-spacing: 0px;
