@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Sidebar from "./Sidebar";
-import TopHeader from "./TopHeader";
+import DashHeader from "./DashHeader";
 
 function DashboardLayout({ children, history }) {
   const [show, setShow] = useState(false);
@@ -14,7 +14,7 @@ function DashboardLayout({ children, history }) {
         <Sidebar className="sec" history={history} />
       </section>
 
-      <TopHeader setShow={setShow} show={show} />
+      <DashHeader setShow={setShow} show={show} />
       <Main>{children}</Main>
     </Div>
   );

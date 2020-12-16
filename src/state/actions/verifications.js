@@ -121,15 +121,11 @@ export const getTranscriptsByStatus = (status) => async (dispatch) => {
 };
 
 export const updateVerificatonRequest = (id, data) =>
-  axios.put(
-    `https://croscheck.herokuapp.com/api/v1/verifications/${id}`,
-    data,
-    {
-      headers: {
-        "content-type": "application/json",
-      },
-    }
-  );
+  axios.put(`https://localhost:5000/api/v1/verifications/${id}`, data, {
+    headers: {
+      "content-type": "application/json",
+    },
+  });
 
 export const updateTranscriptRequest = (id, data) => async (dispatch) => {
   console.log("dataaa", id, data);

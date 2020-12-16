@@ -4,12 +4,10 @@ import styled from "styled-components";
 import Avatar from "../../asset/Avatar.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { getMessages, deleteMessages } from '../../state/actions/verifications';
+import { getMessages, deleteMessages } from "../../state/actions/verifications";
 import { BellFilled } from "@ant-design/icons";
 
-
 function TopHeader({ setShow, show }) {
-
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.verifications);
   const [open, setOpen] = useState(true);
@@ -21,58 +19,50 @@ function TopHeader({ setShow, show }) {
   };
 
   useEffect(() => {
-    dispatch(getMessages("value"))
+    dispatch(getMessages("value"));
   }, [dispatch]);
-
 
   const handleFontChange = (font) => {
     setFont(font);
   };
-  
+
   return (
-    <HeadContainer className="top-header">
+    <HeadContainer>
       <h5>overview</h5>
       <div className="right-con">
         <div className="nots">
-           <BellFilled
-              style={{
-                fontSize: "1.5em",
-                color: "#2C3E50",
-                width: "20px",
-                cursor: "pointer",
-              }}
-              onClick={() => setOpen(!open)}
-            />
-             {!open && messages.length > 0 ? (
-              <div className="messages">
-                 {messages.map(message => (
-                   <div 
-                     key={message.id}
-                     className="message">
-                     <h2>{message.subject}</h2>
-                      <p>{message.message}</p>
-                     <button
-                        onClick={() => {
-                         dispatch(deleteMessages(message.id))
-                         handleFontChange(message.id);
-                        }}
-                        className={
-                          font === message.id
-                            ? "read"
-                            : ""
-                        }
-                     >
-                       mark as read</button>
-                    </div>
-                    ))}
-                
-       </div>
+          <BellFilled
+            style={{
+              fontSize: "1.5em",
+              color: "#2C3E50",
+              width: "20px",
+              cursor: "pointer",
+            }}
+            onClick={() => setOpen(!open)}
+          />
+          {!open && messages.length > 0 ? (
+            <div className="messages">
+              {messages.map((message) => (
+                <div key={message.id} className="message">
+                  <h5>{message.subject}</h5>
+                  <p>{message.message}</p>
+                  <button
+                    onClick={() => {
+                      dispatch(deleteMessages(message.id));
+                      handleFontChange(message.id);
+                    }}
+                    className={font === message.id ? "read" : ""}
+                  >
+                    mark as read
+                  </button>
+                </div>
+              ))}
+            </div>
           ) : null}
           {messages.length > 0 && <div className="red-circle"></div>}
         </div>
         <div className="user-avatar">
-          <img 
-            src={Avatar} alt="Avatar" />
+          <img src={Avatar} alt="Avatar" />
           <div className="user-info">
             <p>
               {user?.firstName} {user?.lastName}
@@ -93,7 +83,7 @@ function TopHeader({ setShow, show }) {
           className="menu-icon"
           onClick={handleMenuIcon}
         />
-        )}
+      )}
     </HeadContainer>
   );
 }
@@ -101,6 +91,7 @@ function TopHeader({ setShow, show }) {
 export default TopHeader;
 
 const HeadContainer = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -129,7 +120,6 @@ const HeadContainer = styled.div`
     color: #173049;
     opacity: 1;
     font-size: 14px;
-    margin-left: 15rem;
     text-transform: capitalize;
 
     @media (max-width: 400px) {
@@ -191,19 +181,19 @@ const HeadContainer = styled.div`
           float: right;
           background: transparent;
           border: none;
-          color: #0092E0;
+          color: #0092e0;
           text-transform: capitalize;
           cursor: pointer;
           outline: none;
           &.read {
-        font-weight: bolder;
-      }
+            font-weight: bolder;
+          }
         }
-         p {
-           letter-spacing: 0.32px;
-           opacity: 1;
-           font-weight: normal;
-         }
+        p {
+          letter-spacing: 0.32px;
+          opacity: 1;
+          font-weight: normal;
+        }
       }
     }
   }
