@@ -20,7 +20,6 @@ function DashboardLayout({ children, history }) {
   );
 }
 const Div = styled.div`
-  background: green;
   aside {
     @media (min-width: 500px) {
       display: none;
@@ -39,6 +38,7 @@ const Main = styled.main`
   height: calc(100% - 70px);
   bottom: 0;
   width: calc(100% - 230px);
+  background: var(--mainWhite);
 
   @media (max-width: 500px) {
     width: 100%;

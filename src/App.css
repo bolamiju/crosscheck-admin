@@ -7,7 +7,7 @@
   --lightTransparent: #9b9797;
 }
 .app {
-  background: white;
+  background: var(--mainWhite);
 }
 @font-face {
   font-family: segoesemiLight;

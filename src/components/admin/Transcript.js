@@ -11,10 +11,9 @@ import {
 import { DatePicker, Space } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getTranscriptsByStatus,
-  updateTranscriptRequest,
-} from "../../state/actions/verifications";
+import { getTranscriptsByStatus, updateTranscriptRequest } from "../../state/actions/verifications";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Requests = ({ history }) => {
   const [activeTab, setActiveTab] = useState("pending");
@@ -24,9 +23,9 @@ const Requests = ({ history }) => {
   const [transcriptStatus, setTranscriptStatus] = useState("");
   const [info, setInfo] = useState({});
   const [searchParameter, setSearchParameter] = useState("firstName");
-  const [firstNameInput, setFirstNameInput] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [firstNameInput, setFirstNameInput] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const dispatch = useDispatch();
   const {
     pendingTranscripts,
@@ -34,6 +33,8 @@ const Requests = ({ history }) => {
     processingTranscripts,
   } = useSelector((state) => state.transcripts);
   const { RangePicker } = DatePicker;
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     if (activeTab === "pending") {
@@ -53,9 +54,24 @@ const Requests = ({ history }) => {
     setTranscriptStatus(e.target.value);
   };
 
-  const handleUpdateTranscript = () => {
-    updateTranscriptRequest(info._id, { transcriptStatus });
-  };
+  const handleUpdateTranscript = async() => {
+    if (!transcriptStatus) {
+      return toast.error('select an option')
+    }
+    setLoading(true)
+    console.log('transcriptStatus',transcriptStatus)
+    const response = await updateTranscriptRequest(info._id, { transcriptStatus })
+    setLoading(false)
+    console.log(response.data)
+    if (response.data.message === "transcript updated") {
+      toast.success("update sucessful !!")
+      setTranscriptStatus("")
+    }
+    else {
+      toast.error("update Unsucessful. Try again !")
+
+    }
+  }
   const handleDateRange = (value, dateString) => {
     setStartDate(dateString[0]);
     setEndDate(dateString[1]);
@@ -127,6 +143,18 @@ const Requests = ({ history }) => {
   return (
     <AdminLayout history={history}>
       <RequestWrapper>
+      <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          style={{ marginTop: "20px" }}
+        />
         <div className="select col-12 mx-auto text-center my-3">
           <select
             defaultValue="no-value"
@@ -471,23 +499,17 @@ const Requests = ({ history }) => {
                       />
                     </div>
                     <div className="select">
-                      <select
-                        name="transcriptStatus"
-                        className="options"
-                        onClick={(e) => handleTranscriptStatus(e)}
-                      >
-                        <option value="processing">Processing</option>
-                        <option value="completed">Completed</option>
+                      <select name="transcriptStatus" className="options" onClick={(e) => handleTranscriptStatus(e)}>
+                        <option className="option" value="no value">choose status</option>
+                        <option className="option" value="processing">Processing</option>
+                        <option className="option" value="completed">Completed</option>
                       </select>
-                      <button
-                        onClick={handleUpdateTranscript}
-                        className="finish"
-                      >
-                        finish{" "}
+                      <button onClick={handleUpdateTranscript} className="finish">
+                        {loading ? "updating" : "submit"}
+                        {" "}
                         <FontAwesomeIcon
                           icon={faLongArrowAltRight}
-                          style={{ marginLeft: "10px", fontSize: "20px" }}
-                        />
+                          style={{ marginLeft: '10px', fontSize: "20px", paddingTop: "0.3rem" }} />
                       </button>
                     </div>
                   </div>
@@ -514,6 +536,9 @@ const RequestWrapper = styled.div`
   overflow-y: scroll;
   overflow-x: hidden;
   height: 100%;
+  ::-webkit-scrollbar {
+    display: none;
+  }
   @media (max-width: 400px) {
     padding: 3rem 0;
   }
@@ -972,14 +997,21 @@ const RequestWrapper = styled.div`
         flex-direction: column;
       }
       .options {
-        width: 8rem;
-        height: 2rem;
-        font-size: 1.2rem;
+        width: 13rem; 
         margin-top: 2rem;
-        font-size: 12px;
-        color: #0092e0;
         outline: none;
         cursor: pointer;
+        padding: 0.5rem; 
+        color: #707070;
+        text-transform: capitalize;
+        .option {
+          color: #707070;
+          padding-bottom: 1rem;
+        }
+        input {
+          padding: 1rem;
+          font-size: 0.5rem;
+        }
         @media (max-width: 400px) {
           width: 90px;
         }
@@ -987,16 +1019,16 @@ const RequestWrapper = styled.div`
       .finish {
         background: #0092e0;
         margin-top: 1rem;
-        width: 100px;
+        width: 7.5rem;
         height: 35px;
         text-transform: capitalize;
         border: none;
         border-radius: 20px;
-        /* padding: 0.3rem; */
         color: #ffffff;
         outline: none;
       }
     }
+     
     .details-info {
       background: white;
       display: grid;

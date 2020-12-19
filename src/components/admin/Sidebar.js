@@ -38,13 +38,6 @@ function Sidebar({ history }) {
             <img src={dashboard} alt="dash" />
             <li>Overview</li>
           </Link>
-          {/* <Link className="link" to="/requests">
-          {" "}
-            <img src={newVer} alt="verification" />
-            <li>
-                Requests
-            </li>
-          </Link> */}
           <div className="link" onClick={() => setShow(!show)}>
             {" "}
             <img src={newVer} alt="verification" />

@@ -121,28 +121,18 @@ export const getTranscriptsByStatus = (status) => async (dispatch) => {
 };
 
 export const updateVerificatonRequest = (id, data) =>
-  axios.put(`https://localhost:5000/api/v1/verifications/${id}`, data, {
+  axios.put(`https://croscheck.herokuapp.comapi/v1/verifications/${id}`, data, {
     headers: {
       "content-type": "application/json",
     },
   });
 
-export const updateTranscriptRequest = (id, data) => async (dispatch) => {
-  console.log("dataaa", id, data);
-  axios
-    .put(`https://croscheck.herokuapp.com/api/v1/transcript/${id}`, data, {
-      headers: {
-        "content-type": "application/json",
-      },
-    })
-    .then(({ data }) => {
-      console.log("pending data", data);
-      dispatch(updateTranscript(data.message));
-    })
-    .catch((err) => {
-      console.log("error", err);
-    });
-};
+export const updateTranscriptRequest = (id, data) =>
+  axios.put(`http://localhost:5000/api/v1/transcript/${id}`, data, {
+    headers: {
+      "content-type": "application/json",
+    },
+  });
 
 export const getMessages = (value) => async (dispatch) => {
   await axios
