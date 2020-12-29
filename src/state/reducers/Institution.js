@@ -3,6 +3,7 @@ import * as types from "../actionTypes/verifications";
 const initialState = {
   institutions: [],
   addInstitutions: {},
+  pageInfo: {},
 };
 
 export default function userReducer(state = initialState, action) {
@@ -12,6 +13,11 @@ export default function userReducer(state = initialState, action) {
         ...state,
         institutions: action.payload,
       };
+      case types.GET_PAGE_DETAILS:
+        return {
+          ...state,
+          pageInfo: action.payload,
+        };
       case types.ADD_INSTITUTIONS:
         return {
           ...state,

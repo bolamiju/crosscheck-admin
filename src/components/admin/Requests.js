@@ -473,7 +473,7 @@ const Requests = ({ history }) => {
                     </div>
                     <button>
                       <a
-                        href={`https://croscheck.herokuapp.com/${info.certImage}`}
+                        href={`${info.certImage}`}
                         target="_blank"
                       >
                         {" "}
@@ -825,11 +825,12 @@ const RequestWrapper = styled.div`
   }
   .new-table {
     position: relative;
-    display: block;
     background: white;
     text-align: center;
     border-radius: 10px;
-    justify-content: center;
+    min-height: 300px;
+    display: flex;
+    justify-content: space-between;
     padding-bottom: 1rem;
     margin-right: 3rem;
     /* width: 100%; */
@@ -856,9 +857,9 @@ const RequestWrapper = styled.div`
         background: var(--mainWhite);
       }
     }
-    td,
     th {
-      padding: 8px;
+      padding: 0.5rem 3.3rem;
+
     }
     td {
       font-family: MontserratRegular;
@@ -867,6 +868,7 @@ const RequestWrapper = styled.div`
       cursor: pointer;
       font-weight: normal;
       letter-spacing: 0.28px;
+      padding: 10px;
       color: #707070;
       opacity: 0.8;
     }
@@ -880,11 +882,9 @@ const RequestWrapper = styled.div`
       background: #173049;
     }
     .no-order {
-      background: white;
-    display: grid;
-    place-items: center;
-    padding: 1rem;
-    border-radius: 10px;
+      position: absolute;
+      left: 30%;
+      top: 30%;
     p {
       text-align: center;
       font-family: MontserratRegular;

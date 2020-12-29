@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../../asset/Avatar.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,6 +10,7 @@ import { BellFilled } from "@ant-design/icons";
 
 
 function TopHeader({ setShow, show }) {
+  let route = useRouteMatch();
 
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.verifications);
@@ -31,7 +33,18 @@ function TopHeader({ setShow, show }) {
   
   return (
     <HeadContainer className="top-header">
-      <h5>overview</h5>
+      <div>
+      <>
+        {" "}
+        {route && route.url === "/education" ? (
+        <h5>education verification</h5>
+      ) : route && route.url === "/transcript" ? (
+        <h5>transcript verification</h5>
+      ) : (
+        <h5>overview</h5>
+      )}
+      </>
+    </div>
       <div className="right-con">
         <div className="nots">
            <BellFilled
@@ -127,9 +140,10 @@ const HeadContainer = styled.div`
   }
 
   h5 {
-    font-family: MontserratRegular;
-    letter-spacing: 0.6px;
-    color: #173049;
+    font-family: MontserratLight;
+    letter-spacing: 0.12px;
+    color: #707070;
+    font-weight: 500;
     opacity: 1;
     font-size: 14px;
     margin-left: 15rem;
