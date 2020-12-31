@@ -84,9 +84,11 @@ export const updateTranscript = (payload) => {
 
 export const getVerificationsByStatus = (status) => async (dispatch) => {
   await axios
-    .get(
-      `https://croscheck.herokuapp.com/api/v1/verifications/status/${status}`
-    )
+    .get(`${BASE_URL}/api/v1/verifications/status/${status}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
     .then(({ data }) => {
       console.log("pending data", data);
       if (status === "pending") {
@@ -104,7 +106,7 @@ export const getVerificationsByStatus = (status) => async (dispatch) => {
 
 export const getTranscriptsByStatus = (status) => async (dispatch) => {
   await axios
-    .get(`https://croscheck.herokuapp.com/api/v1/transcript/status/${status}`)
+    .get(`${BASE_URL}/api/v1/transcript/status/${status}`)
     .then(({ data }) => {
       console.log("pending data", data);
       if (status === "pending") {
@@ -120,15 +122,13 @@ export const getTranscriptsByStatus = (status) => async (dispatch) => {
     });
 };
 
-export const updateVerificatonRequest = (id, data) =>
-  axios.put(`https://croscheck.herokuapp.comapi/v1/verifications/${id}`, data, {
-    headers: {
-      "content-type": "application/json",
-    },
+export const updateVerificatonRequest = (id, email, data) =>
+  axios.put(`http://localhost:5000/api/v1/verifications/${id}/${email}`, data, {
+    headers: { "content-type": "application/json" },
   });
 
 export const updateTranscriptRequest = (id, data) =>
-  axios.put(`http://localhost:5000/api/v1/transcript/${id}`, data, {
+  axios.put(`${BASE_URL}/api/v1/transcript/${id}`, data, {
     headers: {
       "content-type": "application/json",
     },

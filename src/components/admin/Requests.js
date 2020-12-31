@@ -30,6 +30,7 @@ const Requests = ({ history }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(false);
+  const [proof, setProof] = useState("");
 
   const { RangePicker } = DatePicker;
 
@@ -63,10 +64,15 @@ const Requests = ({ history }) => {
     if (!verificationStatus) {
       return toast.error("select an option");
     }
+    var formData = new FormData();
+    formData.append("proof", proof);
+    formData.append("verificationStatus", verificationStatus);
     setLoading(true);
-    const response = await updateVerificatonRequest(info._id, {
-      verificationStatus,
-    });
+    const response = await updateVerificatonRequest(
+      info._id,
+      info.email,
+      formData
+    );
     setLoading(false);
     console.log("response", response);
     if (response.data.message === "verification updated") {
@@ -135,6 +141,9 @@ const Requests = ({ history }) => {
     setFirstNameInput(e.target.value);
   };
 
+  const handleDocument = (e) => {
+    setProof(e.currentTarget.files[0]);
+  };
   return (
     <AdminLayout history={history}>
       <RequestWrapper>
@@ -472,10 +481,7 @@ const Requests = ({ history }) => {
                       <p className="p3">reference id: IDF33245</p>
                     </div>
                     <button>
-                      <a
-                        href={`https://croscheck.herokuapp.com/${info.certImage}`}
-                        target="_blank"
-                      >
+                      <a href={`${info.certImage}`} target="_blank">
                         {" "}
                         view document
                       </a>
@@ -490,37 +496,47 @@ const Requests = ({ history }) => {
                         className="message"
                       />
                     </div>
-                    <div className="select">
-                      <select
-                        name="verificationStatus"
-                        className="options"
-                        onClick={(e) => handleVerificationStatus(e)}
-                      >
-                        <option className="option" value="no value">
-                          choose status
-                        </option>
-                        <option className="option" value="processing">
-                          Processing
-                        </option>
-                        <option className="option" value="completed">
-                          Completed
-                        </option>
-                      </select>
-                      <button
-                        onClick={handleUpdateVerification}
-                        className="finish"
-                      >
-                        {loading ? "updating.." : "submit"}{" "}
-                        <FontAwesomeIcon
-                          icon={faLongArrowAltRight}
-                          style={{
-                            marginLeft: "5px",
-                            fontSize: "20px",
-                            paddingTop: "0.3rem",
-                          }}
-                        />
-                      </button>
-                    </div>
+                    {(activeTab === "pending" ||
+                      activeTab === "processing") && (
+                      <div className="select">
+                        <select
+                          name="verificationStatus"
+                          className="options"
+                          onClick={(e) => handleVerificationStatus(e)}
+                        >
+                          <option className="option" value="no value">
+                            choose status
+                          </option>
+                          <option className="option" value="processing">
+                            Processing
+                          </option>
+                          <option className="option" value="completed">
+                            Completed
+                          </option>
+                        </select>
+                        {verificationStatus === "completed" ? (
+                          <input
+                            type="file"
+                            name="proof"
+                            onChange={handleDocument}
+                          />
+                        ) : null}
+                        <button
+                          onClick={handleUpdateVerification}
+                          className="finish"
+                        >
+                          {loading ? "updating.." : "submit"}{" "}
+                          <FontAwesomeIcon
+                            icon={faLongArrowAltRight}
+                            style={{
+                              marginLeft: "5px",
+                              fontSize: "20px",
+                              paddingTop: "0.3rem",
+                            }}
+                          />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -580,7 +596,6 @@ const RequestWrapper = styled.div`
     color: #173049;
     font-family: segoebold;
     opacity: 1;
-
     li {
       margin-right: 3rem;
       cursor: pointer;
@@ -700,160 +715,197 @@ const RequestWrapper = styled.div`
         letter-spacing: 0.32px;
         color: #707070;
       }
-      .card2 {
-        background: #e6e6e6;
-        padding: 0.5rem;
-        width: 12rem;
-        height: 5rem;
-        margin-left: 0.7rem;
-        border-radius: 0.2rem;
-        cursor: pointer;
-        @media (max-width: 400px) {
-          margin-left: 0;
-          width: 15rem;
-          height: 5rem;
-        }
-        @media (max-width: 500px) {
-          margin-top: 2rem;
-          width: 15rem;
-          height: 5rem;
-          margin-left: 0.8rem;
-        }
-        h6 {
-          font-weight: bolder;
-          text-transform: capitalize;
-          font-family: MontserratBold;
-          letter-spacing: 0.32px;
-          color: #707070;
-          opacity: 1;
-          font-size: 16px;
-        }
-        p {
-          font-weight: lighter;
-          font-size: 0.8rem;
-          letter-spacing: 0.32px;
-          color: #707070;
-        }
-      }
-      .para-icon {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: -0.3rem;
-        .icon-box {
-          background: var(--lightTransparent);
-          padding: 0.4rem;
-          border-radius: 30px;
-          width: 2rem;
-          height: 2rem;
-        }
-        .icon {
-          color: #ffffff;
-          margin-left: 0.3rem;
-        }
-      }
     }
-    .activeCard1 {
-      padding: 0.5rem;
-      width: 12rem;
-      height: 5rem;
-      margin-right: 0.8rem;
-      border-radius: 0.2rem;
-      cursor: pointer;
-      color: #ffffff;
-      background-image: linear-gradient(
-        to right,
-        var(--lightBlue),
-        var(--mainBlue)
-      );
-      @media (max-width: 400px) {
-        margin-left: 0.8rem;
-        width: 15rem;
-        height: 5rem;
-        margin-right: 2;
+    .para-icon {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: -0.3rem;
+      .icon-box {
+        background: var(--lightTransparent);
+        padding: 0.4rem;
+        border-radius: 30px;
+        width: 2rem;
+        height: 2rem;
       }
-      @media (max-width: 500px) {
-        margin-left: 0.8rem;
-        width: 15rem;
-        height: 5rem;
-        margin-right: 0;
-      }
-      h6 {
-        font-weight: bolder;
-        text-transform: capitalize;
-        font-family: MontserratSemibold;
-        letter-spacing: 0px;
-        opacity: 1;
-        font-size: 16px;
+      .icon {
         color: #ffffff;
-      }
-      p {
-        font-weight: lighter;
-        letter-spacing: 0.32px;
-        font-size: 0.8rem;
+        margin-left: 0.3rem;
       }
     }
-    .activeCard2 {
-      padding: 0.5rem;
-      width: 12rem;
+  }
+  .activeCard1 {
+    padding: 0.5rem;
+    width: 12rem;
+    height: 5rem;
+    margin-right: 0.8rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    color: #ffffff;
+    background-image: linear-gradient(
+      to right,
+      var(--lightBlue),
+      var(--mainBlue)
+    );
+    @media (max-width: 400px) {
+      margin-left: 0.8rem;
+      width: 15rem;
       height: 5rem;
-      margin-left: 11.2px;
-      border-radius: 0.2rem;
-      cursor: pointer;
-      color: #ffffff;
-      background: red;
-      @media (max-width: 400px) {
-        margin-left: 0.8rem;
-        width: 15rem;
-        height: 5rem;
-        margin-top: 2rem;
-      }
-      @media (max-width: 500px) {
-        width: 15rem;
-        height: 5rem;
-        margin-left: 0.8rem;
-        margin-top: 2rem;
-      }
-      h6 {
-        font-weight: bolder;
-        text-transform: capitalize;
-        font-family: MontserratSemibold;
-        letter-spacing: 0px;
-        opacity: 1;
-        color: #ffffff;
-        font-size: 16px;
-      }
-      p {
-        font-weight: lighter;
-        letter-spacing: 0.32px;
-        font-size: 0.8rem;
-      }
+      margin-right: 2;
     }
-
-    .transcript-order {
-      margin-top: -1rem;
+    @media (max-width: 500px) {
+      margin-left: 0.8rem;
+      width: 15rem;
+      height: 5rem;
+      margin-right: 0;
+    }
+    h6 {
+      font-weight: bolder;
       text-transform: capitalize;
-      margin-bottom: 1rem;
-      letter-spacing: 0.44px;
-      color: #173049;
-      font-family: MontserratBold;
+      font-family: MontserratSemibold;
+      letter-spacing: 0px;
       opacity: 1;
-      @media (max-width: 400px) {
-        margin-left: 1rem;
-      }
-      @media (max-width: 500px) {
-        margin-left: 1rem;
+      font-size: 16px;
+      color: #ffffff;
+    }
+    p {
+      font-weight: lighter;
+      letter-spacing: 0.32px;
+      font-size: 0.8rem;
+    }
+  }
+  .activeCard2 {
+    padding: 0.5rem;
+    width: 12rem;
+    height: 5rem;
+    margin-left: 11.2px;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    color: #ffffff;
+    background: red;
+    @media (max-width: 400px) {
+      margin-left: 0.8rem;
+      width: 15rem;
+      height: 5rem;
+      margin-top: 2rem;
+    }
+    @media (max-width: 500px) {
+      width: 15rem;
+      height: 5rem;
+      margin-left: 0.8rem;
+      margin-top: 2rem;
+    }
+    h6 {
+      font-weight: bolder;
+      text-transform: capitalize;
+      font-family: MontserratSemibold;
+      letter-spacing: 0px;
+      opacity: 1;
+      color: #ffffff;
+      font-size: 16px;
+    }
+    p {
+      font-weight: lighter;
+      letter-spacing: 0.32px;
+      font-size: 0.8rem;
+    }
+  }
+
+  .transcript-order {
+    margin-top: -1rem;
+    text-transform: capitalize;
+    margin-bottom: 1rem;
+    letter-spacing: 0.44px;
+    color: #173049;
+    font-family: MontserratBold;
+    opacity: 1;
+    @media (max-width: 400px) {
+      margin-left: 1rem;
+    }
+    @media (max-width: 500px) {
+      margin-left: 1rem;
+    }
+  }
+  .details-info {
+    background: white;
+    display: grid;
+    place-items: center;
+    min-height: 385px;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-right: 3rem;
+    margin-bottom: 2rem;
+    p {
+      text-align: center;
+      font-family: MontserratRegular;
+      font-weight: normal;
+      letter-spacing: 0.28px;
+      color: #707070;
+      opacity: 0.2;
+    }
+  }
+  .new-table {
+    position: relative;
+    display: block;
+    background: white;
+    text-align: center;
+    border-radius: 10px;
+    justify-content: center;
+    padding-bottom: 1rem;
+    margin-right: 3rem;
+    /* width: 100%; */
+    min-width: 385px;
+    min-height: 250px;
+    margin-bottom: 2rem;
+    @media (max-width: 400px) {
+      margin-right: 0;
+      width: 100%;
+    }
+    @media (max-width: 500px) {
+      padding-left: 0.5rem;
+      width: 100%;
+    }
+    .table-headers {
+      font-family: MontserratBold;
+      letter-spacing: 0.32px;
+      color: #707070;
+      font-weight: normal;
+      opacity: 1;
+    }
+    tr {
+      &.activeOrder {
+        background: var(--mainWhite);
       }
     }
-    .details-info {
+    td,
+    th {
+      padding: 8px;
+    }
+    td {
+      font-family: MontserratRegular;
+      font-size: 12px;
+      border-top: 0.2rem solid var(--mainWhite);
+      cursor: pointer;
+      font-weight: normal;
+      letter-spacing: 0.28px;
+      color: #707070;
+      opacity: 0.8;
+    }
+    .excel-sheet {
+      position: absolute;
+      right: 5%;
+      bottom: 5%;
+      padding: 0.3rem;
+      border: none;
+      color: #ffffff;
+      background: #173049;
+    }
+    .no-order {
       background: white;
       display: grid;
       place-items: center;
-      min-height: 385px;
       padding: 1rem;
       border-radius: 10px;
-      margin-right: 3rem;
-      margin-bottom: 2rem;
       p {
         text-align: center;
         font-family: MontserratRegular;
@@ -863,231 +915,158 @@ const RequestWrapper = styled.div`
         opacity: 0.2;
       }
     }
-    .new-table {
-      position: relative;
-      display: block;
-      background: white;
-      text-align: center;
-      border-radius: 10px;
-      justify-content: center;
-      padding-bottom: 1rem;
-      margin-right: 3rem;
-      /* width: 100%; */
-      min-width: 385px;
-      min-height: 300px;
-      margin-bottom: 2rem;
+  }
+  .details {
+    margin-left: -1rem;
+    min-width: 470px;
+    margin-bottom: 2rem;
+    h6 {
+      text-transform: capitalize;
+      letter-spacing: 0.44px;
+      color: #173049;
+      font-family: MontserratBold;
+      margin-bottom: 1rem;
+      opacity: 1;
       @media (max-width: 400px) {
-        margin-right: 0;
-        width: 100%;
+        margin-left: 1rem;
       }
       @media (max-width: 500px) {
-        padding-left: 0.5rem;
-        width: 100%;
+        margin-left: 1rem;
       }
-      .table-headers {
+    }
+    @media (max-width: 400px) {
+      margin-left: 0;
+      margin-top: 2rem;
+    }
+    @media (max-width: 500px) {
+      margin-left: 0;
+      margin-top: 2rem;
+    }
+    .container {
+      display: block;
+      background: white;
+      /* min-height: 400px; */
+      text-align: left;
+      border-radius: 10px;
+      h5 {
         font-family: MontserratBold;
         letter-spacing: 0.32px;
         color: #707070;
-        font-weight: normal;
         opacity: 1;
+        text-transform: capitalize;
+        font-weight: normal;
       }
-      tr {
-        &.activeOrder {
-          background: var(--mainWhite);
-        }
+      .individual-details {
+        margin-top: 1rem;
+        border-top: 2px solid var(--lighterDark);
       }
-      td,
-      th {
-        padding: 8px;
-      }
-      td {
+      .para {
+        display: flex;
         font-family: MontserratRegular;
-        font-size: 12px;
-        border-top: 0.2rem solid var(--mainWhite);
-        cursor: pointer;
         font-weight: normal;
         letter-spacing: 0.28px;
         color: #707070;
         opacity: 0.8;
-      }
-      .excel-sheet {
-        position: absolute;
-        right: 5%;
-        bottom: 5%;
-        padding: 0.3rem;
-        border: none;
-        color: #ffffff;
-        background: #173049;
-        margin-top: 20px;
-      }
-      .no-order {
-        background: white;
-        display: grid;
-        place-items: center;
-        padding: 1rem;
-        border-radius: 10px;
-        p {
-          text-align: center;
-          font-family: MontserratRegular;
-          font-weight: normal;
-          letter-spacing: 0.28px;
-          color: #707070;
-          opacity: 0.2;
-        }
-      }
-    }
-    .details {
-      margin-left: -1rem;
-      min-width: 470px;
-      margin-bottom: 2rem;
-      h6 {
+        justify-content: left;
+        font-size: 12px;
         text-transform: capitalize;
-        letter-spacing: 0.44px;
-        color: #173049;
-        font-family: MontserratBold;
-        margin-bottom: 1rem;
-        opacity: 1;
-        @media (max-width: 400px) {
-          margin-left: 1rem;
+        .p1 {
+          padding-left: 3rem;
         }
-        @media (max-width: 500px) {
-          margin-left: 1rem;
+        .p2 {
+          padding-left: 1.8rem;
+        }
+        .p3 {
+          padding-left: 5rem;
+        }
+        .p4 {
+          padding-left: 1rem;
+        }
+        .p5 {
+          padding-left: 1rem;
         }
       }
-      @media (max-width: 400px) {
-        margin-left: 0;
-        margin-top: 2rem;
+      .comment-section {
+        display: flex;
+        align-items: center;
       }
-      @media (max-width: 500px) {
-        margin-left: 0;
-        margin-top: 2rem;
-      }
-      .container {
-        display: block;
-        background: white;
-        /* min-height: 400px; */
-        text-align: left;
-        border-radius: 10px;
-        h5 {
-          font-family: MontserratBold;
-          letter-spacing: 0.32px;
-          color: #707070;
-          opacity: 1;
-          text-transform: capitalize;
-          font-weight: normal;
-        }
-        .individual-details {
-          margin-top: 1rem;
-          border-top: 2px solid var(--lighterDark);
-        }
-        .para {
-          display: flex;
+      .field {
+        margin-top: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        label {
           font-family: MontserratRegular;
           font-weight: normal;
           letter-spacing: 0.28px;
           color: #707070;
           opacity: 0.8;
-          justify-content: left;
-          font-size: 12px;
-          text-transform: capitalize;
-          .p1 {
-            padding-left: 3rem;
-          }
-          .p2 {
-            padding-left: 1.8rem;
-          }
-          .p3 {
-            padding-left: 5rem;
-          }
-          .p4 {
-            padding-left: 1rem;
-          }
-          .p5 {
-            padding-left: 1rem;
-          }
         }
-        .comment-section {
-          display: flex;
-          align-items: center;
-        }
-        .field {
-          margin-top: 0.5rem;
-          display: flex;
-          flex-direction: column;
-          label {
-            font-family: MontserratRegular;
-            font-weight: normal;
-            letter-spacing: 0.28px;
-            color: #707070;
-            opacity: 0.8;
-          }
-          textarea {
-            width: 220px;
-            height: 80px;
-            font-family: MontserratRegular;
-            font-weight: normal;
-            letter-spacing: 0.28px;
-            color: #707070;
-            opacity: 1;
-            margin-bottom: 0.5rem;
-            border-radius: 10px;
-            outline: none;
-            padding: 0.5rem;
-            font-size: 12px;
-          }
-        }
-        .select {
-          margin-left: 1rem;
-          display: flex;
-          flex-direction: column;
-        }
-        .options {
-          width: 13rem;
-          margin-top: 2rem;
-          outline: none;
-          cursor: pointer;
-          padding: 0.5rem;
-          color: #707070;
-          text-transform: capitalize;
-          .option {
-            color: #707070;
-            padding-bottom: 1rem;
-          }
-          input {
-            padding: 1rem;
-            font-size: 0.5rem;
-          }
-          @media (max-width: 400px) {
-            width: 90px;
-          }
-        }
-        .finish {
-          background: #0092e0;
-          margin-top: 1rem;
-          width: 7.5rem;
-          height: 35px;
-          text-transform: capitalize;
-          border: none;
-          border-radius: 20px;
-          color: #ffffff;
-          outline: none;
-        }
-      }
-      .details-info {
-        background: white;
-        display: grid;
-        place-items: center;
-        min-height: 400px;
-        padding: 1rem;
-        border-radius: 10px;
-        p {
-          text-align: center;
+        textarea {
+          width: 220px;
+          height: 80px;
           font-family: MontserratRegular;
           font-weight: normal;
           letter-spacing: 0.28px;
           color: #707070;
-          opacity: 0.2;
+          opacity: 1;
+          margin-bottom: 0.5rem;
+          border-radius: 10px;
+          outline: none;
+          padding: 0.5rem;
+          font-size: 12px;
         }
+      }
+      .select {
+        margin-left: 1rem;
+        display: flex;
+        flex-direction: column;
+      }
+      .options {
+        width: 13rem;
+        margin-top: 2rem;
+        outline: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        color: #707070;
+        text-transform: capitalize;
+        .option {
+          color: #707070;
+          padding-bottom: 1rem;
+        }
+        input {
+          padding: 1rem;
+          font-size: 0.5rem;
+        }
+        @media (max-width: 400px) {
+          width: 90px;
+        }
+      }
+      .finish {
+        background: #0092e0;
+        margin-top: 1rem;
+        width: 7.5rem;
+        height: 35px;
+        text-transform: capitalize;
+        border: none;
+        border-radius: 20px;
+        color: #ffffff;
+        outline: none;
+      }
+    }
+    .details-info {
+      background: white;
+      display: grid;
+      place-items: center;
+      min-height: 400px;
+      padding: 1rem;
+      border-radius: 10px;
+      p {
+        text-align: center;
+        font-family: MontserratRegular;
+        font-weight: normal;
+        letter-spacing: 0.28px;
+        color: #707070;
+        opacity: 0.2;
       }
     }
   }
