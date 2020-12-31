@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../../asset/Avatar.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,6 +9,8 @@ import { getMessages, deleteMessages } from "../../state/actions/verifications";
 import { BellFilled } from "@ant-design/icons";
 
 function TopHeader({ setShow, show }) {
+  let route = useRouteMatch();
+
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.verifications);
   const [open, setOpen] = useState(true);
@@ -27,8 +30,19 @@ function TopHeader({ setShow, show }) {
   };
 
   return (
-    <HeadContainer>
-      <h5>overview</h5>
+    <HeadContainer className="top-header">
+      <div>
+        <>
+          {" "}
+          {route && route.url === "/education" ? (
+            <h5>education verification</h5>
+          ) : route && route.url === "/transcript" ? (
+            <h5>transcript verification</h5>
+          ) : (
+            <h5>overview</h5>
+          )}
+        </>
+      </div>
       <div className="right-con">
         <div className="nots">
           <BellFilled
@@ -118,9 +132,10 @@ const HeadContainer = styled.div`
   }
 
   h5 {
-    font-family: MontserratRegular;
-    letter-spacing: 0.6px;
-    color: #173049;
+    font-family: MontserratLight;
+    letter-spacing: 0.12px;
+    color: #707070;
+    font-weight: 500;
     opacity: 1;
     font-size: 14px;
     text-transform: capitalize;
@@ -178,7 +193,7 @@ const HeadContainer = styled.div`
       box-shadow: 0px 0px 10px #00000029;
       z-index: 1;
       ::-webkit-scrollbar {
-         display: none;
+        display: none;
       }
       .message {
         border-bottom: 1px solid #707070;

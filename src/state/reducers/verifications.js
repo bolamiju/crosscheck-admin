@@ -7,6 +7,7 @@ const initialState = {
   messages: [],
   userVerifications: [],
   newTranscript: [],
+  selectedInstitution: {},
 };
 
 export default function userReducer(state = initialState, action) {
@@ -25,6 +26,11 @@ export default function userReducer(state = initialState, action) {
       return {
         ...state,
         processingVerifications: action.payload,
+      };
+      case types.SELECT_SCHOOL:
+      return {
+        ...state,
+        selectedInstitution: action.payload,
       };
       case types.GET_MESSAGES: 
       return {

@@ -1,59 +1,165 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import ReactPaginate from "react-paginate";
+import { useFormik } from "formik";
+import { CountryDropdown } from "react-country-region-selector";
 import styled from 'styled-components';
-import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllInstitutions, addAllInstitutions } from "../state/actions/Institutions";
+import { getInstitutes, addAllInstitutions, setPageInfo  } from "../state/actions/Institutions";
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import Axios from 'axios';
+import { search } from "../components/admin/utils";
 
 
-const Institution = () => {
+
+const Institution = ({ initialValues, updateFormValues }) => {
 
   const dispatch = useDispatch();
-  const { institutions, addInstitutions } = useSelector((state) => state.institutions);
+  const { institutions, addInstitutions, pageInfo } = useSelector((state) => state.institutions);
+  const { selectedInstitution } = useSelector((state) => state.verifications);
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const [input, setInput] = useState("");
-  const [hideTable, setHideTable] = useState(false);
-
-  useEffect(() => {
-    dispatch(getAllInstitutions());
-  }, [dispatch]);
-
- 
-  const handleInputChange = (e) => {
-    setInput(e.target.value);
-  }
-
-  const filteredItems = institutions.filter((item) =>
-    item.name.toLocaleLowerCase().includes(input.toLocaleLowerCase())
+  const [selectedInst, setSelectedInst] = useState(
+    selectedInstitution.name ? selectedInstitution : {}
   );
 
-  const pageSize = 10;
-  const pagesCount = Math.ceil(filteredItems.length / pageSize);
+  const [input, setInput] = useState("");
+  const [schCard, setSchCard] = useState(true);
+  const [hideTable, setHideTable] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [details, setDetails] = useState(true);
+  const [byCountryOffset, setByCountryOffset] = useState(0);
+  const [byCountryandNameoffset, setByCountryandNameOffset] = useState(0);
+  const [country, setCountry] = useState("");
 
-  // const verificationsCount = Math.ceil(allHistory.length / pageSize);
 
-  const handleNavigation = (e, index) => {
-    e.preventDefault();
-    if (index < 0 || index >= pagesCount) {
-      return;
-    } else {
-      setCurrentPage(index);
+   const formik = useFormik({
+    initialValues: {
+      country: "",
+    },
+    validationSchema: Yup.object().shape({
+      country: Yup.string().required("First Name is required"),
+    }),
+  });
+ 
+
+  const request = useCallback(
+    async (offset, limit) => {
+      return await search(
+        `https://croscheck.herokuapp.com/api/v1/institutions/${input}/${offset}/${limit}`
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [offset, input]
+  );
+
+  useEffect(() => {
+    console.log("clean up");
+    dispatch(getInstitutes([]));
+    dispatch(setPageInfo({}));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const institutionByCountry = useCallback(
+    async (country, offset, limit) => {
+      const { data } = await Axios.get(
+        `https://croscheck.herokuapp.com/api/v1/institutions/country/${country}/${offset}/${limit}`
+      );
+      // console.log("res", data.institution);
+      const {
+        totalDocs,
+        totalPages,
+        hasPrevPage,
+        hasNextPage,
+        page,
+      } = data.institution;
+      dispatch(getInstitutes(data.institution.docs));
+      dispatch(
+        setPageInfo({ totalDocs, totalPages, hasPrevPage, hasNextPage, page })
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [offset, country]
+  );
+  const countryAndName = useCallback(
+    async (country, offset, limit, input) => {
+      await search(
+        `https://croscheck.herokuapp.com/api/v1/institutions/countryandName/${country}/${input}/${offset}/${limit}`
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [country, offset, input]
+  );
+
+  useEffect(() => {
+    if (country !== "" && input.length === 0) {
+      institutionByCountry(country, byCountryOffset, 15);
+    }
+    if (country !== "" && input.length > 0) {
+      countryAndName(country, byCountryandNameoffset, 15, input);
+    }
+    if (input.length > 0 && country.length === 0) {
+      request(offset, 15);
+    }
+  }, [
+    dispatch,
+    institutionByCountry,
+    byCountryandNameoffset,
+    input,
+    request,
+    offset,
+    byCountryOffset,
+    country,
+    countryAndName,
+  ]);
+  const pagesCount = pageInfo?.totalPages;
+
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+    setHideTable(false);
+  };
+
+
+  const handleSelected = (institute) => {
+    setSelectedInst(institute);
+    formik.setFieldValue("institution", institute.name);
+    setHideTable(true);
+    setInput(institute.name);
+    setSchCard(true);
+  };
+
+  const institutionNavs = (data) => {
+    console.log("data", data);
+    if (country !== "" && input.length === 0) {
+      setByCountryOffset((prev) => Math.ceil(data.selected * 15));
+    } else if (country !== "" && input.length > 0) {
+      setByCountryandNameOffset((prev) => Math.ceil(data.selected * 15));
+    } else if (input.length > 0 && country.length === 0) {
+      setOffset((prev) => Math.ceil(data.selected * 15));
     }
   };
 
-  const handleSelected = (institute) => {
-    // dispatch(selectSchool(institute));
-    setHideTable(true);
-    setInput(institute.name);
-    // history.push("/new");
-  };
-
-
+  
   return (
-    <div className=" col-12 mx-auto text-center">
-      <SelectSch>
+    <div className="col-6 col-lg-12 mx-auto">
+      {formik?.values?.institution?.length > 0 && schCard ? (
+          <EditWrapper className="mx-auto" style={{ display: !details ? "none" : "" }}>
+          <p className="institution-details">Institution Details</p>
+          <div className="inst-name">
+            <span>Institution name</span>
+            <span>
+              {formik.values.institution}{" "}
+              <span className="change" onClick={() => setSchCard(false)}>
+                <small>change</small>
+              </span>
+            </span>
+          </div>
+          <div className="sch-country">
+            <span>Country</span>
+            <span>{selectedInst.country}</span>
+          </div>
+        </EditWrapper>
+      ) : (
+        <SelectSch>
         <div className="selects mx-auto text-center">
           <div className="sch-select">
             <label style={{ paddingLeft: "5px" }}>Select Institution</label>
@@ -66,8 +172,33 @@ const Institution = () => {
               placeholder="Search for a school"
             />
           </div>
+          <div className="select-country">
+                <label style={{ paddingLeft: "5px" }}>SELECT COUNTRY</label>
+                <CountryDropdown
+                  style={{
+                    height: "34px",
+                    border: "2px solid #e2e2e2",
+                    outline: "none",
+                    borderRadius: "14px",
+                    fontSize: "14px",
+                    fontFamily: "MontserratItalic",
+                  }}
+                  name="country"
+                  id="country"
+                  className="country"
+                  valueType="full"
+                  value={formik.values.country}
+                  onChange={(_, e) => {
+                    formik.handleChange(e);
+                    console.log(e.target.value);
+                    setCountry(e.target.value.toLowerCase());
+                  }}
+                  onBlur={formik.handleBlur}
+                  ReactFlagsSelect
+                />
+              </div>
         </div>
-        {filteredItems.length > 0 && input.length > 0 && (
+        {(input.length > 0 || country.length > 0) && institutions.length > 0 && (
           <div className="new-table">
             <table
               cellSpacing="0"
@@ -84,18 +215,16 @@ const Institution = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredItems
-                  .slice(currentPage * pageSize, (currentPage + 1) * pageSize)
-                  .map((ite) => (
+                {institutions.map((ite) => (
                     <tr onClick={() => handleSelected(ite)} key={ite.name}>
                       <th className="mobile-header">Number</th>
                       <td>{ite.name}</td>
                       <th className="mobile-header">Market rate</th>
                       <td>{ite.country}</td>
                       <th className="mobile-header">Weight</th>
-                      <td>{ite.category}</td>
+                      <td>{ite["our_charge"] || "-"}</td>
                       <th className="mobile-header">Value</th>
-                      <td>{ite.amount}</td>
+                      <td>{ite["institute_charge"] || "-"}</td>
                     </tr>
                     // <tr className="space"></tr>
                   ))}
@@ -103,61 +232,43 @@ const Institution = () => {
             </table>
             {!hideTable && (
               <div className="pagination-line">
-                <p>
-                  Showing{" "}
-                  {
-                    filteredItems.slice(
-                      currentPage * pageSize,
-                      (currentPage + 1) * pageSize
-                    ).length
-                  }{" "}
-                    of {pagesCount} of entries
+                 <p>
+                      Showing {institutions.length} of {pageInfo.totalDocs} of
+                    entries
                   </p>
-                <Pagination aria-label="Page navigation example">
-                  <PaginationItem
-                    disabled={currentPage <= 0}
-                    className="prev"
-                    onClick={(e) => handleNavigation(e, currentPage - 1)}
-                  >
-                    <PaginationLink previous href={() => false} />
-                  </PaginationItem>
 
-                  {[...Array(pagesCount)].map((page, i) => (
-                    <PaginationItem
-                      active={i === currentPage}
-                      key={i}
-                      onClick={(e) => handleNavigation(e, i)}
-                    >
-                      <PaginationLink href={() => false}>
-                        {i + 1}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-
-                  <PaginationItem
-                    disabled={currentPage >= pagesCount - 1}
-                    onClick={(e) => handleNavigation(e, currentPage + 1)}
-                  >
-                    <PaginationLink
-                      next
-                      href={() => false}
-                      className="next"
+                    <ReactPaginate
+                      previousLabel={"previous"}
+                      nextLabel={"next"}
+                      breakLabel={"..."}
+                      breakClassName={"break-me"}
+                      pageCount={pagesCount}
+                      marginPagesDisplayed={2}
+                      pageRangeDisplayed={5}
+                      onPageChange={(e) => institutionNavs(e)}
+                      containerClassName={"pagination"}
+                      subContainerClassName={"pages pagination"}
+                      activeClassName={"active"}
                     />
-                  </PaginationItem>
-                </Pagination>
               </div>
             )}
           </div>
         )}
-        <Formik
+       
+      </SelectSch>
+      )}
+      <FormStyle>
+      <Formik
           initialValues={{ name: "", country: "", category: "", amount: "",state:'' }}
           onSubmit={( values, {resetForm}) => {
             console.log("submitting", values)  
-            addAllInstitutions(values);
+            addAllInstitutions({ values });
             resetForm({values: ""})
           }}
           validationSchema={Yup.object().shape({
             name: Yup.string()
+              .required("Required !"),
+              state: Yup.string()
               .required("Required !"),
             country: Yup.string()
               .required("Required !"),
@@ -190,13 +301,13 @@ const Institution = () => {
                       onBlur={handleBlur}
                       className={errors.name && touched.name && "error"}
                     />
-
+                   
                   </div>
                   {errors.name && touched.name && (
-                    <div className="input-feedback">{errors.state}</div>
+                    <div className="input-feedback">{errors.name}</div>
                   )}
                     <div className="field">
-                    <label htmlFor="name">state</label>
+                    <label htmlFor="state">state</label>
                     <input
                       name="state"
                       type="text"
@@ -255,11 +366,98 @@ const Institution = () => {
             }
           }
         </Formik>
-      </SelectSch>
+      </FormStyle>
     </div>
   )
 };
 
+
+const EditWrapper = styled.div`
+  margin-top: 2rem;
+  width: 600px;
+  min-height: 150px;
+  background: #ffffff;
+  box-shadow: 0px 0px 10px #00000029;
+  text-align: left;
+  .institution-details {
+    margin-left: 30px;
+    border-bottom: 1px solid gray;
+    width: 90%;
+    font-family: segoebold;
+    font-size: 15px;
+    color: #173049;
+    p {
+      padding-bottom: 10px;
+    }
+  }
+  .sch-country {
+    padding-left: 30px;
+    padding-top: 10px;
+    padding-bottom: 40px;
+    span {
+      &:nth-child(1) {
+        font-weight: normal;
+        font-size: 14px;
+        font-family: MontserratBold;
+        letter-spacing: 0.32px;
+        color: #707070;
+      }
+      &:nth-child(2) {
+        padding-left: 105px;
+        font-weight: normal;
+        font-size: 14px;
+        font-family: MontserratRegular;
+        letter-spacing: 0.32px;
+        color: #707070;
+      }
+    }
+  }
+  .inst-name {
+    padding-left: 30px;
+    padding-top: 10px;
+    @media (max-width: 500px) {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding-left: 20px;
+    }
+    span {
+      &:nth-child(1) {
+        font-weight: normal;
+        font-size: 14px;
+        font-family: MontserratBold;
+        letter-spacing: 0.32px;
+        color: #707070;
+      }
+      &:nth-child(2) {
+        padding-left: 40px;
+        font-weight: normal;
+        font-size: 14px;
+        font-family: MontserratRegular;
+        letter-spacing: 0.32px;
+        color: #707070;
+        @media (max-width: 500px) {
+          padding-left: 0px;
+        }
+      }
+    }
+    .change {
+      margin-left: 7px;
+      background: #ff0000 0% 0% no-repeat padding-box;
+      border-radius: 3px;
+      padding-left: 5px;
+      padding-right: 5px;
+      cursor: pointer;
+      opacity: 0.6;
+      small {
+        font: normal normal bold 12px/14px Montserrat;
+        letter-spacing: 0.24px;
+        color: black;
+        opacity: 1;
+      }
+    }
+  }
+`
 const SelectSch = styled.div`
   display: flex;
   flex-direction: column; 
@@ -376,6 +574,7 @@ const SelectSch = styled.div`
       }
     }
   }
+  
   .new-table {
     margin-top: 10px;
     width: 100%;
@@ -410,19 +609,11 @@ const SelectSch = styled.div`
         }
       }
 
-      td {
-        /* border-left: 1px solid #ecf0f1;
-        border-right: 1px solid #ecf0f1; */
-      }
-
       th {
         background-color: #1e2a36;
         color: white;
       }
 
-      /* tr:nth-of-type(even) td {
-        background-color: lighten(#4ecdc4, 35%);
-      } */
       tr {
         cursor: pointer;
         &:nth-child(odd) {
@@ -448,71 +639,121 @@ const SelectSch = styled.div`
       opacity: 1;
       margin-left: 50px;
     }
-  }
-  .form {
-    margin-top: 2rem;
-    width: 350px;
-    min-height: 460px;
-    box-shadow: 0px 0px 10px #00000029;
-
-
+    .pagination-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
+    margin: 0 auto;
     p {
-    margin-top: 0 !important;
-    margin-bottom: 10px !important;
-    padding: 0.3rem 0 0.5rem 0;
-    font-family: MontserratRegular;
-    font-size: 20px;
-    text-align: center !important;
-    font-weight: normal;
-    background: #0091DF;
-    letter-spacing: 0.6px;
-    color: #FFFFFF;
-    opacity: 1;
-    text-transform: capitalize
-    }
-    .field {
-        display: block;
-       
-        input, label {
-            display: block;
-            margin-left: 1rem;
-        }
-        label {
-          font-family: MontserratRegular;
-          letter-spacing: 0.32px;
-          color: #707070;
-          text-transform: capitalize;
-          opacity: 1;
-          padding-top: 0.5rem;
-        }
-        input {
-            width: 85%;
-            height: 30px;
-            color: #707070;
-            border-radius: 10px;
-            opacity: 0.8;
-            outline: none;
-            border: 0.5px solid #707070;
-            padding-left: 0.5rem;
-           
-        } 
-    }
-    .input-feedback {
-        color: red;
-        margin-left: 1rem;
-        font-size: 1rem;
-    }
-    button {
-      margin-top: 1.5rem;
-      margin-bottom: 1.5rem;
-      background: #0091DF;
-      color: white;
-      border: none;
-      padding: 0.3rem 0.5rem;
-      border-radius: 0.3rem;
-      font-size: 1rem;
-    }
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
   }
+  .pagination {
+    display: flex;
+    justify-content: flex-end;
+    list-style-type: none;
+  }
+  ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+.pagination .disabled {
+    cursor: not-allowed;
+    border: 1px solid grey !important;
+}
+.pagination .active {
+    background: #0092e0;
+    color: white;
+}
+.pagination li {
+    color: #0092e0;
+    border: 1px solid #0092e0;
+    padding: 3px 10px 3px 10px;
+}
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+  }
+}
+  
+  
 `;
+
+const FormStyle = styled.div`
+.form {
+  margin-top: 2rem;
+  width: 350px;
+  min-height: 460px;
+  box-shadow: 0px 0px 10px #00000029;
+
+
+  p {
+  margin-top: 0 !important;
+  margin-bottom: 10px !important;
+  padding: 0.3rem 0 0.5rem 0;
+  font-family: MontserratRegular;
+  font-size: 20px;
+  text-align: center !important;
+  font-weight: normal;
+  background: #0091DF;
+  letter-spacing: 0.6px;
+  color: #FFFFFF;
+  opacity: 1;
+  text-transform: capitalize
+  }
+  .field {
+      display: block;
+     
+      input, label {
+          display: block;
+          margin-left: 1rem;
+      }
+      label {
+        font-family: MontserratRegular;
+        letter-spacing: 0.32px;
+        color: #707070;
+        text-transform: capitalize;
+        opacity: 1;
+        padding-top: 0.5rem;
+      }
+      input {
+          width: 85%;
+          height: 30px;
+          color: #707070;
+          border-radius: 10px;
+          opacity: 0.8;
+          outline: none;
+          border: 0.5px solid #707070;
+          padding-left: 0.5rem;
+         
+      } 
+  }
+  .input-feedback {
+      color: red;
+      margin-left: 1rem;
+      font-size: 1rem;
+  }
+  button {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    background: #0091DF;
+    color: white;
+    border: none;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.3rem;
+    font-size: 1rem;
+  }
+}
+`
 
 export default Institution

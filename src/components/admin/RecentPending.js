@@ -110,15 +110,17 @@ const PendingWrapper = styled.div`
   }
   .new-table {
     background: white;
-    /* padding: 1rem; */
     text-align: center;
+    min-height: 300px;
+    display: flex;
+    justify-content: space-between;
 
-    td,
     th {
-      padding: 10px;
+      padding: 0.5rem 3.3rem;
     }
     td {
       border-top: 0.2rem solid var(--mainWhite);
+      padding: 10px;
     }
   }
 `;

@@ -11,7 +11,10 @@ import {
 import { DatePicker, Space } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getTranscriptsByStatus, updateTranscriptRequest } from "../../state/actions/verifications";
+import {
+  getTranscriptsByStatus,
+  updateTranscriptRequest,
+} from "../../state/actions/verifications";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -23,9 +26,9 @@ const Requests = ({ history }) => {
   const [transcriptStatus, setTranscriptStatus] = useState("");
   const [info, setInfo] = useState({});
   const [searchParameter, setSearchParameter] = useState("firstName");
-  const [firstNameInput, setFirstNameInput] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [firstNameInput, setFirstNameInput] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const dispatch = useDispatch();
   const {
     pendingTranscripts,
@@ -34,7 +37,6 @@ const Requests = ({ history }) => {
   } = useSelector((state) => state.transcripts);
   const { RangePicker } = DatePicker;
   const [loading, setLoading] = useState(false);
-
 
   useEffect(() => {
     if (activeTab === "pending") {
@@ -54,24 +56,24 @@ const Requests = ({ history }) => {
     setTranscriptStatus(e.target.value);
   };
 
-  const handleUpdateTranscript = async() => {
+  const handleUpdateTranscript = async () => {
     if (!transcriptStatus) {
-      return toast.error('select an option')
+      return toast.error("select an option");
     }
-    setLoading(true)
-    console.log('transcriptStatus',transcriptStatus)
-    const response = await updateTranscriptRequest(info._id, { transcriptStatus })
-    setLoading(false)
-    console.log(response.data)
+    setLoading(true);
+    console.log("transcriptStatus", transcriptStatus);
+    const response = await updateTranscriptRequest(info._id, {
+      transcriptStatus,
+    });
+    setLoading(false);
+    console.log(response.data);
     if (response.data.message === "transcript updated") {
-      toast.success("update sucessful !!")
-      setTranscriptStatus("")
+      toast.success("update sucessful !!");
+      setTranscriptStatus("");
+    } else {
+      toast.error("update Unsucessful. Try again !");
     }
-    else {
-      toast.error("update Unsucessful. Try again !")
-
-    }
-  }
+  };
   const handleDateRange = (value, dateString) => {
     setStartDate(dateString[0]);
     setEndDate(dateString[1]);
@@ -143,7 +145,7 @@ const Requests = ({ history }) => {
   return (
     <AdminLayout history={history}>
       <RequestWrapper>
-      <ToastContainer
+        <ToastContainer
           position="bottom-right"
           autoClose={5000}
           hideProgressBar={false}
@@ -499,17 +501,34 @@ const Requests = ({ history }) => {
                       />
                     </div>
                     <div className="select">
-                      <select name="transcriptStatus" className="options" onClick={(e) => handleTranscriptStatus(e)}>
-                        <option className="option" value="no value">choose status</option>
-                        <option className="option" value="processing">Processing</option>
-                        <option className="option" value="completed">Completed</option>
+                      <select
+                        name="transcriptStatus"
+                        className="options"
+                        onClick={(e) => handleTranscriptStatus(e)}
+                      >
+                        <option className="option" value="no value">
+                          choose status
+                        </option>
+                        <option className="option" value="processing">
+                          Processing
+                        </option>
+                        <option className="option" value="completed">
+                          Completed
+                        </option>
                       </select>
-                      <button onClick={handleUpdateTranscript} className="finish">
-                        {loading ? "updating" : "submit"}
-                        {" "}
+                      <button
+                        onClick={handleUpdateTranscript}
+                        className="finish"
+                      >
+                        {loading ? "updating" : "submit"}{" "}
                         <FontAwesomeIcon
                           icon={faLongArrowAltRight}
-                          style={{ marginLeft: '10px', fontSize: "20px", paddingTop: "0.3rem" }} />
+                          style={{
+                            marginLeft: "10px",
+                            fontSize: "20px",
+                            paddingTop: "0.3rem",
+                          }}
+                        />
                       </button>
                     </div>
                   </div>
@@ -821,17 +840,15 @@ const RequestWrapper = styled.div`
   }
   .new-table {
     position: relative;
-    display: block;
     background: white;
     text-align: center;
     border-radius: 10px;
-    justify-content: center;
+    min-height: 300px;
+    display: flex;
+    justify-content: space-between;
     padding-bottom: 1rem;
     margin-right: 3rem;
-    /* width: 100%; */
     min-width: 385px;
-    min-height: 250px;
-    margin-bottom: 2rem;
     @media (max-width: 400px) {
       margin-right: 0;
       width: 100%;
@@ -852,9 +869,8 @@ const RequestWrapper = styled.div`
         background: var(--mainWhite);
       }
     }
-    td,
     th {
-      padding: 8px;
+      padding: 0.5rem 3.3rem;
     }
     td {
       font-family: MontserratRegular;
@@ -865,6 +881,7 @@ const RequestWrapper = styled.div`
       letter-spacing: 0.28px;
       color: #707070;
       opacity: 0.8;
+      padding: 10px;
     }
     .excel-sheet {
       position: absolute;
@@ -876,11 +893,9 @@ const RequestWrapper = styled.div`
       background: #173049;
     }
     .no-order {
-      background: white;
-      display: grid;
-      place-items: center;
-      padding: 1rem;
-      border-radius: 10px;
+      position: absolute;
+      left: 30%;
+      top: 30%;
       p {
         text-align: center;
         font-family: MontserratRegular;
@@ -997,11 +1012,11 @@ const RequestWrapper = styled.div`
         flex-direction: column;
       }
       .options {
-        width: 13rem; 
+        width: 13rem;
         margin-top: 2rem;
         outline: none;
         cursor: pointer;
-        padding: 0.5rem; 
+        padding: 0.5rem;
         color: #707070;
         text-transform: capitalize;
         .option {
@@ -1028,7 +1043,7 @@ const RequestWrapper = styled.div`
         outline: none;
       }
     }
-     
+
     .details-info {
       background: white;
       display: grid;
