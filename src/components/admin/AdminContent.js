@@ -4,6 +4,7 @@ import Overview from "./Overview";
 import Requests from "./Requests";
 import Transcript from './Transcript';
 import History from './History';
+import Institutions from './ManageInstitutions'
 
 
 const AdminContent = (props) => {
@@ -22,7 +23,9 @@ const AdminContent = (props) => {
         <Transcript />
       ) : route && route.url === "/history" ? (
           <History />
-      ) : (
+      ) : route && route.url === "/institutions" ? (
+        <Institutions />
+    ): (
         <Overview history={history} />
       )}
       </>

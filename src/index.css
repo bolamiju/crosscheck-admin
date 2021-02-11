@@ -11,3 +11,50 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.pagination-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 95%;
+  margin: 0 auto;
+  margin-top:20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  list-style-type: none;
+}
+.pagination li {
+  color: #0092e0;
+  border: none;
+  padding: 3px 10px 3px 10px;
+}
+
+.pagination li:hover {
+  background: #0092e0;
+  color: white;
+  cursor: pointer;
+}
+.pagination .active {
+  background: #0092e0;
+  color: white;
+}
+.pagination .disabled {
+  cursor: not-allowed;
+  border: none
+}
+
+.pagination .disabled a {
+  cursor: not-allowed;
+}
+
+.pagination li a {
+  text-decoration: none;
+  outline: none;
+}
+
+.pagination li a span {
+  font-weight: bold;
+}

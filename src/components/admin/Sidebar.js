@@ -80,10 +80,10 @@ function Sidebar({ history }) {
             {" "}
             <img src={contact} alt="account" /> <li>My Account</li>
           </Link>
-          <Link className="link">
+          <Link className="link" to="/institutions">
             {" "}
             <img src={receipt} alt="receipt" />
-            <li>Receipts</li>
+            <li>Manage Institutions</li>
           </Link>
           <Link className="link" onClick={logOut}>
             {" "}

@@ -8,7 +8,7 @@ import {
   faLongArrowAltRight,
   faLongArrowAltDown,
 } from "@fortawesome/free-solid-svg-icons";
-import { DatePicker, Space } from "antd";
+import { DatePicker, Space,Select } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,6 +17,8 @@ import {
 } from "../../state/actions/verifications";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+const {Option} = Select
 
 const Requests = ({ history }) => {
   const [activeTab, setActiveTab] = useState("pending");
@@ -37,7 +39,6 @@ const Requests = ({ history }) => {
   } = useSelector((state) => state.transcripts);
   const { RangePicker } = DatePicker;
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     if (activeTab === "pending") {
       dispatch(getTranscriptsByStatus("pending"));
@@ -52,25 +53,25 @@ const Requests = ({ history }) => {
     setBackground(background);
   };
 
-  const handleTranscriptStatus = (e) => {
-    setTranscriptStatus(e.target.value);
+  const handleTranscriptStatus = (val) => {
+    setTranscriptStatus(val);
   };
-
   const handleUpdateTranscript = async () => {
     if (!transcriptStatus) {
       return toast.error("select an option");
     }
     setLoading(true);
-    console.log("transcriptStatus", transcriptStatus);
-    const response = await updateTranscriptRequest(info._id, {
+    const response = await updateTranscriptRequest(info?._id,info?.email, {
       transcriptStatus,
     });
-    setLoading(false);
-    console.log(response.data);
+    console.log('res',response)
+   
     if (response.data.message === "transcript updated") {
       toast.success("update sucessful !!");
       setTranscriptStatus("");
+      setLoading(false);
     } else {
+      setLoading(false);
       toast.error("update Unsucessful. Try again !");
     }
   };
@@ -501,21 +502,15 @@ const Requests = ({ history }) => {
                       />
                     </div>
                     <div className="select">
-                      <select
-                        name="transcriptStatus"
-                        className="options"
-                        onClick={(e) => handleTranscriptStatus(e)}
-                      >
-                        <option className="option" value="no value">
-                          choose status
-                        </option>
-                        <option className="option" value="processing">
-                          Processing
-                        </option>
-                        <option className="option" value="completed">
-                          Completed
-                        </option>
-                      </select>
+                    <Select
+                          style={{ height: "40px" }}
+                          showSearch
+                          placeholder="Select status"
+                          onChange={handleTranscriptStatus}
+                        >
+                          <Option value="processing">processing</Option>
+                          <Option value="completed">completed</Option>
+                        </Select>
                       <button
                         onClick={handleUpdateTranscript}
                         className="finish"
@@ -979,6 +974,9 @@ const RequestWrapper = styled.div`
       .comment-section {
         display: flex;
         align-items: center;
+        .ant-select-arrow {
+          margin-top: -10px !important;
+        }
       }
       .field {
         margin-top: 0.5rem;

@@ -4,11 +4,12 @@ const initialState = {
   institutions: [],
   addInstitutions: {},
   pageInfo: {},
+  loading: false,
 };
 
 export default function userReducer(state = initialState, action) {
   switch (action.type) {
-    case types.GET_INSTITUTIONS:
+    case types.FETCH_INSTITUTIONS:
       return {
         ...state,
         institutions: action.payload,
@@ -18,11 +19,21 @@ export default function userReducer(state = initialState, action) {
           ...state,
           pageInfo: action.payload,
         };
+        case types.LOADING:
+          return {
+            ...state,
+            loading: action.payload,
+          };
       case types.ADD_INSTITUTIONS:
         return {
           ...state,
           addInstitutions: action.payload,
         };
+        case types.DELETE_INSTITUTE:
+          return {
+            ...state,
+            institutions: state.institutions.filter(sch=>sch._id !== action.payload),
+          };
 
     default:
       return state;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "./AdminLayout";
 import styled from "styled-components";
-import { DatePicker, Space } from "antd";
+import { DatePicker, Space, Select } from "antd";
 import ReactToExcel from "react-html-table-to-excel";
 import qualifications from "../../asset/qualification.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,12 +18,14 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const { Option } = Select;
+
 const Requests = ({ history }) => {
   const [activeTab, setActiveTab] = useState("pending");
   const [activeCard, setActiveCard] = useState("new");
   const [display, setDisplay] = useState("empty");
   const [background, setBackground] = useState("");
-  const [verificationStatus, setVerificationStatus] = useState("");
+  const [verificationStatus, setVerificationStatus] = useState("select");
   const [info, setInfo] = useState({});
   const [searchParameter, setSearchParameter] = useState("firstName");
   const [firstNameInput, setFirstNameInput] = useState("");
@@ -31,7 +33,6 @@ const Requests = ({ history }) => {
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [proof, setProof] = useState("");
-
   const { RangePicker } = DatePicker;
 
   const dispatch = useDispatch();
@@ -55,9 +56,9 @@ const Requests = ({ history }) => {
     setBackground(background);
   };
 
-  const handleVerificationStatus = (e) => {
-    console.log("valueee", e.target.value);
-    setVerificationStatus(e.target.value);
+  const handleVerificationStatus = (value) => {
+    console.log("valueee", value);
+    setVerificationStatus(value);
   };
 
   const handleUpdateVerification = async () => {
@@ -481,7 +482,7 @@ const Requests = ({ history }) => {
                       <p className="p3">reference id: IDF33245</p>
                     </div>
                     <button>
-                      <a href={`${info.certImage}`} target="_blank">
+                      <a href={`${info.certImage}`} target="_blank" rel="noopener noreferrer">
                         {" "}
                         view document
                       </a>
@@ -499,21 +500,15 @@ const Requests = ({ history }) => {
                     {(activeTab === "pending" ||
                       activeTab === "processing") && (
                       <div className="select">
-                        <select
-                          name="verificationStatus"
-                          className="options"
-                          onClick={(e) => handleVerificationStatus(e)}
+                        <Select
+                          style={{ height: "40px" }}
+                          showSearch
+                          placeholder="choose status"
+                          onChange={handleVerificationStatus}
                         >
-                          <option className="option" value="no value">
-                            choose status
-                          </option>
-                          <option className="option" value="processing">
-                            Processing
-                          </option>
-                          <option className="option" value="completed">
-                            Completed
-                          </option>
-                        </select>
+                          <Option value="processing">processing</Option>
+                          <Option value="completed">completed</Option>
+                        </Select>
                         {verificationStatus === "completed" ? (
                           <input
                             type="file"
@@ -988,6 +983,9 @@ const RequestWrapper = styled.div`
       .comment-section {
         display: flex;
         align-items: center;
+        .ant-select-arrow {
+          margin-top: -10px !important;
+        }
       }
       .field {
         margin-top: 0.5rem;

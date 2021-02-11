@@ -2,7 +2,7 @@
 import axios from "axios";
 import store from "../../../store";
 import {
-  getInstitutes,
+  fetchInstitutes,
   setPageInfo,
 } from "../../../state/actions/Institutions";
 
@@ -24,7 +24,6 @@ const makeRequestCreator = () => {
         return resources[query];
       }
       const res = await axios(query, { cancelToken: cancel.token });
-      console.log("oun re", res);
 
       const {
         docs,
@@ -34,7 +33,7 @@ const makeRequestCreator = () => {
         hasNextPage,
         page,
       } = res.data.institution;
-      store.dispatch(getInstitutes(docs));
+      store.dispatch(fetchInstitutes(docs));
       store.dispatch(
         setPageInfo({ totalDocs, totalPages, hasPrevPage, hasNextPage, page })
       );

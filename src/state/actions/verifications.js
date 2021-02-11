@@ -123,22 +123,22 @@ export const getTranscriptsByStatus = (status) => async (dispatch) => {
 };
 
 export const updateVerificatonRequest = (id, email, data) =>
-  axios.put(`http://localhost:5000/api/v1/verifications/${id}/${email}`, data, {
+  axios.put(`${BASE_URL}/api/v1/verifications/${id}/${email}`, data, {
     headers: { "content-type": "application/json" },
   });
+  
 
-export const updateTranscriptRequest = (id, data) =>
-  axios.put(`${BASE_URL}/api/v1/transcript/${id}`, data, {
+export const updateTranscriptRequest = (id,email, data) =>
+  axios.put(`${BASE_URL}/api/v1/transcript/${id}/${email}`, data, {
     headers: {
       "content-type": "application/json",
     },
   });
 
-export const getMessages = (value) => async (dispatch) => {
-  await axios
-    .get(`${BASE_URL}/api/v1/message`, value)
+export const getMessages = () => async (dispatch) => {
+  const res = axios
+    .get(`${BASE_URL}/api/v1/message`)
     .then(({ data }) => {
-      console.log("messages", data);
       dispatch(messages(data.message));
     })
     .catch((err) => {

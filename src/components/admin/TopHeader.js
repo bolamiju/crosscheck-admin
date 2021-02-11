@@ -22,7 +22,7 @@ function TopHeader({ setShow, show }) {
   };
 
   useEffect(() => {
-    dispatch(getMessages("value"));
+   dispatch(getMessages());
   }, [dispatch]);
 
   const handleFontChange = (font) => {
@@ -38,6 +38,8 @@ function TopHeader({ setShow, show }) {
             <h5>education verification</h5>
           ) : route && route.url === "/transcript" ? (
             <h5>transcript verification</h5>
+          ) :  route && route.url === "/institutions" ? (
+            <h5>Institutions</h5>
           ) : (
             <h5>overview</h5>
           )}
@@ -60,6 +62,7 @@ function TopHeader({ setShow, show }) {
                 <div key={message.id} className="message">
                   <h5>{message.subject}</h5>
                   <p>{message.message}</p>
+                  <p>Request Id: {message.id}</p>
                   <button
                     onClick={() => {
                       dispatch(deleteMessages(message.id));
