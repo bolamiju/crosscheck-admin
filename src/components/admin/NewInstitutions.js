@@ -10,7 +10,7 @@ const request = (data) => {
   return axios({
     data,
     method: "post",
-    url: `https://croscheck.herokuapp.com/api/v1/institutions/add`,
+    url: `https://crosschek.herokuapp.com/api/v1/institutions/add`,
     headers: { "Content-Type": "application/json" },
   });
 };
