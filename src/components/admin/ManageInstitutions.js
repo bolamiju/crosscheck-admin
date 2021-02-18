@@ -418,7 +418,7 @@ const DashboardBody = styled.div`
   }
  
   .add-new-btn{
-      margin:20px
+      margin:20px;
       outline:none;
       color:white;
       border-radius:10px;
@@ -585,5 +585,7 @@ const DashboardBody = styled.div`
 
   .spacer {
     margin-top: 4rem;
+  
   }
+
 `;

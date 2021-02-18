@@ -17,7 +17,6 @@ const request = (data) => {
 
 const NewInstitution = () => {
   const formData = {
-    id: Date.now(),
     name: "",
     country: "",
     our_charge: 0,
@@ -25,20 +24,31 @@ const NewInstitution = () => {
     transcript_fee: 0,
   };
 
-  const [formValues, setFormValues] = useState([{ ...formData }]);
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, "0");
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const year = today.getFullYear();
+  const hours = today.getHours();
+  const minutes = today.getMinutes();
+  const seconds = today.getSeconds();
+  const date = `${year}${month}${day}${hours}${minutes}${seconds}`;
+
+  const [formValues, setFormValues] = useState([{ ...formData,id:date }]);
 
   const addNewForm = () => {
-    setFormValues((values) => [...values, formData]);
+    setFormValues((values) => [
+      ...values,
+      { ...formData, id: Date.now()},
+    ]);
   };
   const updateFormValues = (id) => (data) => {
     setFormValues((formValues) =>
       formValues.map((value, index) => (index === id ? data : value))
     );
   };
-  console.log("form", formValues);
 
   const deleteOneVerification = (id) => {
-    let vals = formValues.filter((v, index) => v.id !== id);
+    let vals = formValues.filter((v) => v.id !== id);
     setFormValues(vals);
   };
   const addSchool = async () => {
@@ -95,7 +105,7 @@ const NewInstitution = () => {
           <tbody>
             {formValues.map((values, id) => (
               <InstitutionForm
-                key={id}
+              key={values.id}
                 initialValues={values}
                 updateFormValues={updateFormValues(id)}
                 id={values.id}
