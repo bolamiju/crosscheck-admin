@@ -246,7 +246,7 @@ const Requests = ({ history }) => {
                     </div>
                   </div>
                 </div>
-                <div
+                {/* <div
                   onClick={() => {
                     setActiveCard("pendings");
                   }}
@@ -267,11 +267,11 @@ const Requests = ({ history }) => {
                       />
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div>
                 {activeCard === "new" ? (
-                  <h6 className="transcript-order">new education order</h6>
+                  <h6 className="transcript-order">New Transcript orders</h6>
                 ) : (
                   <h6 className="transcript-order"> pending order</h6>
                 )}
@@ -323,15 +323,20 @@ const Requests = ({ history }) => {
                             <p>No pending verification requests</p>
                           </div>
                         )}
-                      </tbody>
-                    </table>
-                    <ReactToExcel
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td><ReactToExcel
                       className="excel-sheet"
                       table="table-to-xls"
                       filename="excelFile"
                       sheet="sheet 1"
                       buttonText="EXPORT"
-                    />
+                    /></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    
                   </div>
                 ) : (
                   ""
@@ -383,15 +388,20 @@ const Requests = ({ history }) => {
                           <p>No transcript is being processed</p>
                         </div>
                       )}
-                    </tbody>
-                  </table>
-                  <ReactToExcel
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td> <ReactToExcel
                     className="excel-sheet"
                     table="table-to-xls"
                     filename="excelFile"
                     sheet="sheet 1"
                     buttonText="EXPORT"
-                  />
+                  /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                 
                 </div>
               ) : (
                 ""
@@ -443,15 +453,20 @@ const Requests = ({ history }) => {
                           <p>No completed verifications</p>
                         </div>
                       )}
-                    </tbody>
-                  </table>
-                  <ReactToExcel
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td>  <ReactToExcel
                     className="excel-sheet"
                     table="table-to-xls"
                     filename="excelFile"
                     sheet="sheet 1"
                     buttonText="EXPORT"
-                  />
+                  /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                
                 </div>
               ) : (
                 ""
@@ -879,9 +894,7 @@ const RequestWrapper = styled.div`
       padding: 10px;
     }
     .excel-sheet {
-      position: absolute;
-      right: 5%;
-      bottom: 5%;
+    margin-top:20px;
       padding: 0.3rem;
       border: none;
       color: #ffffff;

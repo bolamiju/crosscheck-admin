@@ -324,15 +324,18 @@ const Requests = ({ history }) => {
                             <p>No pending verification requests</p>
                           </div>
                         )}
-                      </tbody>
-                    </table>
-                    <ReactToExcel
+                        <tr>
+                          <td></td>
+                          <td></td> <ReactToExcel
                       className="excel-sheet"
                       table="table-to-xls"
                       filename="excelFile"
                       sheet="sheet 1"
                       buttonText="EXPORT"
-                    />
+                    /></tr>
+                      </tbody>
+                    </table>
+                   
                   </div>
                 ) : (
                   ""
@@ -387,15 +390,20 @@ const Requests = ({ history }) => {
                           <p>No verifications is being processed</p>
                         </div>
                       )}
-                    </tbody>
-                  </table>
-                  <ReactToExcel
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td> <ReactToExcel
                     className="excel-sheet"
                     table="table-to-xls"
                     filename="excelFile"
                     sheet="sheet 1"
                     buttonText="EXPORT"
-                  />
+                  /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                 
                 </div>
               ) : (
                 ""
@@ -449,15 +457,20 @@ const Requests = ({ history }) => {
                           <p>No completed verifications</p>
                         </div>
                       )}
-                    </tbody>
-                  </table>
-                  <ReactToExcel
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td>  <ReactToExcel
                     className="excel-sheet"
                     table="table-to-xls"
                     filename="excelFile"
                     sheet="sheet 1"
                     buttonText="EXPORT"
-                  />
+                  /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                
                 </div>
               ) : (
                 ""
@@ -853,6 +866,13 @@ const RequestWrapper = styled.div`
     min-width: 385px;
     min-height: 250px;
     margin-bottom: 2rem;
+    .excel-sheet {
+     margin-top:20px;
+      padding: 0.3rem;
+      border: none;
+      color: #ffffff;
+      background: #173049;
+    }
     @media (max-width: 400px) {
       margin-right: 0;
       width: 100%;
@@ -886,16 +906,9 @@ const RequestWrapper = styled.div`
       padding: 10px;
       color: #707070;
       opacity: 0.8;
+     
     }
-    .excel-sheet {
-      position: absolute;
-      right: 5%;
-      bottom: 5%;
-      padding: 0.3rem;
-      border: none;
-      color: #ffffff;
-      background: #173049;
-    }
+    
     .no-order {
       position: absolute;
       left: 30%;
