@@ -247,7 +247,7 @@ const Requests = ({ history }) => {
                     </div>
                   </div>
                 </div>
-                <div
+                {/* <div
                   onClick={() => {
                     setActiveCard("pendings");
                   }}
@@ -268,7 +268,7 @@ const Requests = ({ history }) => {
                       />
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div>
                 {activeCard === "new" ? (
