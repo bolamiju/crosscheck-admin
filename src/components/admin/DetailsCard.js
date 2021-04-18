@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from 'react'
 import { toast } from "react-toastify";
+import { BASE_URL } from "../../state/constant/constants";
 import axios from 'axios'
 import {
   getVerificationsByStatus,
@@ -17,7 +18,7 @@ const DetailsCard = ({info,activeTab,}) => {
      const [verificationStatus, setVerificationStatus] = useState("select");
       const [proof, setProof] = useState("");
       const [loading, setLoading] = useState(false);
-      
+
      const handleVerificationStatus = (value) => {
     setVerificationStatus(value);
   };
@@ -38,7 +39,7 @@ const DetailsCard = ({info,activeTab,}) => {
   Object.keys(values).forEach((key) => {
     formData.append(key, values[key]);
   });
-    const response = await axios.put(`http://localhost:5000/api/v1/verifications/${info.id}/${info.email}`, formData, {
+    const response = await axios.put(`${BASE_URL}/api/v1/verifications/${info.id}/${info.email}`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
     console.log('resoonse',response)
