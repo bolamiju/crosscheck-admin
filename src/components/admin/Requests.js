@@ -1,38 +1,37 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "./AdminLayout";
-import styled from "styled-components";
 import { DatePicker, Space, Select } from "antd";
 import ReactToExcel from "react-html-table-to-excel";
 import qualifications from "../../asset/qualification.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faLongArrowAltRight,
   faLongArrowAltDown,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
   getVerificationsByStatus,
-  updateVerificatonRequest,
 } from "../../state/actions/verifications";
-import { ToastContainer, toast } from "react-toastify";
+import DetailsCard from "./DetailsCard"
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {RequestWrapper} from './RequestStyles.js'
 
-const { Option } = Select;
 
 const Requests = ({ history }) => {
   const [activeTab, setActiveTab] = useState("pending");
   const [activeCard, setActiveCard] = useState("new");
   const [display, setDisplay] = useState("empty");
   const [background, setBackground] = useState("");
-  const [verificationStatus, setVerificationStatus] = useState("select");
+ 
   const [info, setInfo] = useState({});
-  const [searchParameter, setSearchParameter] = useState("firstName");
-  const [firstNameInput, setFirstNameInput] = useState("");
+  const [searchParameter, setSearchParameter] = useState("name");
+  const [nameInput, setNameInput] = useState("");
+  const [id,setId] = useState('')
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [proof, setProof] = useState("");
+  
+ 
   const { RangePicker } = DatePicker;
 
   const dispatch = useDispatch();
@@ -56,41 +55,16 @@ const Requests = ({ history }) => {
     setBackground(background);
   };
 
-  const handleVerificationStatus = (value) => {
-    console.log("valueee", value);
-    setVerificationStatus(value);
-  };
-
-  const handleUpdateVerification = async () => {
-    if (!verificationStatus) {
-      return toast.error("select an option");
-    }
-    var formData = new FormData();
-    formData.append("proof", proof);
-    formData.append("verificationStatus", verificationStatus);
-    setLoading(true);
-    const response = await updateVerificatonRequest(
-      info._id,
-      info.email,
-      formData
-    );
-    setLoading(false);
-    console.log("response", response);
-    if (response.data.message === "verification updated") {
-      toast.success("update sucessful !!");
-      setVerificationStatus("");
-    } else {
-      toast.error("update Unsucessful. Try again !");
-    }
-  };
-
   const handleDateRange = (value, dateString) => {
     setStartDate(dateString[0]);
     setEndDate(dateString[1]);
   };
 
   const pendingFilterOrder = pendingVerifications.filter((verification) =>
-    verification[searchParameter].toLowerCase().includes(firstNameInput)
+    verification[searchParameter].toLowerCase().includes(nameInput.toLowerCase())
+  );
+  const pendingIdFilterOrder = pendingVerifications.filter((verification) =>
+    verification[searchParameter].includes(id)
   );
 
   const min = Date.parse(startDate);
@@ -106,7 +80,10 @@ const Requests = ({ history }) => {
   });
 
   const processingFilterOrder = processingVerifications.filter((verification) =>
-    verification[searchParameter].toLowerCase().includes(firstNameInput)
+    verification[searchParameter].toLowerCase().includes(nameInput.toLowerCase())
+  );
+  const processingIdFilterOrder = processingVerifications.filter((verification) =>
+    verification[searchParameter].includes(id)
   );
 
   const processingDateFilter = processingVerifications.filter(
@@ -121,9 +98,12 @@ const Requests = ({ history }) => {
   );
 
   const completedFilterOrder = completedVerifications.filter((verification) =>
-    verification[searchParameter].toLowerCase().includes(firstNameInput)
+    verification[searchParameter].toLowerCase().includes(nameInput.toLowerCase())
   );
 
+const completedIdFilterOrder = completedVerifications.filter((verification) =>
+    verification[searchParameter].includes(id)
+  );
   const completedDateFilter = completedVerifications.filter((verification) => {
     if (
       Date.parse(verification[searchParameter]) >= min &&
@@ -132,19 +112,21 @@ const Requests = ({ history }) => {
       return verification;
     }
   });
-
-  const handleSubmit = (e) => {
+console.log('sea',searchParameter)
+  const handleSelectChange = (e) => {
     e.preventDefault();
     setSearchParameter(e.target.value);
-    setFirstNameInput("");
+    setNameInput("");
   };
   const handleChange = (e) => {
-    setFirstNameInput(e.target.value);
+    setNameInput(e.target.value);
   };
 
-  const handleDocument = (e) => {
-    setProof(e.currentTarget.files[0]);
-  };
+  const handleId = (e) =>{
+    setId(e.target.value)
+  }
+
+ 
   return (
     <AdminLayout history={history}>
       <RequestWrapper>
@@ -165,21 +147,29 @@ const Requests = ({ history }) => {
             defaultValue="no-value"
             name="searchParameter"
             className="option mr-4"
-            onChange={handleSubmit}
+            onChange={handleSelectChange}
           >
-            <option value="no-value" disabled>
+            {/* <option value="no-value" disabled>
               Filter by
-            </option>
-            <option value="firstName">Name</option>
+            </option> */}
+            <option value="name">Name</option>
             <option value="date">Date</option>
-            <option value="_id">Id</option>
+            <option value="id">Id</option>
           </select>
-          {searchParameter === "firstName" && (
+          {searchParameter === "name" && (
             <input
               type="text"
-              name="firstNameInput"
-              value={firstNameInput}
+              name="nameInput"
+              value={nameInput}
               onChange={handleChange}
+            />
+          )}
+          {searchParameter === "id" && (
+            <input
+              type="text"
+              name="id"
+              value={id}
+              onChange={handleId}
             />
           )}
           {searchParameter === "date" && (
@@ -197,7 +187,12 @@ const Requests = ({ history }) => {
             <ul className=" list d-flex">
               <li
                 onClick={() => {
+                   if(activeTab !== "pending"){
+                    setDisplay("empty")}
                   setActiveTab("pending");
+                   setNameInput("")
+                   setId("")
+                  
                 }}
                 className={activeTab === "pending" ? "activeTab" : ""}
               >
@@ -206,7 +201,12 @@ const Requests = ({ history }) => {
               </li>
               <li
                 onClick={() => {
+                   if(activeTab !== "processing"){
+                    setDisplay("empty")}
                   setActiveTab("processing");
+                   setNameInput("")
+                   setId("")
+                    setInfo({})
                 }}
                 className={activeTab === "processing" ? "activeTab" : ""}
               >
@@ -215,7 +215,12 @@ const Requests = ({ history }) => {
               </li>
               <li
                 onClick={() => {
+                   if(activeTab !== "completed"){
+                    setDisplay("empty")}
                   setActiveTab("completed");
+                    setNameInput("")
+                    setId("")
+                    setInfo({})
                 }}
                 className={activeTab === "completed" ? "activeTab" : ""}
               >
@@ -247,28 +252,7 @@ const Requests = ({ history }) => {
                     </div>
                   </div>
                 </div>
-                {/* <div
-                  onClick={() => {
-                    setActiveCard("pendings");
-                  }}
-                  className={
-                    activeCard === "pendings" ? "activeCard2" : "card2"
-                  }
-                >
-                  <h6>pendings</h6>
-                  <div className="para-icon">
-                    <p>
-                      Take actions on <br /> pending activities
-                    </p>
-                    <div className="icon-box">
-                      <FontAwesomeIcon
-                        className="icon"
-                        icon={faLongArrowAltDown}
-                        style={{ fontSize: "20px" }}
-                      />
-                    </div>
-                  </div>
-                </div> */}
+                
               </div>
               <div>
                 {activeCard === "new" ? (
@@ -293,12 +277,12 @@ const Requests = ({ history }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {(searchParameter === "firstName"
-                          ? pendingFilterOrder
-                          : pendingDateFilter
+                        {(searchParameter === "name" 
+                          ? pendingFilterOrder : searchParameter === "id" ? pendingIdFilterOrder
+                          :  pendingDateFilter
                         ).length > 0 ? (
-                          (searchParameter === "firstName"
-                            ? pendingFilterOrder
+                          (searchParameter === "name" 
+                            ? pendingFilterOrder : searchParameter === "id" ? pendingIdFilterOrder
                             : pendingDateFilter
                           ).map((verification) => (
                             <tr
@@ -359,12 +343,12 @@ const Requests = ({ history }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {(searchParameter === "firstName"
-                        ? processingFilterOrder
+                      {(searchParameter === "name"
+                        ? processingFilterOrder : searchParameter === "id" ? processingIdFilterOrder
                         : processingDateFilter
                       ).length > 0 ? (
-                        (searchParameter === "firstName"
-                          ? processingFilterOrder
+                        (searchParameter === "name"
+                          ? processingFilterOrder : searchParameter === "id" ? processingIdFilterOrder
                           : processingDateFilter
                         ).map((verification) => (
                           <tr
@@ -426,13 +410,13 @@ const Requests = ({ history }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {(searchParameter === "firstName"
-                        ? completedFilterOrder
+                      {(searchParameter === "name"
+                        ? completedFilterOrder : searchParameter === "id" ? completedIdFilterOrder
                         : completedDateFilter
                       ).length > 0 ? (
-                        (searchParameter === "firstName"
-                          ? completedFilterOrder
-                          : completedDateFilter
+                        (searchParameter === "name"
+                          ? completedFilterOrder : searchParameter === "id" ? completedIdFilterOrder
+                        : completedDateFilter
                         ).map((verification) => (
                           <tr
                             key={verification._id}
@@ -479,74 +463,7 @@ const Requests = ({ history }) => {
             <div className="details">
               <h6>Details</h6>
               {display === "populated" && (
-                <div className="container p-3">
-                  <h5>individual details</h5>
-                  <div className="individual-details">
-                    <div className="para pt-2">
-                      <p>first name: {info.firstName}</p>
-                      <p className="p1">last name: {info.lastName}</p>
-                    </div>
-                    <div className="para">
-                      <p>matric number: {info.studentId}</p>
-                      <p className="p2">course: {info.course}</p>
-                    </div>
-                    <div className="para">
-                      <p>grad year: {info.graduationYear}</p>
-                      <p className="p3">reference id: IDF33245</p>
-                    </div>
-                    <button>
-                      <a href={`${info.certImage}`} target="_blank" rel="noopener noreferrer">
-                        {" "}
-                        view document
-                      </a>
-                    </button>
-                  </div>
-                  <div className="comment-section">
-                    <div className="field">
-                      <label htmlFor="message">comments</label>
-                      <textarea
-                        name="message"
-                        type="text"
-                        className="message"
-                      />
-                    </div>
-                    {(activeTab === "pending" ||
-                      activeTab === "processing") && (
-                      <div className="select">
-                        <Select
-                          style={{ height: "40px" }}
-                          showSearch
-                          placeholder="choose status"
-                          onChange={handleVerificationStatus}
-                        >
-                          <Option value="processing">processing</Option>
-                          <Option value="completed">completed</Option>
-                        </Select>
-                        {verificationStatus === "completed" ? (
-                          <input
-                            type="file"
-                            name="proof"
-                            onChange={handleDocument}
-                          />
-                        ) : null}
-                        <button
-                          onClick={handleUpdateVerification}
-                          className="finish"
-                        >
-                          {loading ? "updating.." : "submit"}{" "}
-                          <FontAwesomeIcon
-                            icon={faLongArrowAltRight}
-                            style={{
-                              marginLeft: "5px",
-                              fontSize: "20px",
-                              paddingTop: "0.3rem",
-                            }}
-                          />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
+               <DetailsCard activeTab={activeTab} info={info}/>
               )}
               {display === "empty" && (
                 <div className="details-info">
@@ -563,523 +480,5 @@ const Requests = ({ history }) => {
     </AdminLayout>
   );
 };
-const RequestWrapper = styled.div`
-  background: var(--mainWhite);
-  width: 100%;
-  margin-top: -1.25rem;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  height: 100%;
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  @media (max-width: 400px) {
-    padding: 3rem 0;
-  }
-  @media (max-width: 500px) {
-    padding: 3rem 0;
-  }
-  .select {
-    .option {
-      width: 12rem;
-      height: 2rem;
-      font-size: 1.2rem;
-      color: #0092e0;
-      outline: none;
-      cursor: pointer;
-    }
-    input {
-      padding: 0.2rem;
-      outline: none;
-    }
-  }
-  .list {
-    list-style: none;
-    border-bottom: 1px solid var(--lighterDark);
-    justify-content: space-between;
-    padding-left: 0px;
-    padding-bottom: -4px;
-    font-family: MontserratBold;
-    letter-spacing: 0.44px;
-    color: #173049;
-    font-family: segoebold;
-    opacity: 1;
-    li {
-      margin-right: 3rem;
-      cursor: pointer;
-      &.activeTab {
-        border-bottom: 2px solid #0092e0;
-        letter-spacing: 0.44px;
-        color: #0092e0;
-        padding-bottom: 1rem;
-        opacity: 1;
-        text-transform: capitalize;
-      }
-    }
-  }
-  .request-container {
-    @media (max-width: 400px) {
-      display: none;
-    }
-    @media (max-width: 500px) {
-      display: none;
-    }
-  }
-  .box {
-    margin: -3rem 3rem;
-    @media (max-width: 400px) {
-      padding: 0;
-      margin: 0;
-    }
-    @media (max-width: 500px) {
-      margin: 0;
-      padding: 0;
-    }
-  }
-  .cards {
-    display: flex;
-    justify-content: space-around;
-    margin-left: -3rem;
-    margin-right: 2rem;
-    cursor: pointer;
-    margin-top: -1rem;
-    @media (max-width: 400px) {
-      display: block;
-      padding: 2rem 0;
-      margin-left: 0;
-      margin-right: 0;
-    }
-    @media (max-width: 500px) {
-      display: block;
-      margin-left: 1.5rem;
-      margin-right: 1.5rem;
-      padding: 2rem 0;
-    }
-    .card1 {
-      background: #e6e6e6;
-      padding: 0.5rem;
-      width: 12rem;
-      height: 5rem;
-      /* margin-right: 0.8rem; */
-      border-radius: 0.2rem;
-      cursor: pointer;
-      @media (max-width: 400px) {
-        margin-right: 0;
-        width: 15rem;
-        height: 5rem;
-      }
-      @media (max-width: 500px) {
-        margin-left: 0.8rem;
-        width: 15rem;
-        height: 5rem;
-      }
-      h6 {
-        font-weight: bolder;
-        text-transform: capitalize;
-        font-family: MontserratBold;
-        color: #707070;
-        letter-spacing: 0px;
-        opacity: 1;
-        font-size: 16px;
-      }
-      p {
-        font-weight: lighter;
-        font-size: 0.8rem;
-        color: #707070;
-        letter-spacing: 0.32px;
-      }
-    }
-    .card2 {
-      background: #e6e6e6;
-      padding: 0.5rem;
-      width: 12rem;
-      height: 5rem;
-      margin-left: 0.7rem;
-      border-radius: 0.2rem;
-      cursor: pointer;
-      @media (max-width: 400px) {
-        margin-left: 0;
-        width: 15rem;
-        height: 5rem;
-      }
-      @media (max-width: 500px) {
-        margin-top: 2rem;
-        width: 15rem;
-        height: 5rem;
-        margin-left: 0.8rem;
-      }
-      h6 {
-        font-weight: bolder;
-        text-transform: capitalize;
-        font-family: MontserratBold;
-        letter-spacing: 0.32px;
-        color: #707070;
-        opacity: 1;
-        font-size: 16px;
-      }
-      p {
-        font-weight: lighter;
-        font-size: 0.8rem;
-        letter-spacing: 0.32px;
-        color: #707070;
-      }
-    }
-    .para-icon {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: -0.3rem;
-      .icon-box {
-        background: var(--lightTransparent);
-        padding: 0.4rem;
-        border-radius: 30px;
-        width: 2rem;
-        height: 2rem;
-      }
-      .icon {
-        color: #ffffff;
-        margin-left: 0.3rem;
-      }
-    }
-  }
-  .activeCard1 {
-    padding: 0.5rem;
-    width: 12rem;
-    height: 5rem;
-    margin-right: 0.8rem;
-    border-radius: 0.2rem;
-    cursor: pointer;
-    color: #ffffff;
-    background-image: linear-gradient(
-      to right,
-      var(--lightBlue),
-      var(--mainBlue)
-    );
-    @media (max-width: 400px) {
-      margin-left: 0.8rem;
-      width: 15rem;
-      height: 5rem;
-      margin-right: 2;
-    }
-    @media (max-width: 500px) {
-      margin-left: 0.8rem;
-      width: 15rem;
-      height: 5rem;
-      margin-right: 0;
-    }
-    h6 {
-      font-weight: bolder;
-      text-transform: capitalize;
-      font-family: MontserratSemibold;
-      letter-spacing: 0px;
-      opacity: 1;
-      font-size: 16px;
-      color: #ffffff;
-    }
-    p {
-      font-weight: lighter;
-      letter-spacing: 0.32px;
-      font-size: 0.8rem;
-    }
-  }
-  .activeCard2 {
-    padding: 0.5rem;
-    width: 12rem;
-    height: 5rem;
-    margin-left: 11.2px;
-    border-radius: 0.2rem;
-    cursor: pointer;
-    color: #ffffff;
-    background: red;
-    @media (max-width: 400px) {
-      margin-left: 0.8rem;
-      width: 15rem;
-      height: 5rem;
-      margin-top: 2rem;
-    }
-    @media (max-width: 500px) {
-      width: 15rem;
-      height: 5rem;
-      margin-left: 0.8rem;
-      margin-top: 2rem;
-    }
-    h6 {
-      font-weight: bolder;
-      text-transform: capitalize;
-      font-family: MontserratSemibold;
-      letter-spacing: 0px;
-      opacity: 1;
-      color: #ffffff;
-      font-size: 16px;
-    }
-    p {
-      font-weight: lighter;
-      letter-spacing: 0.32px;
-      font-size: 0.8rem;
-    }
-  }
-
-  .transcript-order {
-    margin-top: -1rem;
-    text-transform: capitalize;
-    margin-bottom: 1rem;
-    letter-spacing: 0.44px;
-    color: #173049;
-    font-family: MontserratBold;
-    opacity: 1;
-    @media (max-width: 400px) {
-      margin-left: 1rem;
-    }
-    @media (max-width: 500px) {
-      margin-left: 1rem;
-    }
-  }
-  .details-info {
-    background: white;
-    display: grid;
-    place-items: center;
-    min-height: 385px;
-    padding: 1rem;
-    border-radius: 10px;
-    margin-right: 3rem;
-    margin-bottom: 2rem;
-    p {
-      text-align: center;
-      font-family: MontserratRegular;
-      font-weight: normal;
-      letter-spacing: 0.28px;
-      color: #707070;
-      opacity: 0.2;
-    }
-  }
-  .new-table {
-    position: relative;
-    background: white;
-    text-align: center;
-    border-radius: 10px;
-    min-height: 300px;
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 1rem;
-    margin-right: 3rem;
-    /* width: 100%; */
-    min-width: 385px;
-    min-height: 250px;
-    margin-bottom: 2rem;
-    .excel-sheet {
-     margin-top:20px;
-      padding: 0.3rem;
-      border: none;
-      color: #ffffff;
-      background: #173049;
-    }
-    @media (max-width: 400px) {
-      margin-right: 0;
-      width: 100%;
-    }
-    @media (max-width: 500px) {
-      padding-left: 0.5rem;
-      width: 100%;
-    }
-    .table-headers {
-      font-family: MontserratBold;
-      letter-spacing: 0.32px;
-      color: #707070;
-      font-weight: normal;
-      opacity: 1;
-    }
-    tr {
-      &.activeOrder {
-        background: var(--mainWhite);
-      }
-    }
-    th {
-      padding: 0.5rem 3.3rem;
-    }
-    td {
-      font-family: MontserratRegular;
-      font-size: 12px;
-      border-top: 0.2rem solid var(--mainWhite);
-      cursor: pointer;
-      font-weight: normal;
-      letter-spacing: 0.28px;
-      padding: 10px;
-      color: #707070;
-      opacity: 0.8;
-     
-    }
-    
-    .no-order {
-      position: absolute;
-      left: 30%;
-      top: 30%;
-      p {
-        text-align: center;
-        font-family: MontserratRegular;
-        font-weight: normal;
-        letter-spacing: 0.28px;
-        color: #707070;
-        opacity: 0.2;
-      }
-    }
-  }
-  .details {
-    margin-left: -1rem;
-    min-width: 470px;
-    margin-bottom: 2rem;
-    h6 {
-      text-transform: capitalize;
-      letter-spacing: 0.44px;
-      color: #173049;
-      font-family: MontserratBold;
-      margin-bottom: 1rem;
-      opacity: 1;
-      @media (max-width: 400px) {
-        margin-left: 1rem;
-      }
-      @media (max-width: 500px) {
-        margin-left: 1rem;
-      }
-    }
-    @media (max-width: 400px) {
-      margin-left: 0;
-      margin-top: 2rem;
-    }
-    @media (max-width: 500px) {
-      margin-left: 0;
-      margin-top: 2rem;
-    }
-    .container {
-      display: block;
-      background: white;
-      /* min-height: 400px; */
-      text-align: left;
-      border-radius: 10px;
-      h5 {
-        font-family: MontserratBold;
-        letter-spacing: 0.32px;
-        color: #707070;
-        opacity: 1;
-        text-transform: capitalize;
-        font-weight: normal;
-      }
-      .individual-details {
-        margin-top: 1rem;
-        border-top: 2px solid var(--lighterDark);
-      }
-      .para {
-        display: flex;
-        font-family: MontserratRegular;
-        font-weight: normal;
-        letter-spacing: 0.28px;
-        color: #707070;
-        opacity: 0.8;
-        justify-content: left;
-        font-size: 12px;
-        text-transform: capitalize;
-        .p1 {
-          padding-left: 3rem;
-        }
-        .p2 {
-          padding-left: 1.8rem;
-        }
-        .p3 {
-          padding-left: 5rem;
-        }
-        .p4 {
-          padding-left: 1rem;
-        }
-        .p5 {
-          padding-left: 1rem;
-        }
-      }
-      .comment-section {
-        display: flex;
-        align-items: center;
-        .ant-select-arrow {
-          margin-top: -10px !important;
-        }
-      }
-      .field {
-        margin-top: 0.5rem;
-        display: flex;
-        flex-direction: column;
-        label {
-          font-family: MontserratRegular;
-          font-weight: normal;
-          letter-spacing: 0.28px;
-          color: #707070;
-          opacity: 0.8;
-        }
-        textarea {
-          width: 220px;
-          height: 80px;
-          font-family: MontserratRegular;
-          font-weight: normal;
-          letter-spacing: 0.28px;
-          color: #707070;
-          opacity: 1;
-          margin-bottom: 0.5rem;
-          border-radius: 10px;
-          outline: none;
-          padding: 0.5rem;
-          font-size: 12px;
-        }
-      }
-      .select {
-        margin-left: 1rem;
-        display: flex;
-        flex-direction: column;
-      }
-      .options {
-        width: 13rem;
-        margin-top: 2rem;
-        outline: none;
-        cursor: pointer;
-        padding: 0.5rem;
-        color: #707070;
-        text-transform: capitalize;
-        .option {
-          color: #707070;
-          padding-bottom: 1rem;
-        }
-        input {
-          padding: 1rem;
-          font-size: 0.5rem;
-        }
-        @media (max-width: 400px) {
-          width: 90px;
-        }
-      }
-      .finish {
-        background: #0092e0;
-        margin-top: 1rem;
-        width: 7.5rem;
-        height: 35px;
-        text-transform: capitalize;
-        border: none;
-        border-radius: 20px;
-        color: #ffffff;
-        outline: none;
-      }
-    }
-    .details-info {
-      background: white;
-      display: grid;
-      place-items: center;
-      min-height: 400px;
-      padding: 1rem;
-      border-radius: 10px;
-      p {
-        text-align: center;
-        font-family: MontserratRegular;
-        font-weight: normal;
-        letter-spacing: 0.28px;
-        color: #707070;
-        opacity: 0.2;
-      }
-    }
-  }
-`;
 
 export default Requests;

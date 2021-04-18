@@ -122,11 +122,22 @@ export const getTranscriptsByStatus = (status) => async (dispatch) => {
     });
 };
 
-export const updateVerificatonRequest = (id, email, data) =>
-  axios.put(`${BASE_URL}/api/v1/verifications/${id}/${email}`, data, {
-    headers: { "content-type": "application/json" },
+export const updateVerificatonRequest = (id, email, data) =>{
+  console.log(data)
+ const formData = new FormData();
+  Object.keys(data).forEach((key) => {
+    formData.append(key, data[key]);
   });
-  
+  return  axios({
+    data: formData,
+    method: "put",
+    url: `http://localhost:5000/api/v1/verifications/${id}/${email}`,
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+//  return axios.put(`http://localhost:5000/api/v1/verifications/${id}/${email}`, formData, {
+//     headers: { "Content-Type": "multipart/form-data" },
+//   });
+}
 
 export const updateTranscriptRequest = (id,email, data) =>
   axios.put(`${BASE_URL}/api/v1/transcript/${id}/${email}`, data, {
