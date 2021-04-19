@@ -7,12 +7,14 @@ import styled from "styled-components";
 
 
 const Overview = ({ history }) => {
+  const user = JSON.parse(localStorage.getItem('user'))
+
   return (
     <AdminLayout history={history}>     
       <OverviewWrapper>
         <div className=" py-5">
           <div className="welcome mx-5 p-3 ">
-            <h5>welcome admin_name</h5>
+            <h5>welcome {user?.firstName || 'Admin'}</h5>
             <p>what would you like to do today ?</p>
           </div>
           <div className="cards px-5 py-5">
