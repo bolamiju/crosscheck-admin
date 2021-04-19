@@ -42,7 +42,6 @@ const DetailsCard = ({info,activeTab,}) => {
     const response = await axios.put(`${BASE_URL}/api/v1/verifications/${info.id}/${info.email}`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
-    console.log('resoonse',response)
     setLoading(false);
     if (response.data.message === "verification updated") {
       toast.success("update sucessful !!");

@@ -406,7 +406,7 @@ const SelectSch = styled.div`
 
 // `;
 
-const DashboardBody = styled.div`
+export const DashboardBody = styled.div`
   height: 100%;
   padding-left: 30px;
   overflow-y: scroll;
@@ -416,7 +416,22 @@ const DashboardBody = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
- 
+  .input{
+    width:300px;
+    outline:none;
+    border:1px solid grey;
+    height:35px
+  }
+  .create-button{
+    width:200px;
+    height:40px;
+    margin-left:140px;
+      outline:none;
+      color:white;
+      border-radius:10px;
+      background:#0092e0;
+      border: 1px solid #0092e0;
+  }
   .add-new-btn{
       margin:20px;
       outline:none;

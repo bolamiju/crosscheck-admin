@@ -25,23 +25,19 @@ const History = ({ history }) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    console.log("hello", user.email)
     dispatch(getUserTranscript(user.email));
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("hi", user.email)
     dispatch(getUserVerification(user.email));
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("hey")
     dispatch(getAllInstitutions());
     // dispatch(getUserVerification(user.email));
   }, [dispatch]);
 
   const allHistory = userVerifications.concat(newTranscript);
-  console.log("please", allHistory)
 
   const verificationsNavigation = (e, index) => {
     e.preventDefault();

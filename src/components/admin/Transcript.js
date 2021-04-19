@@ -64,7 +64,6 @@ const Requests = ({ history }) => {
     const response = await updateTranscriptRequest(info?._id,info?.email, {
       transcriptStatus,
     });
-    console.log('res',response)
    
     if (response.data.message === "transcript updated") {
       toast.success("update sucessful !!");

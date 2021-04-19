@@ -112,7 +112,6 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
       return verification;
     }
   });
-console.log('sea',searchParameter)
   const handleSelectChange = (e) => {
     e.preventDefault();
     setSearchParameter(e.target.value);

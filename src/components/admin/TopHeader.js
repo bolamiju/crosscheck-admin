@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, Redirect } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../../asset/Avatar.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,6 +16,12 @@ function TopHeader({ setShow, show }) {
   const [open, setOpen] = useState(true);
   const [font, setFont] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
+  useEffect(() => {
+    if (["/request","/transcript","/education","/institutions"].includes(route.url) && !user?.id ) {
+      window.location.href = "/login";
+      return <Redirect to="/login" />;
+    }
+  }, [user]);
 
   const handleMenuIcon = () => {
     setShow(!show);

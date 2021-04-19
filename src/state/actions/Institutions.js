@@ -61,7 +61,7 @@ export const addAllInstitutions = (institution) =>
   axios
     .post(`${BASE_URL}/api/v1/institutions/add`, institution)
     .then(({ data }) => {
-      console.log(data)
+      return data
     })
     .catch((err) => {
       return err;

@@ -6,7 +6,6 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { toast, ToastContainer } from "react-toastify";
 
 const request = (data) => {
-  console.log(data);
   return axios({
     data,
     method: "post",

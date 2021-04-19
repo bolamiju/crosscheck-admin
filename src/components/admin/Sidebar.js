@@ -20,8 +20,9 @@ function Sidebar({ history }) {
 
   const logOut = () => {
     localStorage.clear();
-    window.location.href = "/";
+    window.location.href = "/login";
   };
+  const user = JSON.parse(localStorage.getItem("user"))
   return (
     <Container className="hideshow">
       <LogoSection>
@@ -76,10 +77,10 @@ function Sidebar({ history }) {
             <img src={histry} alt="history" />
             <li>History</li>
           </Link>
-          <Link className="link">
+         {user && user.userType === "super_admin" && <Link className="link" to="/users">
             {" "}
-            <img src={contact} alt="account" /> <li>My Account</li>
-          </Link>
+            <img src={contact} alt="account" /> <li>Manage Admins</li>
+          </Link>}
           <Link className="link" to="/institutions">
             {" "}
             <img src={receipt} alt="receipt" />

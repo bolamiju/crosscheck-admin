@@ -37,7 +37,7 @@ const makeRequestCreator = () => {
       store.dispatch(
         setPageInfo({ totalDocs, totalPages, hasPrevPage, hasNextPage, page })
       );
-      console.log("inst", docs);
+     
       // Store response
       // resources[query] = docs;
 
