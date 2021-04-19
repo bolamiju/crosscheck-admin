@@ -24,7 +24,7 @@ const ManageAdmin = () => {
     initialValues,
     onSubmit: async (values) => {
         try{
-       const response = await axios.post(`http://localhost:5000/api/v1/admin/register`,values,{
+       const response = await axios.post(`https://crosschek.herokuapp.com/api/v1/admin/register`,values,{
            headers:{
                "Content-type":"application/json",
                authorization: user?.token
