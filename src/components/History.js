@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-import AdminLayout from "./AdminLayout";
+import AdminLayout from "./admin/AdminLayout";
 import styled from 'styled-components';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { getAllInstitutions } from "../../state/actions/Institutions";
+import { getAllInstitutions } from "../state/actions/Institutions";
 
 import {
   getUserVerification,
   getUserTranscript,
-} from "../../state/actions/verifications";
+} from "../state/actions/verifications";
 
 const History = ({ history }) => {
   const [currentPage, setCurrentPage] = useState(0);

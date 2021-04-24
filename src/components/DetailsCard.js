@@ -1,11 +1,7 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState} from 'react'
 import { toast } from "react-toastify";
-import { BASE_URL } from "../../state/constant/constants";
+import { BASE_URL } from "../state/constant/constants";
 import axios from 'axios'
-import {
-  getVerificationsByStatus,
-  updateVerificatonRequest,
-} from "../../state/actions/verifications";
 import { Select } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,7 +11,7 @@ import {
 const { Option } = Select;
 
 const DetailsCard = ({info,activeTab,}) => {
-     const [verificationStatus, setVerificationStatus] = useState("select");
+     const [verificationStatus, setVerificationStatus] = useState("");
       const [proof, setProof] = useState("");
       const [loading, setLoading] = useState(false);
 
@@ -32,6 +28,9 @@ const DetailsCard = ({info,activeTab,}) => {
       return toast.error("select an option");
     }
     if(verificationStatus === "completed"){
+      if(!proof){
+        return toast.error('upload proof of completion')
+      }
        values={verificationStatus,proof}
     }
     setLoading(true);

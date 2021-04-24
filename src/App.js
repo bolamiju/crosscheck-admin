@@ -4,8 +4,7 @@ import store from "./store";
 import './App.css';
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import AdminContent from "./components/admin/AdminContent";
-import Institutions from './components/admin/ManageInstitutions'
-import Login from './components/admin/Login'
+import Login from './components/ManageAdmins/Login'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
 
@@ -28,6 +27,7 @@ function App() {
        <Route exact path="/check" component={AdminContent} />
        <Route exact path="/institutions" component={AdminContent}/>
        <Route exact path="/users" component={AdminContent}/>
+       <Route exact path="/reset" component={AdminContent}/>
        <Route exact path="/login" component={Login}/>
    </Router>
     </Provider>

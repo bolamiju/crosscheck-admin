@@ -1,11 +1,12 @@
 import React from "react";
 import { useRouteMatch } from "react-router-dom";
-import Overview from "./Overview";
-import Requests from "./Requests";
-import Transcript from './Transcript';
-import History from './History';
-import Institutions from './ManageInstitutions'
-import ManageAdmin from './ManageAdmins'
+import Overview from "../Overview";
+import Requests from "../Requests";
+import Transcript from '../Transcript';
+import History from '../History';
+import ManageInstitutions from '../Institutions/manage'
+import ManageAdmin from '../ManageAdmins/ManageAdmins'
+import MyAccount from '../MyAccount'
 
 
 const AdminContent = (props) => {
@@ -25,9 +26,9 @@ const AdminContent = (props) => {
       ) : route && route.url === "/history" ? (
           <History />
       ) : route && route.url === "/institutions" ? (
-        <Institutions />
+        <ManageInstitutions />
     ):  route && route.url === "/users" ? (
-        <ManageAdmin />) :(
+        <ManageAdmin />) : route && route.url === "/reset" ? <MyAccount/> :(
         <Overview history={history} />
       )}
       </>

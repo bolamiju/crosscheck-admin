@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Sidebar from "./Sidebar";
+import Sidebar from "../Sidebar";
 import DashHeader from "./DashHeader";
 
 function DashboardLayout({ children, history }) {

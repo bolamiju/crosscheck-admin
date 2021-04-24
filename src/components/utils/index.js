@@ -1,10 +1,10 @@
 // import React from "react";
 import axios from "axios";
-import store from "../../../store";
+import store from "../../store";
 import {
   fetchInstitutes,
   setPageInfo,
-} from "../../../state/actions/Institutions";
+} from "../../state/actions/Institutions";
 
 const resources = {};
 

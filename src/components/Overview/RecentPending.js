@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
+import ReactPaginate from "react-paginate";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch,faAngleDoubleLeft,faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getVerificationsByStatus,
@@ -10,11 +12,11 @@ import {
 const RecentPending = () => {
   const [activeTab] = useState("pending");
   const [status] = useState("status");
-
+  const [currentPage, setCurrentPage] = useState(0)
   const dispatch = useDispatch();
   const { pendingVerifications } = useSelector((state) => state.verifications);
   const { pendingTranscripts } = useSelector((state) => state.transcripts);
-
+  const pageSize = 10
   useEffect(() => {
     dispatch(getVerificationsByStatus("pending"));
     dispatch(getVerificationsByStatus("completed"));
@@ -25,11 +27,15 @@ const RecentPending = () => {
     dispatch(getTranscriptsByStatus("completed"));
   }, [dispatch]);
 
-  const everyHistory = [...pendingVerifications, ...pendingTranscripts];
 
-  const filteredPending = everyHistory.filter((history) =>
-    history[status].toLowerCase().includes(activeTab)
-  );
+  const allHistory = [...pendingVerifications, ...pendingTranscripts];
+
+  const orderCount = Math.ceil(allHistory.length / pageSize);
+
+
+  const handleNext=(data)=>{
+    return setCurrentPage(data.selected)
+  }
 
   return (
     <PendingWrapper>
@@ -55,7 +61,7 @@ const RecentPending = () => {
               </tr>
             </thead>
             <tbody className="table-body">
-              {filteredPending.map((history) => (
+              {allHistory.slice(currentPage * pageSize, (currentPage + 1) * pageSize).map((history) => (
                 <tr>
                   <td>{`${history.firstName}  ${history.lastName}`}</td>
                   <td>{history.institution}</td>
@@ -64,6 +70,39 @@ const RecentPending = () => {
               ))}
             </tbody>
           </table>
+            <div className="pagination-line">
+        <p>
+          Showing{" "}
+          {
+            allHistory.slice(
+              currentPage * pageSize,
+              (currentPage + 1) * pageSize
+            ).length
+          }{" "}
+          of {allHistory.length} of entries
+        </p>
+        <ReactPaginate
+                previousLabel={<FontAwesomeIcon
+                  className="icon"
+                  icon={faAngleDoubleLeft}
+                  style={{ fontSize: "15px" }}
+                />}
+                nextLabel={<FontAwesomeIcon
+                  className="icon"
+                  icon={faAngleDoubleRight}
+                  style={{ fontSize: "15px" }}
+                />}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={orderCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={(e) => handleNext(e)}
+                containerClassName={"pagination"}
+                subContainerClassName={"pages pagination"}
+                activeClassName={"active"}
+              /> 
+      </div>
         </div>
       ) : (
         <div className="details-info">
@@ -113,6 +152,7 @@ const PendingWrapper = styled.div`
     text-align: center;
     min-height: 300px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
 
     th {

@@ -1,13 +1,15 @@
 import React from "react";
-import AdminLayout from "./AdminLayout";
+import AdminLayout from "../admin/AdminLayout";
 import RecentPending from "./RecentPending";
 import RecentCompleted from "./RecentCompleted";
 import styled from "styled-components";
-
+import { useDispatch, useSelector } from "react-redux";
 
 
 const Overview = ({ history }) => {
   const user = JSON.parse(localStorage.getItem('user'))
+    const { pendingVerifications, completedVerifications } = useSelector((state) => state.verifications);
+  const { pendingTranscripts, completedTranscripts } = useSelector((state) => state.transcripts);
 
   return (
     <AdminLayout history={history}>     
@@ -19,27 +21,27 @@ const Overview = ({ history }) => {
           </div>
           <div className="cards px-5 py-5">
             <div className="card1">
-              <h2>10</h2>
+              <h2>{pendingTranscripts?.length || 0}</h2>
               <p>
-                new transcript <br /> orders
+                new transcript orders
               </p>
             </div>
             <div className="card2">
-              <h2>100</h2>
+              <h2>{pendingVerifications?.length}</h2>
               <p>
-                new education <br /> checks
+                new education checks
               </p>
             </div>
             <div className="card3">
-              <h2>25</h2>
+              <h2>{completedTranscripts?.length}</h2>
               <p>
-                new identity <br /> verifications
+                Total completed Transcript Requests
               </p>
             </div>
             <div className="card4">
-              <h2>15</h2>
+              <h2>{completedVerifications?.length}</h2>
               <p>
-                new credit <br /> checks
+               Total completed education checks
               </p>
             </div>
           </div>
@@ -62,6 +64,8 @@ const Overview = ({ history }) => {
     </AdminLayout>
   );
 };
+
+export default Overview;
 
 const OverviewWrapper = styled.div`
   background: var(--mainWhite);
@@ -116,7 +120,7 @@ const OverviewWrapper = styled.div`
   .card1 {
     background: var(--lightBlue);
     padding: 1.5rem 0.5rem 0.5rem 1.5rem;
-    width: 22rem;
+    width: 20rem;
     height: 8rem;
     color: white;
     margin-right: 1.5rem;
@@ -148,7 +152,7 @@ const OverviewWrapper = styled.div`
   .card2 {
     background: var(--lightBlue);
     padding: 1.5rem 0.5rem 0.5rem 1.5rem;
-    width: 22rem;
+    width: 20rem;
     height: 8rem;
     color: white;
     margin-right: 1.5rem;
@@ -180,7 +184,7 @@ const OverviewWrapper = styled.div`
   .card3 {
     background: var(--lightBlue);
     padding: 1.5rem 0.5rem 0.5rem 1.5rem;
-    width: 22rem;
+    width: 20rem;
     height: 8rem;
     color: white;
     margin-right: 1.5rem;
@@ -212,7 +216,7 @@ const OverviewWrapper = styled.div`
   .card4 {
     background: var(--lightBlue);
     padding: 1.5rem 0.5rem 0.5rem 1.5rem;
-    width: 22rem;
+    width: 20rem;
     height: 8rem;
     color: white;
     border-radius: 0.2rem;
@@ -267,4 +271,4 @@ const OverviewWrapper = styled.div`
   }
 `;
 
-export default Overview;
+

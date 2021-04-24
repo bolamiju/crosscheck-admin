@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import Logo from "../../asset/CrossCheckLogo.png";
-import dashboard from "../../asset/dashboard.svg";
-import contact from "../../asset/contact.svg";
-import logout from "../../asset/logout.svg";
-import receipt from "../../asset/receipt.svg";
-import newVer from "../../asset/new.svg";
-import histry from "../../asset/history.svg";
+import Logo from "../asset/CrossCheckLogo.png";
+import dashboard from "../asset/dashboard.svg";
+import contact from "../asset/contact.svg";
+import logout from "../asset/logout.svg";
+import receipt from "../asset/receipt.svg";
+import newVer from "../asset/new.svg";
+import histry from "../asset/history.svg";
 import {
   // faAngleDoubleDown,
   faAngleDown,
@@ -85,6 +85,11 @@ function Sidebar({ history }) {
             {" "}
             <img src={receipt} alt="receipt" />
             <li>Manage Institutions</li>
+          </Link>
+           <Link className="link" to="/reset">
+            {" "}
+            <img src={contact} alt="contact" />
+            <li>Reset Password</li>
           </Link>
           <Link className="link" onClick={logOut}>
             {" "}

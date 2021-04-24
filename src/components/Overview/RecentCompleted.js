@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
+import ReactPaginate from "react-paginate";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch,faAngleDoubleLeft,faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getVerificationsByStatus,
@@ -10,6 +12,8 @@ import {
 const RecentPending = () => {
   const [activeTab] = useState("completed");
   const [status] = useState("status");
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 8
 
   const dispatch = useDispatch();
   const { completedVerifications } = useSelector((state) => state.verifications);
@@ -31,16 +35,18 @@ const RecentPending = () => {
 
   const allHistory = [...completedVerifications, ...completedTranscripts];
 
-  const filteredPending = allHistory.filter((history) =>
-    history[status].toLowerCase().includes(activeTab)
-  );
+  const orderCount = Math.ceil(allHistory.length / pageSize);
+
+  const handleNext=(data)=>{
+    return setCurrentPage(data.selected)
+  }
 
   return (
     <PendingWrapper>
       <div className=" title d-flex justify-content-between mr-4">
         <h6>recent completed</h6>
         <p>
-          total <span>125</span>
+          total <span>{allHistory?.length || ""}</span>
         </p>
       </div>
       {activeTab === "completed" ? (
@@ -59,7 +65,7 @@ const RecentPending = () => {
               </tr>
             </thead>
             <tbody className="table-body">
-              {filteredPending.map((history) => (
+              {allHistory.slice(currentPage * pageSize, (currentPage + 1) * pageSize).map((history) => (
                 <tr>
                   <td>{`${history.firstName}  ${history.lastName}`}</td>
                   <td>{history.institution}</td>
@@ -68,13 +74,46 @@ const RecentPending = () => {
               ))}
             </tbody>
           </table>
+          <div className="pagination-line">
+        <p>
+          Showing{" "}
+          {
+            allHistory.slice(
+              currentPage * pageSize,
+              (currentPage + 1) * pageSize
+            ).length
+          }{" "}
+          of {allHistory.length} of entries
+        </p>
+        <ReactPaginate
+                previousLabel={<FontAwesomeIcon
+                  className="icon"
+                  icon={faAngleDoubleLeft}
+                  style={{ fontSize: "15px" }}
+                />}
+                nextLabel={<FontAwesomeIcon
+                  className="icon"
+                  icon={faAngleDoubleRight}
+                  style={{ fontSize: "15px" }}
+                />}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={orderCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={(e) => handleNext(e)}
+                containerClassName={"pagination"}
+                subContainerClassName={"pages pagination"}
+                activeClassName={"active"}
+              /> 
+      </div>
         </div>
-      ) : (
-        <div className="details-info">
+        
+      ) :( <div className="details-info">
           {" "}
-          <p>No completed order</p>
-        </div>
-      )}
+          <p>No pending order</p>
+        </div>)
+      }
     </PendingWrapper>
   );
 };
@@ -120,6 +159,7 @@ const PendingWrapper = styled.div`
     text-align: center;
     min-height: 300px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
 
     th {

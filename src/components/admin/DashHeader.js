@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import TopHeader from "./TopHeader";
+import TopHeader from "../TopHeader";
 
 const DashHeader = ({ setShow, show }) => {
   return (

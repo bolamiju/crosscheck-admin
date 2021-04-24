@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import AdminLayout from "./AdminLayout";
+import AdminLayout from "./admin/AdminLayout";
 import ReactToExcel from "react-html-table-to-excel";
 import styled from "styled-components";
-import qualifications from "../../asset/qualification.svg";
+import qualifications from "../asset/qualification.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLongArrowAltRight,
@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getTranscriptsByStatus,
   updateTranscriptRequest,
-} from "../../state/actions/verifications";
+} from "../state/actions/verifications";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

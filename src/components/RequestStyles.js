@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 export const RequestWrapper = styled.div`
@@ -81,6 +80,7 @@ export const RequestWrapper = styled.div`
     margin-right: 2rem;
     cursor: pointer;
     margin-top: -1rem;
+    padding: 18px !important;
     @media (max-width: 400px) {
       display: block;
       padding: 2rem 0;

@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import axios from 'axios'
-import AdminLayout from "./AdminLayout";
-import { DashboardBody } from './ManageInstitutions'
+import AdminLayout from "../admin/AdminLayout";
+import { DashboardBody } from '../Styles'
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import {Select} from 'antd'
@@ -10,8 +10,7 @@ const {Option} = Select
 const ManageAdmin = () => {
     const [activeTab, setActiveTab] = useState("manage");
     const user = JSON.parse(localStorage.getItem('user'))
-    const handleSelect =(val)=>{
-    }
+   
     const initialValues = {
         email:"",
         password:"",

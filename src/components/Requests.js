@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
-import AdminLayout from "./AdminLayout";
+import AdminLayout from "./admin/AdminLayout";
 import { DatePicker, Space, Select } from "antd";
 import ReactToExcel from "react-html-table-to-excel";
-import qualifications from "../../asset/qualification.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faLongArrowAltDown,
-} from "@fortawesome/free-solid-svg-icons";
-
+import qualifications from "../asset/qualification.svg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getVerificationsByStatus,
-} from "../../state/actions/verifications";
+} from "../state/actions/verifications";
 import DetailsCard from "./DetailsCard"
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,8 +23,8 @@ const Requests = ({ history }) => {
   const [searchParameter, setSearchParameter] = useState("name");
   const [nameInput, setNameInput] = useState("");
   const [id,setId] = useState('')
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState("2021-02-12");
+  const [endDate, setEndDate] = useState("2029-04-16");
   
  
   const { RangePicker } = DatePicker;
@@ -191,6 +186,8 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                   setActiveTab("pending");
                    setNameInput("")
                    setId("")
+                   setStartDate("2021-02-12")
+                   setEndDate("2029-04-16")
                   
                 }}
                 className={activeTab === "pending" ? "activeTab" : ""}
@@ -205,6 +202,8 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                   setActiveTab("processing");
                    setNameInput("")
                    setId("")
+                    setStartDate("2021-02-12")
+                   setEndDate("2029-04-16")
                     setInfo({})
                 }}
                 className={activeTab === "processing" ? "activeTab" : ""}
@@ -219,6 +218,8 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                   setActiveTab("completed");
                     setNameInput("")
                     setId("")
+                     setStartDate("2021-02-12")
+                   setEndDate("2029-04-16")
                     setInfo({})
                 }}
                 className={activeTab === "completed" ? "activeTab" : ""}
@@ -231,7 +232,7 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
           <div className="box d-block d-lg-flex py-1">
             <div>
               <div className="cards px-5 py-5">
-                <div
+                {/* <div
                   onClick={() => {
                     setActiveCard("new");
                   }}
@@ -250,7 +251,7 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                       />
                     </div>
                   </div>
-                </div>
+                </div> */}
                 
               </div>
               <div>

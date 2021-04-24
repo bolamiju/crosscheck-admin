@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouteMatch, Redirect } from "react-router-dom";
 import styled from "styled-components";
-import Avatar from "../../asset/Avatar.png";
+import Avatar from "../asset/Avatar.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { getMessages, deleteMessages } from "../../state/actions/verifications";
+import { getMessages, deleteMessages } from "../state/actions/verifications";
 import { BellFilled } from "@ant-design/icons";
 
 function TopHeader({ setShow, show }) {
