@@ -122,7 +122,7 @@ export const getTranscriptsByStatus = (status) => async (dispatch) => {
 };
 
 export const updateTranscriptRequest = (id,email, data) =>
-  axios.put(`${BASE_URL}/api/v1/transcript/${id}/${email}`, data, {
+  axios.put(`https://crosschek.herokuapp.com/api/v1/transcript/${id}/${email}`, data, {
     headers: {
       "content-type": "application/json",
     },

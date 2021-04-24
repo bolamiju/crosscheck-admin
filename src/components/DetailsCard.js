@@ -15,6 +15,8 @@ const DetailsCard = ({info,activeTab,}) => {
       const [proof, setProof] = useState("");
       const [loading, setLoading] = useState(false);
 
+      const user = JSON.parse(localStorage.getItem("user"));
+
      const handleVerificationStatus = (value) => {
     setVerificationStatus(value);
   };
@@ -31,14 +33,14 @@ const DetailsCard = ({info,activeTab,}) => {
       if(!proof){
         return toast.error('upload proof of completion')
       }
-       values={verificationStatus,proof}
+       values={verificationStatus,proof,updated_by: `${user?.firstName} ${user?.lastName}`}
     }
     setLoading(true);
      const formData = new FormData();
   Object.keys(values).forEach((key) => {
     formData.append(key, values[key]);
   });
-    const response = await axios.put(`${BASE_URL}/api/v1/verifications/${info.id}/${info.email}`, formData, {
+    const response = await axios.put(`http://localhost:5000/api/v1/verifications/${info.id}/${info.email}`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
     setLoading(false);

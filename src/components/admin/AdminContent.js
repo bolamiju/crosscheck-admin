@@ -23,7 +23,7 @@ const AdminContent = (props) => {
         <Requests />
       ) : route && route.url === "/transcript" ? (
         <Transcript />
-      ) : route && route.url === "/history" ? (
+      ) :route && route.url === "/history" ? (
           <History />
       ) : route && route.url === "/institutions" ? (
         <ManageInstitutions />

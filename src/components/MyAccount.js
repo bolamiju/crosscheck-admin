@@ -13,7 +13,7 @@ const MyAccount = () => {
     const requestPasswordReset = async(e) =>{
         e.preventDefault()
         try{
-        const response = await axios.post(`http://localhost:5000/api/v1/admin/forgotpassword`,{email},{
+        const response = await axios.post(`https://crosschek.herokuapp.com/api/v1/admin/forgotpassword`,{email},{
             headers:{
                 "content-type":"application/json"
             }

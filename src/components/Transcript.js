@@ -31,6 +31,8 @@ const Requests = ({ history }) => {
   const [firstNameInput, setFirstNameInput] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
+  const user = JSON.parse(localStorage.getItem("user"));
   const dispatch = useDispatch();
   const {
     pendingTranscripts,
@@ -62,7 +64,7 @@ const Requests = ({ history }) => {
     }
     setLoading(true);
     const response = await updateTranscriptRequest(info?._id,info?.email, {
-      transcriptStatus,
+      transcriptStatus,updated_by:`${user.firstName} ${user.lastName}`
     });
    
     if (response.data.message === "transcript updated") {
