@@ -43,12 +43,17 @@ const DetailsCard = ({info,activeTab, setInfo}) => {
     const response = await axios.put(`https://crosschek.herokuapp.com/api/v1/verifications/${info.id}/${info.email}`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
-    setLoading(false);
+    
     if (response.data.message === "verification updated") {
+      setLoading(false);
       toast.success("update sucessful !!");
       setVerificationStatus("");
-      setInfo({})
+        setInfo({})
+      setTimeout(()=>{
+         window.location.href = "/education"
+      },2000)
     } else {
+      setLoading(false);
       toast.error("update Unsucessful. Try again !");
     }
   };

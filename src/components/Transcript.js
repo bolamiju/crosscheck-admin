@@ -74,7 +74,10 @@ const Requests = ({ history }) => {
       setTranscriptStatus("");
       setLoading(false);
       setInfo({})
-       window.location.href = "/transcript"
+      setTimeout(()=>{
+         window.location.href = "/transcript"
+      },2000)
+      
     } else {
       setLoading(false);
       toast.error("update Unsucessful. Try again !");
@@ -202,6 +205,7 @@ const Requests = ({ history }) => {
               <li
                 onClick={() => {
                   setActiveTab("pending");
+                  setInfo({})
                 }}
                 className={activeTab === "pending" ? "activeTab" : ""}
               >
@@ -211,6 +215,7 @@ const Requests = ({ history }) => {
               <li
                 onClick={() => {
                   setActiveTab("processing");
+                  setInfo({})
                 }}
                 className={activeTab === "processing" ? "activeTab" : ""}
               >
@@ -220,6 +225,7 @@ const Requests = ({ history }) => {
               <li
                 onClick={() => {
                   setActiveTab("completed");
+                  setInfo({})
                 }}
                 className={activeTab === "completed" ? "activeTab" : ""}
               >
@@ -498,34 +504,38 @@ const Requests = ({ history }) => {
                   <h5>individual details</h5>
                   <div className="individual-details">
                     <div className="para pt-2">
-                      <p>first name: {info.firstName}</p>
-                      <p className="p1">last name: {info.lastName}</p>
+                      <p>first name: {info?.firstName}</p>
+                      <p className="p1">last name: {info?.lastName}</p>
                     </div>
                     <div className="para">
                       <p>matric number: {info.studentId}</p>
-                      <p className="p2">course: {info.course}</p>
+                      <p className="p2">course: {info?.course}</p>
                     </div>
                     <div className="para">
                       <p>grad year: {info.graduationYear}</p>
-                      <p className="p3">reference id: IDF33245</p>
+                      <p className="p3">Request id: {info?.id}</p>
                     </div>
                   </div>
                   <h5>destination details</h5>
                   <div className="individual-details">
                     <div className="para pt-2">
-                      <p>destination country: {info.destination}</p>
+                      <p>destination country: {info?.destination}</p>
                     </div>
                     <div className="para">
-                      <p>address line: {info.address}</p>
+                      <p>address line: {info?.address}</p>
                     </div>
                     <div className="para">
-                      <p>Zip/Postcode: {info.zipCode}</p>
+                      <p>Zip/Postcode: {info?.zipCode}</p>
                       <p className="p4">
-                        destination no: {info.destinationNumber}
+                        destination no: {info?.destinationNumber}
                       </p>
-                      <p className="p5">city: {info.city}</p>
+                      <p className="p5">city: {info?.city}</p>
                     </div>
+                      
                   </div>
+                   {info?.updated_by &&<><br/><br/> <div className="para">
+                      <p>Updated by : {info?.updated_by}</p>
+                    </div></>}
                  {info.status !=='completed' && <div className="comment-section">
                     <div className="field">
                       <label htmlFor="message">comments</label>
