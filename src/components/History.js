@@ -22,7 +22,7 @@ const History = ({ history }) => {
 
   const [input, setInput] = useState("");
   const [searchParameter] = useState("status");
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("admin"));
 
   useEffect(() => {
     dispatch(getUserTranscript(user.email));

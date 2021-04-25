@@ -32,7 +32,7 @@ const Requests = ({ history }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("admin"));
   const dispatch = useDispatch();
   const {
     pendingTranscripts,
@@ -50,6 +50,8 @@ const Requests = ({ history }) => {
       dispatch(getTranscriptsByStatus("completed"));
     }
   }, [dispatch, activeTab]);
+
+ 
 
   const handleBackground = (background) => {
     setBackground(background);
@@ -71,6 +73,8 @@ const Requests = ({ history }) => {
       toast.success("update sucessful !!");
       setTranscriptStatus("");
       setLoading(false);
+      setInfo({})
+       window.location.href = "/transcript"
     } else {
       setLoading(false);
       toast.error("update Unsucessful. Try again !");
@@ -522,7 +526,7 @@ const Requests = ({ history }) => {
                       <p className="p5">city: {info.city}</p>
                     </div>
                   </div>
-                  <div className="comment-section">
+                 {info.status !=='completed' && <div className="comment-section">
                     <div className="field">
                       <label htmlFor="message">comments</label>
                       <textarea
@@ -556,7 +560,7 @@ const Requests = ({ history }) => {
                         />
                       </button>
                     </div>
-                  </div>
+                  </div>}
                 </div>
               )}
               {display === "empty" && (

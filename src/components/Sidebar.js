@@ -22,7 +22,7 @@ function Sidebar({ history }) {
     localStorage.clear();
     window.location.href = "/login";
   };
-  const user = JSON.parse(localStorage.getItem("user"))
+  const user = JSON.parse(localStorage.getItem("admin"))
   return (
     <Container className="hideshow">
       <LogoSection>

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 const Overview = ({ history }) => {
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user = JSON.parse(localStorage.getItem('admin'))
     const { pendingVerifications, completedVerifications } = useSelector((state) => state.verifications);
   const { pendingTranscripts, completedTranscripts } = useSelector((state) => state.transcripts);
 

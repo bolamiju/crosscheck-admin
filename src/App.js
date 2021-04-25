@@ -11,7 +11,7 @@ import 'antd/dist/antd.css';
 function App() {
   
   const withAuthCheck = (Component, props) => {
-    if (JSON.parse(localStorage.getItem("user"))) {
+    if (JSON.parse(localStorage.getItem("admin"))) {
       return <Component {...props} />;
     }
     return <Redirect to="/login" />;

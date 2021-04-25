@@ -478,7 +478,7 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
             <div className="details">
               <h6>Details</h6>
               {display === "populated" && (
-               <DetailsCard activeTab={activeTab} info={info}/>
+               <DetailsCard activeTab={activeTab} info={info} setInfo={setInfo}/>
               )}
               {display === "empty" && (
                 <div className="details-info">

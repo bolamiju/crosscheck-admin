@@ -31,7 +31,7 @@ const Login = (props) => {
         });
         if (res.status === 200) {
             setLoading(false)
-          localStorage.setItem("user", JSON.stringify(res.data.user));
+          localStorage.setItem("admin", JSON.stringify(res.data.user));
           formik.resetForm();
           props.history.push(`/dashboard`);
         }

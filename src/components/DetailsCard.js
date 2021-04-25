@@ -10,12 +10,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 const { Option } = Select;
 
-const DetailsCard = ({info,activeTab,}) => {
+const DetailsCard = ({info,activeTab, setInfo}) => {
      const [verificationStatus, setVerificationStatus] = useState("");
       const [proof, setProof] = useState("");
       const [loading, setLoading] = useState(false);
 
-      const user = JSON.parse(localStorage.getItem("user"));
+      const user = JSON.parse(localStorage.getItem("admin"));
 
      const handleVerificationStatus = (value) => {
     setVerificationStatus(value);
@@ -47,6 +47,7 @@ const DetailsCard = ({info,activeTab,}) => {
     if (response.data.message === "verification updated") {
       toast.success("update sucessful !!");
       setVerificationStatus("");
+      setInfo({})
     } else {
       toast.error("update Unsucessful. Try again !");
     }

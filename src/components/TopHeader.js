@@ -15,7 +15,7 @@ function TopHeader({ setShow, show }) {
   const { messages } = useSelector((state) => state.verifications);
   const [open, setOpen] = useState(true);
   const [font, setFont] = useState("");
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("admin"));
   useEffect(() => {
     if (["/request","/transcript","/education","/institutions"].includes(route.url) && !user?.id ) {
       window.location.href = "/login";
@@ -107,7 +107,7 @@ function TopHeader({ setShow, show }) {
                   
                   <p style={{fontWeight:"bold"}}>Request Id: {message.id}</p>
                   <div style={{display:'flex'}}>
-                  <span style={{fontSize:'13px'}}>{timeDifferenceForDate(message.date.split(" ")[0])}</span>
+                  <span style={{fontSize:'13px'}}>{timeDifferenceForDate(message?.dateTime)}</span>
                   <button
                     onClick={() => {
                       dispatch(deleteMessages(message.id));

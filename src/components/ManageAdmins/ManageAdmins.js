@@ -9,7 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 const {Option} = Select
 const ManageAdmin = () => {
     const [activeTab, setActiveTab] = useState("manage");
-    const user = JSON.parse(localStorage.getItem('user'))
+    const user = JSON.parse(localStorage.getItem('admin'))
    
     const initialValues = {
         email:"",
