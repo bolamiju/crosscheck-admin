@@ -226,7 +226,7 @@ const Requests = ({ history }) => {
           </div>
           <div className="box d-block d-lg-flex py-1">
             <div>
-              <div className="cards px-5 py-5">
+              {/* <div className="cards px-5 py-5">
                 <div
                   onClick={() => {
                     setActiveCard("new");
@@ -269,7 +269,6 @@ const Requests = ({ history }) => {
                     </div>
                   </div>
                 </div> */}
-              </div>
               <div>
                 {activeCard === "new" ? (
                   <h6 className="transcript-order">New Transcript orders</h6>
@@ -324,9 +323,14 @@ const Requests = ({ history }) => {
                             <p>No pending verification requests</p>
                           </div>
                         )}
+                         {(searchParameter === "firstName"
+                          ? pendingFilterOrder
+                          : pendingDateFilter
+                        ).length > 0 &&
                         <tr>
                           <td></td>
                           <td></td>
+                         
                           <td><ReactToExcel
                       className="excel-sheet"
                       table="table-to-xls"
@@ -334,7 +338,7 @@ const Requests = ({ history }) => {
                       sheet="sheet 1"
                       buttonText="EXPORT"
                     /></td>
-                        </tr>
+                        </tr>}
                       </tbody>
                     </table>
                     
@@ -389,6 +393,10 @@ const Requests = ({ history }) => {
                           <p>No transcript is being processed</p>
                         </div>
                       )}
+                      {(searchParameter === "firstName"
+                        ? processingFilterOrder
+                        : processingDateFilter
+                      ).length > 0 &&
                       <tr>
                         <td></td>
                         <td></td>
@@ -400,6 +408,7 @@ const Requests = ({ history }) => {
                     buttonText="EXPORT"
                   /></td>
                       </tr>
+}
                     </tbody>
                   </table>
                  
@@ -454,6 +463,11 @@ const Requests = ({ history }) => {
                           <p>No completed verifications</p>
                         </div>
                       )}
+                      {
+                        (searchParameter === "firstName"
+                        ? completedFilterOrder
+                        : completedDateFilter
+                      ).length > 0 &&
                       <tr>
                         <td></td>
                         <td></td>
@@ -464,7 +478,7 @@ const Requests = ({ history }) => {
                     sheet="sheet 1"
                     buttonText="EXPORT"
                   /></td>
-                      </tr>
+                      </tr>}
                     </tbody>
                   </table>
                 
@@ -817,7 +831,6 @@ const RequestWrapper = styled.div`
   }
 
   .transcript-order {
-    margin-top: -1rem;
     text-transform: capitalize;
     margin-bottom: 1rem;
     letter-spacing: 0.44px;

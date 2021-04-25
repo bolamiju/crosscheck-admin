@@ -27,7 +27,8 @@ function App() {
        <Route exact path="/check" component={AdminContent} />
        <Route exact path="/institutions" component={AdminContent}/>
        <Route exact path="/users" component={AdminContent}/>
-       <Route exact path="/reset" component={AdminContent}/>
+       <Route exact path="/forgotpassword" component={AdminContent}/>
+        <Route exact path="/resetpassword/:token" component={AdminContent}/>
        <Route exact path="/login" component={Login}/>
    </Router>
     </Provider>

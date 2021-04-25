@@ -308,15 +308,21 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                             <p>No pending verification requests</p>
                           </div>
                         )}
+                        {(searchParameter === "name" 
+                          ? pendingFilterOrder : searchParameter === "id" ? pendingIdFilterOrder
+                          :  pendingDateFilter
+                        ).length > 0 &&
                         <tr>
                           <td></td>
-                          <td></td> <ReactToExcel
+                          <td></td>
+                          <td>
+                          <ReactToExcel
                       className="excel-sheet"
                       table="table-to-xls"
                       filename="excelFile"
                       sheet="sheet 1"
                       buttonText="EXPORT"
-                    /></tr>
+                    /></td></tr>}
                       </tbody>
                     </table>
                    
@@ -374,9 +380,14 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                           <p>No verifications is being processed</p>
                         </div>
                       )}
+                       {(searchParameter === "name"
+                        ? processingFilterOrder : searchParameter === "id" ? processingIdFilterOrder
+                        : processingDateFilter
+                      ).length > 0 &&
                       <tr>
                         <td></td>
                         <td></td>
+                        
                         <td> <ReactToExcel
                     className="excel-sheet"
                     table="table-to-xls"
@@ -384,7 +395,7 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                     sheet="sheet 1"
                     buttonText="EXPORT"
                   /></td>
-                      </tr>
+                      </tr>}
                     </tbody>
                   </table>
                  
@@ -444,13 +455,17 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                       <tr>
                         <td></td>
                         <td></td>
+                         {(searchParameter === "name"
+                        ? completedFilterOrder : searchParameter === "id" ? completedIdFilterOrder
+                        : completedDateFilter
+                      ).length > 0 &&
                         <td>  <ReactToExcel
                     className="excel-sheet"
                     table="table-to-xls"
                     filename="excelFile"
                     sheet="sheet 1"
                     buttonText="EXPORT"
-                  /></td>
+                  /></td>}
                       </tr>
                     </tbody>
                   </table>

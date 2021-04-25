@@ -7,6 +7,7 @@ import History from '../History';
 import ManageInstitutions from '../Institutions/manage'
 import ManageAdmin from '../ManageAdmins/ManageAdmins'
 import MyAccount from '../MyAccount'
+import ResetPassword from '../ManageAdmins/ResetPassword'
 
 
 const AdminContent = (props) => {
@@ -27,8 +28,9 @@ const AdminContent = (props) => {
           <History />
       ) : route && route.url === "/institutions" ? (
         <ManageInstitutions />
-    ):  route && route.url === "/users" ? (
-        <ManageAdmin />) : route && route.url === "/reset" ? <MyAccount/> :(
+    ): route && route.url.includes ("/resetpassword") ? (
+        <ResetPassword />) :  route && route.url === "/users" ? (
+        <ManageAdmin />) : route && route.url === "/forgotpassword" ? <MyAccount/> :(
         <Overview history={history} />
       )}
       </>

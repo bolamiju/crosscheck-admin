@@ -86,7 +86,7 @@ function Sidebar({ history }) {
             <img src={receipt} alt="receipt" />
             <li>Manage Institutions</li>
           </Link>
-           <Link className="link" to="/reset">
+           <Link className="link" to="/forgotpassword">
             {" "}
             <img src={contact} alt="contact" />
             <li>Reset Password</li>

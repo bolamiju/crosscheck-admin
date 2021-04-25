@@ -40,7 +40,7 @@ const DetailsCard = ({info,activeTab,}) => {
   Object.keys(values).forEach((key) => {
     formData.append(key, values[key]);
   });
-    const response = await axios.put(`http://localhost:5000/api/v1/verifications/${info.id}/${info.email}`, formData, {
+    const response = await axios.put(`https://crosschek.herokuapp.com/api/v1/verifications/${info.id}/${info.email}`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
     setLoading(false);

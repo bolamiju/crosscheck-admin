@@ -18,7 +18,7 @@ const MyAccount = () => {
                 "content-type":"application/json"
             }
         })
-       if(response?.status === 201){
+       if(response?.status === 200){
            toast.success('A password reset link has been sent to your email')
        }
         }
