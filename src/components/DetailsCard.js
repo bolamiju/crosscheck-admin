@@ -5,15 +5,16 @@ import axios from 'axios'
 import { Select } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faLongArrowAltRight,
-  faLongArrowAltDown,
+  faLongArrowAltRight
 } from "@fortawesome/free-solid-svg-icons";
 const { Option } = Select;
 
 const DetailsCard = ({info,activeTab, setInfo}) => {
+  console.log('info',info)
      const [verificationStatus, setVerificationStatus] = useState("");
       const [proof, setProof] = useState("");
       const [loading, setLoading] = useState(false);
+      const [inputValues, setInputValues] = useState({subject:'',message:''})
 
       const user = JSON.parse(localStorage.getItem("admin"));
 
@@ -57,6 +58,31 @@ const DetailsCard = ({info,activeTab, setInfo}) => {
       toast.error("update Unsucessful. Try again !");
     }
   };
+const handleChange = (e) =>{
+  const { name, value} = e.target
+  setInputValues({...inputValues,[name]: value})
+}
+  const handleEmail = async (e) =>{
+    e.preventDefault()
+    setLoading(true)
+    if(inputValues.message.length === 0  || inputValues.subject.length === 0){
+      setLoading(false)
+      return toast.error("subject and email body cannot be empty");
+    }
+    const { id, name, institution } = info
+    const { message, subject} = inputValues
+    const response = await axios.post(`https://crosschek.herokuapp.com/api/v1/verifications/sendemail/${info.email}/${info.requester}`, {...inputValues, id, name, institution})
+    if(response?.status === 200){
+       setLoading(false);
+      setInputValues({message:"", subject: ""})
+      return  toast.success("Email sent")
+    }
+    else{
+      setLoading(false)
+     return toast.error('An error occured')
+    }
+  }
+
     return (
          <div className="container p-3">
                   <h5>individual details</h5>
@@ -72,6 +98,10 @@ const DetailsCard = ({info,activeTab, setInfo}) => {
                     <div className="para">
                       <p>grad year: {info.graduationYear}</p>
                     </div>
+                    <br/>
+                    {activeTab !== 'pending' && <div className="para">
+                      <p>Updated by: {info.updated_by || 'N/A'}</p>
+                    </div>}
                     <button style={{border:"1px solid grey"}}>
                       <a href={`${info.certImage}`} target="_blank" rel="noopener noreferrer" style={{color:'black'}}>
                         {" "}
@@ -80,14 +110,7 @@ const DetailsCard = ({info,activeTab, setInfo}) => {
                     </button>
                   </div>
                   <div className="comment-section">
-                    {/* <div className="field">
-                      <label htmlFor="message">comments</label>
-                      <textarea
-                        name="message"
-                        type="text"
-                        className="message"
-                      />
-                    </div> */}
+                  
                     {(activeTab === "pending" ||
                       activeTab === "processing") && (
                       <div className="select">
@@ -98,6 +121,7 @@ const DetailsCard = ({info,activeTab, setInfo}) => {
                           onChange={handleVerificationStatus}
                         >
                         <Option disabled>Select</Option>
+                        {(activeTab ==="pending" || activeTab ==="processing") && <Option value="email"> Send email</Option>}
                          {activeTab ==="pending" && <Option value="processing">processing</Option>}
                           <Option value="completed">completed</Option>
                         </Select>
@@ -107,8 +131,13 @@ const DetailsCard = ({info,activeTab, setInfo}) => {
                             name="proof"
                             onChange={handleDocument}
                           />
+                        ) : verificationStatus === "email" ? (
+                          <div className="send-email">
+                            <input placeholder="subject" name="subject" value={inputValues.subject} onChange={handleChange}/>
+                            <textarea placeholder="enter email content" name="message" value={inputValues.message} onChange={handleChange}/>
+                            </div>
                         ) : null}
-                        <button
+                      { verificationStatus !== 'email' && <button
                           onClick={handleUpdateVerification}
                           className="finish"
                         >
@@ -121,7 +150,24 @@ const DetailsCard = ({info,activeTab, setInfo}) => {
                               paddingTop: "0.3rem",
                             }}
                           />
-                        </button>
+                        </button>}
+                        {
+                          verificationStatus === 'email' && 
+                          <button
+                        onClick={handleEmail}
+                          className="finish"
+                        >
+                          {loading ? "Sending..." : "Send Email"}{" "}
+                          <FontAwesomeIcon
+                            icon={faLongArrowAltRight}
+                            style={{
+                              marginLeft: "5px",
+                              fontSize: "20px",
+                              paddingTop: "0.3rem",
+                            }}
+                          />
+                          </button>
+                        }
                       </div>
                     )}
                   </div>

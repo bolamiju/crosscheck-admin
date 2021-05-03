@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "./admin/AdminLayout";
 import { DatePicker, Space, Select } from "antd";
+import ReactPaginate from "react-paginate";
 import ReactToExcel from "react-html-table-to-excel";
 import qualifications from "../asset/qualification.svg";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +10,8 @@ import {
 } from "../state/actions/verifications";
 import DetailsCard from "./DetailsCard"
 import { ToastContainer } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch,faAngleDoubleLeft,faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
 import "react-toastify/dist/ReactToastify.css";
 import {RequestWrapper} from './RequestStyles.js'
 
@@ -18,6 +21,8 @@ const Requests = ({ history }) => {
   const [activeCard, setActiveCard] = useState("new");
   const [display, setDisplay] = useState("empty");
   const [background, setBackground] = useState("");
+   const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 5
  
   const [info, setInfo] = useState({});
   const [searchParameter, setSearchParameter] = useState("name");
@@ -36,6 +41,9 @@ const Requests = ({ history }) => {
     completedVerifications,
   } = useSelector((state) => state.verifications);
 
+   const pendingVerificationsCount = Math.ceil(pendingVerifications.length / pageSize);
+   const processingVerificationsCount = Math.ceil(processingVerifications.length / pageSize);
+  const completedVerificationsCount = Math.ceil(completedVerifications.length / pageSize);
   useEffect(() => {
     if (activeTab === "pending") {
       dispatch(getVerificationsByStatus("pending"));
@@ -119,6 +127,11 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
   const handleId = (e) =>{
     setId(e.target.value)
   }
+
+  const handleNext=(data)=>{
+    return setCurrentPage(data.selected)
+  }
+
 
  
   return (
@@ -284,7 +297,7 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                           (searchParameter === "name" 
                             ? pendingFilterOrder : searchParameter === "id" ? pendingIdFilterOrder
                             : pendingDateFilter
-                          ).map((verification) => (
+                          ).slice(currentPage * pageSize, (currentPage + 1) * pageSize).map((verification) => (
                             <tr
                               key={verification._id}
                               onClick={() => {
@@ -325,7 +338,42 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                     /></td></tr>}
                       </tbody>
                     </table>
-                   
+                     <div className="pagination-line">
+        <p>
+          Showing{" "}
+          {
+            (searchParameter === "name" 
+                          ? pendingFilterOrder : searchParameter === "id" ? pendingIdFilterOrder
+                          :  pendingDateFilter
+                        ).slice(
+              currentPage * pageSize,
+              (currentPage + 1) * pageSize
+            ).length
+          }{" "}
+          of {pendingVerifications.length} of entries
+        </p>
+                    <ReactPaginate
+                previousLabel={<FontAwesomeIcon
+                  className="icon"
+                  icon={faAngleDoubleLeft}
+                  style={{ fontSize: "15px" }}
+                />}
+                nextLabel={<FontAwesomeIcon
+                  className="icon"
+                  icon={faAngleDoubleRight}
+                  style={{ fontSize: "15px" }}
+                />}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={pendingVerificationsCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={(e) => handleNext(e)}
+                containerClassName={"pagination"}
+                subContainerClassName={"pages pagination"}
+                activeClassName={"active"}
+              /> 
+              </div>
                   </div>
                 ) : (
                   ""
@@ -356,7 +404,7 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                         (searchParameter === "name"
                           ? processingFilterOrder : searchParameter === "id" ? processingIdFilterOrder
                           : processingDateFilter
-                        ).map((verification) => (
+                        ).slice(currentPage * pageSize, (currentPage + 1) * pageSize).map((verification) => (
                           <tr
                             key={verification._id}
                             onClick={() => {
@@ -398,7 +446,43 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                       </tr>}
                     </tbody>
                   </table>
-                 
+                     <div className="pagination-line">
+        <p>
+          Showing{" "}
+          {
+            (searchParameter === "name"
+                        ? processingFilterOrder : searchParameter === "id" ? processingIdFilterOrder
+                        : processingDateFilter
+                      ).slice(
+              currentPage * pageSize,
+              (currentPage + 1) * pageSize
+            ).length
+          }{" "}
+          of {processingVerifications.length} of entries
+        </p>
+                    <ReactPaginate
+                previousLabel={<FontAwesomeIcon
+                  className="icon"
+                  icon={faAngleDoubleLeft}
+                  style={{ fontSize: "15px" }}
+                />}
+                nextLabel={<FontAwesomeIcon
+                  className="icon"
+                  icon={faAngleDoubleRight}
+                  style={{ fontSize: "15px" }}
+                />}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={processingVerificationsCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={(e) => handleNext(e)}
+                containerClassName={"pagination"}
+                subContainerClassName={"pages pagination"}
+                activeClassName={"active"}
+              /> 
+              </div>
+
                 </div>
               ) : (
                 ""
@@ -428,7 +512,7 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                         (searchParameter === "name"
                           ? completedFilterOrder : searchParameter === "id" ? completedIdFilterOrder
                         : completedDateFilter
-                        ).map((verification) => (
+                        ).slice(currentPage * pageSize, (currentPage + 1) * pageSize).map((verification) => (
                           <tr
                             key={verification._id}
                             onClick={() => {
@@ -469,7 +553,42 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                       </tr>
                     </tbody>
                   </table>
-                
+                 <div className="pagination-line">
+        <p>
+          Showing{" "}
+          {
+            (searchParameter === "name"
+                        ? completedFilterOrder : searchParameter === "id" ? completedIdFilterOrder
+                        : completedDateFilter
+                      ).slice(
+              currentPage * pageSize,
+              (currentPage + 1) * pageSize
+            ).length
+          }{" "}
+          of {completedVerifications.length} of entries
+        </p>
+                    <ReactPaginate
+                previousLabel={<FontAwesomeIcon
+                  className="icon"
+                  icon={faAngleDoubleLeft}
+                  style={{ fontSize: "15px" }}
+                />}
+                nextLabel={<FontAwesomeIcon
+                  className="icon"
+                  icon={faAngleDoubleRight}
+                  style={{ fontSize: "15px" }}
+                />}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={completedVerificationsCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={(e) => handleNext(e)}
+                containerClassName={"pagination"}
+                subContainerClassName={"pages pagination"}
+                activeClassName={"active"}
+              /> 
+              </div>
                 </div>
               ) : (
                 ""

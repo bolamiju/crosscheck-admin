@@ -300,7 +300,8 @@ export const RequestWrapper = styled.div`
     justify-content: space-between;
     padding-bottom: 1rem;
     margin-right: 3rem;
-    /* width: 100%; */
+  display: flex;
+  flex-direction: column;
     min-width: 385px;
     min-height: 250px;
     margin-bottom: 2rem;
@@ -437,6 +438,15 @@ export const RequestWrapper = styled.div`
         .ant-select-arrow {
           margin-top: -10px !important;
         }
+        .send-email{
+          display: flex;
+          flex-direction: column;
+          input, textarea{
+            border : 1px solid  var(--lighterDark);
+            outline: none;
+            margin-top: 20px; 
+          }
+        }
       }
       .field {
         margin-top: 0.5rem;
@@ -467,6 +477,7 @@ export const RequestWrapper = styled.div`
       .select {
         display: flex;
         flex-direction: column;
+        width: 100%
       }
       .options {
         width: 13rem;
