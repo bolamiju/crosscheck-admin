@@ -10,7 +10,6 @@ import {
 const { Option } = Select;
 
 const DetailsCard = ({info,activeTab, setInfo}) => {
-  console.log('info',info)
      const [verificationStatus, setVerificationStatus] = useState("");
       const [proof, setProof] = useState("");
       const [loading, setLoading] = useState(false);
