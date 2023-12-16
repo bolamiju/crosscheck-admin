@@ -1,8 +1,6 @@
 import * as types from "../actionTypes/verifications";
 import axios from "axios";
 import { BASE_URL } from "../constant/constants";
-import {GET_PAGE_DETAILS } from "../actionTypes/verifications";
-
 
 export const fetchInstitutes = (payload) => {
   return {
@@ -39,10 +37,10 @@ export const noInstitute = (payload) => {
   };
 };
 
-export const removeInstitution =  (id)=>{
+export const removeInstitution = (id) => {
   return axios.delete(`${BASE_URL}/api/v1/institutions/${id}`, {
     headers: { "Content-Type": "application/json" },
-  })
+  });
 };
 
 export const getAllInstitutions = () => (dispatch) => {
@@ -56,14 +54,13 @@ export const getAllInstitutions = () => (dispatch) => {
     });
 };
 
-export const addAllInstitutions = (institution) =>
-{
+export const addAllInstitutions = (institution) => {
   axios
     .post(`${BASE_URL}/api/v1/institutions/add`, institution)
     .then(({ data }) => {
-      return data
+      return data;
     })
     .catch((err) => {
       return err;
     });
-}
+};

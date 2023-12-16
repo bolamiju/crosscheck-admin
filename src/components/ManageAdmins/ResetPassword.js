@@ -1,54 +1,51 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios'
+import axios from "axios";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { toast, ToastContainer } from "react-toastify";
-import Logo from "../../asset/CrossCheckLogo.png";
-// } from "../../state/actions/users";
 import * as Yup from "yup";
-import DashboardLayout from '../admin/AdminLayout'
+import DashboardLayout from "../admin/AdminLayout";
+import { BASE_URL } from "../../state/constant/constants";
 function ResetPassword(props) {
   const [passwordToken, setPasswordToken] = useState("");
-  const [loading, setLoading] = useState(false)
-  const route = useRouteMatch()
+  const [loading, setLoading] = useState(false);
+  const route = useRouteMatch();
   const {
     params: { token },
   } = route;
 
-
   useEffect(() => {
     setPasswordToken(token);
   }, [token]);
-    const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       newPassword: "",
-      confirmPassword: ""
+      confirmPassword: "",
     },
 
     onSubmit: async (values) => {
-      setLoading(true)
+      setLoading(true);
       try {
-        const res = await axios.put(`https://crosschek.herokuapp.com/api/v1/admin/resetpassword/${passwordToken}`,values)
-        if(res.status === 200){
-            setLoading(false)
-            formik.resetForm()
-            return toast.success('Password reset successful')
+        const res = await axios.put(
+          `${BASE_URL}/api/v1/admin/resetpassword/${passwordToken}`,
+          values
+        );
+        if (res.status === 200) {
+          setLoading(false);
+          formik.resetForm();
+          return toast.success("Password reset successful");
         }
-       
       } catch (err) {
-          setLoading(false)
-          if(err?.response?.data.message === "Password reset token is invalid or has expired."){
-              
-          return toast.error('Password reset token is invalid or has expired')
-          }
-       else{
-           toast.error('An error occured')
-       }
-       
+        setLoading(false);
+        if (
+          err?.response?.data.message ===
+          "Password reset token is invalid or has expired."
+        ) {
+          return toast.error("Password reset token is invalid or has expired");
+        } else {
+          toast.error("An error occured");
+        }
       }
     },
     validationSchema: Yup.object({
@@ -61,8 +58,8 @@ function ResetPassword(props) {
     }),
   });
   return (
-    <DashboardLayout >
-     <ToastContainer
+    <DashboardLayout>
+      <ToastContainer
         position="top-right"
         autoClose={10000}
         hideProgressBar={false}
@@ -76,12 +73,9 @@ function ResetPassword(props) {
       />
       <form>
         <Div>
-          
           <h3 style={{ textAlign: "center" }}>Create a New Password</h3>
           <div className="section">
-            <label htmlFor="email">
-              New Password
-            </label>
+            <label htmlFor="email">New Password</label>
             <input
               type="text"
               name="newPassword"
@@ -91,13 +85,11 @@ function ResetPassword(props) {
               onBlur={formik.handleBlur}
             />{" "}
             {formik.touched.newPassword && formik.errors.newPassword ? (
-              <div >Enter password</div>
+              <div>Enter password</div>
             ) : null}
           </div>
           <div className="section">
-            <label  htmlFor="email">
-              Confirm Password
-            </label>
+            <label htmlFor="email">Confirm Password</label>
             <input
               type="text"
               name="confirmPassword"
@@ -107,18 +99,16 @@ function ResetPassword(props) {
               onBlur={formik.handleBlur}
             />
             {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-              <div >{formik.errors.confirmPassword}</div>
+              <div>{formik.errors.confirmPassword}</div>
             ) : null}
           </div>
           <button
-          className="reset-btn"
+            className="reset-btn"
             type="button"
             onClick={formik.handleSubmit}
           >
-           {loading ? "Requesting..." :  "RESET PASSWORD"}
+            {loading ? "Requesting..." : "RESET PASSWORD"}
           </button>
-
-          
         </Div>
       </form>
     </DashboardLayout>
@@ -131,30 +121,30 @@ const Div = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
- 
-  .section{
-      display: flex;
-      flex-direction: column;
-      margin-bottom:20px;
-      input{
-          width:300px;
-          border: 1px solid gray;
-          border-radius: 3px;
-          height:40px
-      }
-      label{
-          font-weight: bold;
-          font-size: 16px
-      }
-  }
-  .reset-btn{
-      width:300px;
-      outline: none;
-      color: white;
-      background: #0092e0;
-      border: 1px solid #0092e0;
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    input {
+      width: 300px;
+      border: 1px solid gray;
       border-radius: 3px;
-      height: 50px;
-      font-weight: bold
+      height: 40px;
+    }
+    label {
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+  .reset-btn {
+    width: 300px;
+    outline: none;
+    color: white;
+    background: #0092e0;
+    border: 1px solid #0092e0;
+    border-radius: 3px;
+    height: 50px;
+    font-weight: bold;
   }
 `;

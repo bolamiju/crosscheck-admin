@@ -1,37 +1,36 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "./admin/AdminLayout";
-import { DatePicker, Space, Select } from "antd";
+import { DatePicker, Space } from "antd";
 import ReactPaginate from "react-paginate";
 import ReactToExcel from "react-html-table-to-excel";
 import qualifications from "../asset/qualification.svg";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getVerificationsByStatus,
-} from "../state/actions/verifications";
-import DetailsCard from "./DetailsCard"
+import { getVerificationsByStatus } from "../state/actions/verifications";
+import DetailsCard from "./DetailsCard";
 import { ToastContainer } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch,faAngleDoubleLeft,faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
+} from "@fortawesome/free-solid-svg-icons";
 import "react-toastify/dist/ReactToastify.css";
-import {RequestWrapper} from './RequestStyles.js'
-
+import { RequestWrapper } from "./RequestStyles.js";
 
 const Requests = ({ history }) => {
   const [activeTab, setActiveTab] = useState("pending");
   const [activeCard, setActiveCard] = useState("new");
   const [display, setDisplay] = useState("empty");
   const [background, setBackground] = useState("");
-   const [currentPage, setCurrentPage] = useState(0);
-  const pageSize = 5
- 
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 5;
+
   const [info, setInfo] = useState({});
   const [searchParameter, setSearchParameter] = useState("name");
   const [nameInput, setNameInput] = useState("");
-  const [id,setId] = useState('')
+  const [id, setId] = useState("");
   const [startDate, setStartDate] = useState("2021-02-12");
   const [endDate, setEndDate] = useState("2029-04-16");
-  
- 
+
   const { RangePicker } = DatePicker;
 
   const dispatch = useDispatch();
@@ -41,9 +40,15 @@ const Requests = ({ history }) => {
     completedVerifications,
   } = useSelector((state) => state.verifications);
 
-   const pendingVerificationsCount = Math.ceil(pendingVerifications.length / pageSize);
-   const processingVerificationsCount = Math.ceil(processingVerifications.length / pageSize);
-  const completedVerificationsCount = Math.ceil(completedVerifications.length / pageSize);
+  const pendingVerificationsCount = Math.ceil(
+    pendingVerifications.length / pageSize
+  );
+  const processingVerificationsCount = Math.ceil(
+    processingVerifications.length / pageSize
+  );
+  const completedVerificationsCount = Math.ceil(
+    completedVerifications.length / pageSize
+  );
   useEffect(() => {
     if (activeTab === "pending") {
       dispatch(getVerificationsByStatus("pending"));
@@ -64,7 +69,9 @@ const Requests = ({ history }) => {
   };
 
   const pendingFilterOrder = pendingVerifications.filter((verification) =>
-    verification[searchParameter].toLowerCase().includes(nameInput.toLowerCase())
+    verification[searchParameter]
+      .toLowerCase()
+      .includes(nameInput.toLowerCase())
   );
   const pendingIdFilterOrder = pendingVerifications.filter((verification) =>
     verification[searchParameter].includes(id)
@@ -83,10 +90,12 @@ const Requests = ({ history }) => {
   });
 
   const processingFilterOrder = processingVerifications.filter((verification) =>
-    verification[searchParameter].toLowerCase().includes(nameInput.toLowerCase())
+    verification[searchParameter]
+      .toLowerCase()
+      .includes(nameInput.toLowerCase())
   );
-  const processingIdFilterOrder = processingVerifications.filter((verification) =>
-    verification[searchParameter].includes(id)
+  const processingIdFilterOrder = processingVerifications.filter(
+    (verification) => verification[searchParameter].includes(id)
   );
 
   const processingDateFilter = processingVerifications.filter(
@@ -101,10 +110,12 @@ const Requests = ({ history }) => {
   );
 
   const completedFilterOrder = completedVerifications.filter((verification) =>
-    verification[searchParameter].toLowerCase().includes(nameInput.toLowerCase())
+    verification[searchParameter]
+      .toLowerCase()
+      .includes(nameInput.toLowerCase())
   );
 
-const completedIdFilterOrder = completedVerifications.filter((verification) =>
+  const completedIdFilterOrder = completedVerifications.filter((verification) =>
     verification[searchParameter].includes(id)
   );
   const completedDateFilter = completedVerifications.filter((verification) => {
@@ -124,16 +135,14 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
     setNameInput(e.target.value);
   };
 
-  const handleId = (e) =>{
-    setId(e.target.value)
-  }
+  const handleId = (e) => {
+    setId(e.target.value);
+  };
 
-  const handleNext=(data)=>{
-    return setCurrentPage(data.selected)
-  }
+  const handleNext = (data) => {
+    return setCurrentPage(data.selected);
+  };
 
-
- 
   return (
     <AdminLayout history={history}>
       <RequestWrapper>
@@ -172,12 +181,7 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
             />
           )}
           {searchParameter === "id" && (
-            <input
-              type="text"
-              name="id"
-              value={id}
-              onChange={handleId}
-            />
+            <input type="text" name="id" value={id} onChange={handleId} />
           )}
           {searchParameter === "date" && (
             <Space direction="version">
@@ -194,14 +198,14 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
             <ul className=" list d-flex">
               <li
                 onClick={() => {
-                   if(activeTab !== "pending"){
-                    setDisplay("empty")}
+                  if (activeTab !== "pending") {
+                    setDisplay("empty");
+                  }
                   setActiveTab("pending");
-                   setNameInput("")
-                   setId("")
-                   setStartDate("2021-02-12")
-                   setEndDate("2029-04-16")
-                  
+                  setNameInput("");
+                  setId("");
+                  setStartDate("2021-02-12");
+                  setEndDate("2029-04-16");
                 }}
                 className={activeTab === "pending" ? "activeTab" : ""}
               >
@@ -210,14 +214,15 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
               </li>
               <li
                 onClick={() => {
-                   if(activeTab !== "processing"){
-                    setDisplay("empty")}
+                  if (activeTab !== "processing") {
+                    setDisplay("empty");
+                  }
                   setActiveTab("processing");
-                   setNameInput("")
-                   setId("")
-                    setStartDate("2021-02-12")
-                   setEndDate("2029-04-16")
-                    setInfo({})
+                  setNameInput("");
+                  setId("");
+                  setStartDate("2021-02-12");
+                  setEndDate("2029-04-16");
+                  setInfo({});
                 }}
                 className={activeTab === "processing" ? "activeTab" : ""}
               >
@@ -226,14 +231,15 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
               </li>
               <li
                 onClick={() => {
-                   if(activeTab !== "completed"){
-                    setDisplay("empty")}
+                  if (activeTab !== "completed") {
+                    setDisplay("empty");
+                  }
                   setActiveTab("completed");
-                    setNameInput("")
-                    setId("")
-                     setStartDate("2021-02-12")
-                   setEndDate("2029-04-16")
-                    setInfo({})
+                  setNameInput("");
+                  setId("");
+                  setStartDate("2021-02-12");
+                  setEndDate("2029-04-16");
+                  setInfo({});
                 }}
                 className={activeTab === "completed" ? "activeTab" : ""}
               >
@@ -265,7 +271,6 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                     </div>
                   </div>
                 </div> */}
-                
               </div>
               <div>
                 {activeCard === "new" ? (
@@ -290,90 +295,110 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                         </tr>
                       </thead>
                       <tbody>
-                        {(searchParameter === "name" 
-                          ? pendingFilterOrder : searchParameter === "id" ? pendingIdFilterOrder
-                          :  pendingDateFilter
+                        {(searchParameter === "name"
+                          ? pendingFilterOrder
+                          : searchParameter === "id"
+                          ? pendingIdFilterOrder
+                          : pendingDateFilter
                         ).length > 0 ? (
-                          (searchParameter === "name" 
-                            ? pendingFilterOrder : searchParameter === "id" ? pendingIdFilterOrder
+                          (searchParameter === "name"
+                            ? pendingFilterOrder
+                            : searchParameter === "id"
+                            ? pendingIdFilterOrder
                             : pendingDateFilter
-                          ).slice(currentPage * pageSize, (currentPage + 1) * pageSize).map((verification) => (
-                            <tr
-                              key={verification._id}
-                              onClick={() => {
-                                setDisplay("populated");
-                                setInfo(verification);
-                                handleBackground(verification._id);
-                              }}
-                              className={
-                                background === verification._id
-                                  ? "activeOrder"
-                                  : ""
-                              }
-                            >
-                              <td>{`${verification.firstName} ${verification.lastName}`}</td>
-                              <td>{verification.institution}</td>
-                              <td>{verification.date}</td>
-                            </tr>
-                          ))
+                          )
+                            .slice(
+                              currentPage * pageSize,
+                              (currentPage + 1) * pageSize
+                            )
+                            .map((verification) => (
+                              <tr
+                                key={verification._id}
+                                onClick={() => {
+                                  setDisplay("populated");
+                                  setInfo(verification);
+                                  handleBackground(verification._id);
+                                }}
+                                className={
+                                  background === verification._id
+                                    ? "activeOrder"
+                                    : ""
+                                }
+                              >
+                                <td>{`${verification.firstName} ${verification.lastName}`}</td>
+                                <td>{verification.institution}</td>
+                                <td>{verification.date}</td>
+                              </tr>
+                            ))
                         ) : (
                           <div className="no-order">
                             <p>No pending verification requests</p>
                           </div>
                         )}
-                        {(searchParameter === "name" 
-                          ? pendingFilterOrder : searchParameter === "id" ? pendingIdFilterOrder
-                          :  pendingDateFilter
-                        ).length > 0 &&
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td>
-                          <ReactToExcel
-                      className="excel-sheet"
-                      table="table-to-xls"
-                      filename="excelFile"
-                      sheet="sheet 1"
-                      buttonText="EXPORT"
-                    /></td></tr>}
+                        {(searchParameter === "name"
+                          ? pendingFilterOrder
+                          : searchParameter === "id"
+                          ? pendingIdFilterOrder
+                          : pendingDateFilter
+                        ).length > 0 && (
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                              <ReactToExcel
+                                className="excel-sheet"
+                                table="table-to-xls"
+                                filename="excelFile"
+                                sheet="sheet 1"
+                                buttonText="EXPORT"
+                              />
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
-                     <div className="pagination-line">
-        <p>
-          Showing{" "}
-          {
-            (searchParameter === "name" 
-                          ? pendingFilterOrder : searchParameter === "id" ? pendingIdFilterOrder
-                          :  pendingDateFilter
-                        ).slice(
-              currentPage * pageSize,
-              (currentPage + 1) * pageSize
-            ).length
-          }{" "}
-          of {pendingVerifications.length} of entries
-        </p>
-                    <ReactPaginate
-                previousLabel={<FontAwesomeIcon
-                  className="icon"
-                  icon={faAngleDoubleLeft}
-                  style={{ fontSize: "15px" }}
-                />}
-                nextLabel={<FontAwesomeIcon
-                  className="icon"
-                  icon={faAngleDoubleRight}
-                  style={{ fontSize: "15px" }}
-                />}
-                breakLabel={"..."}
-                breakClassName={"break-me"}
-                pageCount={pendingVerificationsCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={(e) => handleNext(e)}
-                containerClassName={"pagination"}
-                subContainerClassName={"pages pagination"}
-                activeClassName={"active"}
-              /> 
-              </div>
+                    <div className="pagination-line">
+                      <p>
+                        Showing{" "}
+                        {
+                          (searchParameter === "name"
+                            ? pendingFilterOrder
+                            : searchParameter === "id"
+                            ? pendingIdFilterOrder
+                            : pendingDateFilter
+                          ).slice(
+                            currentPage * pageSize,
+                            (currentPage + 1) * pageSize
+                          ).length
+                        }{" "}
+                        of {pendingVerifications.length} of entries
+                      </p>
+                      <ReactPaginate
+                        previousLabel={
+                          <FontAwesomeIcon
+                            className="icon"
+                            icon={faAngleDoubleLeft}
+                            style={{ fontSize: "15px" }}
+                          />
+                        }
+                        nextLabel={
+                          <FontAwesomeIcon
+                            className="icon"
+                            icon={faAngleDoubleRight}
+                            style={{ fontSize: "15px" }}
+                          />
+                        }
+                        breakLabel={"..."}
+                        breakClassName={"break-me"}
+                        pageCount={pendingVerificationsCount}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={(e) => handleNext(e)}
+                        containerClassName={"pagination"}
+                        subContainerClassName={"pages pagination"}
+                        activeClassName={"active"}
+                      />
+                    </div>
                   </div>
                 ) : (
                   ""
@@ -398,91 +423,111 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                     </thead>
                     <tbody>
                       {(searchParameter === "name"
-                        ? processingFilterOrder : searchParameter === "id" ? processingIdFilterOrder
+                        ? processingFilterOrder
+                        : searchParameter === "id"
+                        ? processingIdFilterOrder
                         : processingDateFilter
                       ).length > 0 ? (
                         (searchParameter === "name"
-                          ? processingFilterOrder : searchParameter === "id" ? processingIdFilterOrder
+                          ? processingFilterOrder
+                          : searchParameter === "id"
+                          ? processingIdFilterOrder
                           : processingDateFilter
-                        ).slice(currentPage * pageSize, (currentPage + 1) * pageSize).map((verification) => (
-                          <tr
-                            key={verification._id}
-                            onClick={() => {
-                              setDisplay("populated");
-                              setInfo(verification);
-                              handleBackground(verification._id);
-                            }}
-                            className={
-                              background === verification._id
-                                ? "activeOrder"
-                                : ""
-                            }
-                          >
-                            <td>{`${verification.firstName} ${verification.lastName}`}</td>
-                            <td>{verification.institution}</td>
-                            <td>{verification.date}</td>
-                          </tr>
-                        ))
+                        )
+                          .slice(
+                            currentPage * pageSize,
+                            (currentPage + 1) * pageSize
+                          )
+                          .map((verification) => (
+                            <tr
+                              key={verification._id}
+                              onClick={() => {
+                                setDisplay("populated");
+                                setInfo(verification);
+                                handleBackground(verification._id);
+                              }}
+                              className={
+                                background === verification._id
+                                  ? "activeOrder"
+                                  : ""
+                              }
+                            >
+                              <td>{`${verification.firstName} ${verification.lastName}`}</td>
+                              <td>{verification.institution}</td>
+                              <td>{verification.date}</td>
+                            </tr>
+                          ))
                       ) : (
                         <div className="no-order">
                           <p>No verifications is being processed</p>
                         </div>
                       )}
-                       {(searchParameter === "name"
-                        ? processingFilterOrder : searchParameter === "id" ? processingIdFilterOrder
+                      {(searchParameter === "name"
+                        ? processingFilterOrder
+                        : searchParameter === "id"
+                        ? processingIdFilterOrder
                         : processingDateFilter
-                      ).length > 0 &&
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        
-                        <td> <ReactToExcel
-                    className="excel-sheet"
-                    table="table-to-xls"
-                    filename="excelFile"
-                    sheet="sheet 1"
-                    buttonText="EXPORT"
-                  /></td>
-                      </tr>}
+                      ).length > 0 && (
+                        <tr>
+                          <td></td>
+                          <td></td>
+
+                          <td>
+                            {" "}
+                            <ReactToExcel
+                              className="excel-sheet"
+                              table="table-to-xls"
+                              filename="excelFile"
+                              sheet="sheet 1"
+                              buttonText="EXPORT"
+                            />
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
-                     <div className="pagination-line">
-        <p>
-          Showing{" "}
-          {
-            (searchParameter === "name"
-                        ? processingFilterOrder : searchParameter === "id" ? processingIdFilterOrder
-                        : processingDateFilter
-                      ).slice(
-              currentPage * pageSize,
-              (currentPage + 1) * pageSize
-            ).length
-          }{" "}
-          of {processingVerifications.length} of entries
-        </p>
+                  <div className="pagination-line">
+                    <p>
+                      Showing{" "}
+                      {
+                        (searchParameter === "name"
+                          ? processingFilterOrder
+                          : searchParameter === "id"
+                          ? processingIdFilterOrder
+                          : processingDateFilter
+                        ).slice(
+                          currentPage * pageSize,
+                          (currentPage + 1) * pageSize
+                        ).length
+                      }{" "}
+                      of {processingVerifications.length} of entries
+                    </p>
                     <ReactPaginate
-                previousLabel={<FontAwesomeIcon
-                  className="icon"
-                  icon={faAngleDoubleLeft}
-                  style={{ fontSize: "15px" }}
-                />}
-                nextLabel={<FontAwesomeIcon
-                  className="icon"
-                  icon={faAngleDoubleRight}
-                  style={{ fontSize: "15px" }}
-                />}
-                breakLabel={"..."}
-                breakClassName={"break-me"}
-                pageCount={processingVerificationsCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={(e) => handleNext(e)}
-                containerClassName={"pagination"}
-                subContainerClassName={"pages pagination"}
-                activeClassName={"active"}
-              /> 
-              </div>
-
+                      previousLabel={
+                        <FontAwesomeIcon
+                          className="icon"
+                          icon={faAngleDoubleLeft}
+                          style={{ fontSize: "15px" }}
+                        />
+                      }
+                      nextLabel={
+                        <FontAwesomeIcon
+                          className="icon"
+                          icon={faAngleDoubleRight}
+                          style={{ fontSize: "15px" }}
+                        />
+                      }
+                      breakLabel={"..."}
+                      breakClassName={"break-me"}
+                      pageCount={processingVerificationsCount}
+                      marginPagesDisplayed={2}
+                      pageRangeDisplayed={5}
+                      onPageChange={(e) => handleNext(e)}
+                      containerClassName={"pagination"}
+                      subContainerClassName={"pages pagination"}
+                      activeClassName={"active"}
+                    />
+                  </div>
                 </div>
               ) : (
                 ""
@@ -506,31 +551,40 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                     </thead>
                     <tbody>
                       {(searchParameter === "name"
-                        ? completedFilterOrder : searchParameter === "id" ? completedIdFilterOrder
+                        ? completedFilterOrder
+                        : searchParameter === "id"
+                        ? completedIdFilterOrder
                         : completedDateFilter
                       ).length > 0 ? (
                         (searchParameter === "name"
-                          ? completedFilterOrder : searchParameter === "id" ? completedIdFilterOrder
-                        : completedDateFilter
-                        ).slice(currentPage * pageSize, (currentPage + 1) * pageSize).map((verification) => (
-                          <tr
-                            key={verification._id}
-                            onClick={() => {
-                              setDisplay("populated");
-                              setInfo(verification);
-                              handleBackground(verification._id);
-                            }}
-                            className={
-                              background === verification._id
-                                ? "activeOrder"
-                                : ""
-                            }
-                          >
-                            <td>{`${verification.firstName} ${verification.lastName}`}</td>
-                            <td>{verification.institution}</td>
-                            <td>{verification.date}</td>
-                          </tr>
-                        ))
+                          ? completedFilterOrder
+                          : searchParameter === "id"
+                          ? completedIdFilterOrder
+                          : completedDateFilter
+                        )
+                          .slice(
+                            currentPage * pageSize,
+                            (currentPage + 1) * pageSize
+                          )
+                          .map((verification) => (
+                            <tr
+                              key={verification._id}
+                              onClick={() => {
+                                setDisplay("populated");
+                                setInfo(verification);
+                                handleBackground(verification._id);
+                              }}
+                              className={
+                                background === verification._id
+                                  ? "activeOrder"
+                                  : ""
+                              }
+                            >
+                              <td>{`${verification.firstName} ${verification.lastName}`}</td>
+                              <td>{verification.institution}</td>
+                              <td>{verification.date}</td>
+                            </tr>
+                          ))
                       ) : (
                         <div className="no-order">
                           <p>No completed verifications</p>
@@ -539,56 +593,68 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
                       <tr>
                         <td></td>
                         <td></td>
-                         {(searchParameter === "name"
-                        ? completedFilterOrder : searchParameter === "id" ? completedIdFilterOrder
-                        : completedDateFilter
-                      ).length > 0 &&
-                        <td>  <ReactToExcel
-                    className="excel-sheet"
-                    table="table-to-xls"
-                    filename="excelFile"
-                    sheet="sheet 1"
-                    buttonText="EXPORT"
-                  /></td>}
+                        {(searchParameter === "name"
+                          ? completedFilterOrder
+                          : searchParameter === "id"
+                          ? completedIdFilterOrder
+                          : completedDateFilter
+                        ).length > 0 && (
+                          <td>
+                            {" "}
+                            <ReactToExcel
+                              className="excel-sheet"
+                              table="table-to-xls"
+                              filename="excelFile"
+                              sheet="sheet 1"
+                              buttonText="EXPORT"
+                            />
+                          </td>
+                        )}
                       </tr>
                     </tbody>
                   </table>
-                 <div className="pagination-line">
-        <p>
-          Showing{" "}
-          {
-            (searchParameter === "name"
-                        ? completedFilterOrder : searchParameter === "id" ? completedIdFilterOrder
-                        : completedDateFilter
-                      ).slice(
-              currentPage * pageSize,
-              (currentPage + 1) * pageSize
-            ).length
-          }{" "}
-          of {completedVerifications.length} of entries
-        </p>
+                  <div className="pagination-line">
+                    <p>
+                      Showing{" "}
+                      {
+                        (searchParameter === "name"
+                          ? completedFilterOrder
+                          : searchParameter === "id"
+                          ? completedIdFilterOrder
+                          : completedDateFilter
+                        ).slice(
+                          currentPage * pageSize,
+                          (currentPage + 1) * pageSize
+                        ).length
+                      }{" "}
+                      of {completedVerifications.length} of entries
+                    </p>
                     <ReactPaginate
-                previousLabel={<FontAwesomeIcon
-                  className="icon"
-                  icon={faAngleDoubleLeft}
-                  style={{ fontSize: "15px" }}
-                />}
-                nextLabel={<FontAwesomeIcon
-                  className="icon"
-                  icon={faAngleDoubleRight}
-                  style={{ fontSize: "15px" }}
-                />}
-                breakLabel={"..."}
-                breakClassName={"break-me"}
-                pageCount={completedVerificationsCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={(e) => handleNext(e)}
-                containerClassName={"pagination"}
-                subContainerClassName={"pages pagination"}
-                activeClassName={"active"}
-              /> 
-              </div>
+                      previousLabel={
+                        <FontAwesomeIcon
+                          className="icon"
+                          icon={faAngleDoubleLeft}
+                          style={{ fontSize: "15px" }}
+                        />
+                      }
+                      nextLabel={
+                        <FontAwesomeIcon
+                          className="icon"
+                          icon={faAngleDoubleRight}
+                          style={{ fontSize: "15px" }}
+                        />
+                      }
+                      breakLabel={"..."}
+                      breakClassName={"break-me"}
+                      pageCount={completedVerificationsCount}
+                      marginPagesDisplayed={2}
+                      pageRangeDisplayed={5}
+                      onPageChange={(e) => handleNext(e)}
+                      containerClassName={"pagination"}
+                      subContainerClassName={"pages pagination"}
+                      activeClassName={"active"}
+                    />
+                  </div>
                 </div>
               ) : (
                 ""
@@ -597,7 +663,11 @@ const completedIdFilterOrder = completedVerifications.filter((verification) =>
             <div className="details">
               <h6>Details</h6>
               {display === "populated" && (
-               <DetailsCard activeTab={activeTab} info={info} setInfo={setInfo}/>
+                <DetailsCard
+                  activeTab={activeTab}
+                  info={info}
+                  setInfo={setInfo}
+                />
               )}
               {display === "empty" && (
                 <div className="details-info">

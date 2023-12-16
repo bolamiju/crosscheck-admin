@@ -4,12 +4,13 @@ import InstitutionForm from "./InstitutionForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { toast, ToastContainer } from "react-toastify";
+import { BASE_URL } from "../../state/constant/constants";
 
 const request = (data) => {
   return axios({
     data,
     method: "post",
-    url: `https://crosschek.herokuapp.com/api/v1/institutions/add`,
+    url: `${BASE_URL}/api/v1/institutions/add`,
     headers: { "Content-Type": "application/json" },
   });
 };
@@ -32,13 +33,10 @@ const NewInstitution = () => {
   const seconds = today.getSeconds();
   const date = `${year}${month}${day}${hours}${minutes}${seconds}`;
 
-  const [formValues, setFormValues] = useState([{ ...formData,id:date }]);
+  const [formValues, setFormValues] = useState([{ ...formData, id: date }]);
 
   const addNewForm = () => {
-    setFormValues((values) => [
-      ...values,
-      { ...formData, id: Date.now()},
-    ]);
+    setFormValues((values) => [...values, { ...formData, id: Date.now() }]);
   };
   const updateFormValues = (id) => (data) => {
     setFormValues((formValues) =>
@@ -104,7 +102,7 @@ const NewInstitution = () => {
           <tbody>
             {formValues.map((values, id) => (
               <InstitutionForm
-              key={values.id}
+                key={values.id}
                 initialValues={values}
                 updateFormValues={updateFormValues(id)}
                 id={values.id}

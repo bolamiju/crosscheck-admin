@@ -2,17 +2,16 @@ import React, { useState, useEffect, useCallback } from "react";
 import Axios from "axios";
 import ReactPaginate from "react-paginate";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleDoubleLeft,
   faAngleDoubleRight,
-  faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import { CountryDropdown } from "react-country-region-selector";
 import AdminLayout from "../admin/AdminLayout";
+import { BASE_URL } from "../../state/constant/constants";
 import {
   fetchInstitutes,
   setPageInfo,
@@ -22,8 +21,7 @@ import {
 import { search } from "../utils";
 import Institution from "./Institution";
 import NewInstitution from "./NewInstitutions";
-import ipapi from "ipapi.co";
-import { SelectSch, DashboardBody} from '../Styles'
+import { SelectSch, DashboardBody } from "../Styles";
 
 const ManageInstitutions = () => {
   const [input, setInput] = useState("");
@@ -32,12 +30,8 @@ const ManageInstitutions = () => {
   const [byCountryOffset, setByCountryOffset] = useState(0);
   const [byCountryandNameoffset, setByCountryandNameOffset] = useState(0);
   const [country, setCountry] = useState("");
-  const [userCountry, setUserCountry] = useState("");
   const [activeTab, setActiveTab] = useState("manage");
   const dispatch = useDispatch();
-  useEffect(() => {
-    ipapi.location((loca) => setUserCountry(loca), "", "", "country");
-  }, []);
 
   const { institutions, pageInfo } = useSelector((state) => state.institutions);
 
@@ -53,7 +47,7 @@ const ManageInstitutions = () => {
   const request = useCallback(
     async (offset, limit) => {
       return await search(
-        `https://crosschek.herokuapp.com/api/v1/institutions/${input}/${offset}/${limit}`
+        `${BASE_URL}/api/v1/institutions/${input}/${offset}/${limit}`
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,15 +58,10 @@ const ManageInstitutions = () => {
     async (country, offset, limit) => {
       dispatch(setLoading(true));
       const { data } = await Axios.get(
-        `https://crosschek.herokuapp.com/api/v1/institutions/country/${country}/${offset}/${limit}`
+        `${BASE_URL}/api/v1/institutions/country/${country}/${offset}/${limit}`
       );
-      const {
-        totalDocs,
-        totalPages,
-        hasPrevPage,
-        hasNextPage,
-        page,
-      } = data.institution;
+      const { totalDocs, totalPages, hasPrevPage, hasNextPage, page } =
+        data.institution;
       if (data.institution.docs > 1) {
         dispatch(noInstitute(false));
       }
@@ -88,7 +77,7 @@ const ManageInstitutions = () => {
   const countryAndName = useCallback(
     async (country, offset, limit, input) => {
       await search(
-        `https://crosschek.herokuapp.com/api/v1/institutions/countryandName/${country}/${input}/${offset}/${limit}`
+        `${BASE_URL}/api/v1/institutions/countryandName/${country}/${input}/${offset}/${limit}`
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -157,13 +146,6 @@ const ManageInstitutions = () => {
             >
               Add institutions
             </li>
-            <li
-            // onClick={handleDocumentTab}
-            // className={activeTab === "documents" ? "activeTab" : ""}
-            >
-              {" "}
-              Anything
-            </li>
           </ul>
         </div>
         {activeTab === "manage" ? (
@@ -178,7 +160,7 @@ const ManageInstitutions = () => {
                   value={input}
                   name="input"
                   placeholder="Search for a school"
-                  style={{height:"35px"}}
+                  style={{ height: "35px" }}
                 />
               </div>
               <div className="country-select">
@@ -200,9 +182,9 @@ const ManageInstitutions = () => {
                   onChange={(_, e) => {
                     formik.handleChange(e);
                     setCountry(e.target.value.toLowerCase());
-                      setByCountryOffset(0)
-                      setByCountryandNameOffset(0)
-                      setOffset(0)
+                    setByCountryOffset(0);
+                    setByCountryandNameOffset(0);
+                    setOffset(0);
                   }}
                   onBlur={formik.handleBlur}
                   ReactFlagsSelect
@@ -285,4 +267,3 @@ const ManageInstitutions = () => {
 };
 
 export default ManageInstitutions;
-

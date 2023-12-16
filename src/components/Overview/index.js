@@ -3,46 +3,41 @@ import AdminLayout from "../admin/AdminLayout";
 import RecentPending from "./RecentPending";
 import RecentCompleted from "./RecentCompleted";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-
+import { useSelector } from "react-redux";
 
 const Overview = ({ history }) => {
-  const user = JSON.parse(localStorage.getItem('admin'))
-    const { pendingVerifications, completedVerifications } = useSelector((state) => state.verifications);
-  const { pendingTranscripts, completedTranscripts } = useSelector((state) => state.transcripts);
+  const user = JSON.parse(localStorage.getItem("admin"));
+  const { pendingVerifications, completedVerifications } = useSelector(
+    (state) => state.verifications
+  );
+  const { pendingTranscripts, completedTranscripts } = useSelector(
+    (state) => state.transcripts
+  );
 
   return (
-    <AdminLayout history={history}>     
+    <AdminLayout history={history}>
       <OverviewWrapper>
         <div className=" py-5">
           <div className="welcome mx-5 p-3 ">
-            <h5>welcome {user?.firstName || 'Admin'}</h5>
+            <h5>welcome {user?.firstName || "Admin"}</h5>
             <p>what would you like to do today ?</p>
           </div>
           <div className="cards px-5 py-5">
             <div className="card1">
               <h2>{pendingTranscripts?.length || 0}</h2>
-              <p>
-                new transcript orders
-              </p>
+              <p>new transcript orders</p>
             </div>
             <div className="card2">
               <h2>{pendingVerifications?.length}</h2>
-              <p>
-                new education checks
-              </p>
+              <p>new education checks</p>
             </div>
             <div className="card3">
               <h2>{completedTranscripts?.length}</h2>
-              <p>
-                Total completed Transcript Requests
-              </p>
+              <p>Total completed Transcript Requests</p>
             </div>
             <div className="card4">
               <h2>{completedVerifications?.length}</h2>
-              <p>
-               Total completed education checks
-              </p>
+              <p>Total completed education checks</p>
             </div>
           </div>
           <div className="box d-block d-lg-flex justify-content-between">
@@ -82,12 +77,12 @@ const OverviewWrapper = styled.div`
     h5 {
       font-family: MontserratBold;
       letter-spacing: 0.44px;
-      color: #0092E0;
+      color: #0092e0;
       opacity: 1;
       text-transform: capitalize;
     }
     p {
-      letter-spacing: 0.32px; 
+      letter-spacing: 0.32px;
       font-family: MontserratRegular;
       color: #707070;
       opacity: 1;
@@ -101,7 +96,7 @@ const OverviewWrapper = styled.div`
       opacity: 1;
       font-size: 32px;
     }
-    p { 
+    p {
       font-family: MontserratRegular;
       letter-spacing: 0.32px;
       opacity: 0.8;
@@ -270,5 +265,3 @@ const OverviewWrapper = styled.div`
     }
   }
 `;
-
-

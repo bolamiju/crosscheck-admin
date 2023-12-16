@@ -1,20 +1,19 @@
-import React,{useState} from 'react'
-import { ToastContainer, toast } from "react-toastify";
+import React, { useState } from "react";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import * as Yup from 'yup'
-import { useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
 import "./login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from "formik";
+import { BASE_URL } from "../../state/constant/constants";
 const Login = (props) => {
-    const [visibility, setVisibility] = useState(false);
-  const [loading,setLoading] = useState(false)
-  const [loginError,setLoginError] = useState('')
+  const [visibility, setVisibility] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
-  
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -24,36 +23,35 @@ const Login = (props) => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const res = await axios.post(`https://crosschek.herokuapp.com/api/v1/admin/login`,values,{
-            headers:{
-                "content-type":"application/json"
-            }
+        const res = await axios.post(`${BASE_URL}/api/v1/admin/login`, values, {
+          headers: {
+            "content-type": "application/json",
+          },
         });
         if (res.status === 200) {
-            setLoading(false)
+          setLoading(false);
           localStorage.setItem("admin", JSON.stringify(res.data.user));
           formik.resetForm();
           props.history.push(`/dashboard`);
         }
-      }
-       catch (err) {
+      } catch (err) {
         if (
           err.response.data.message &&
           err.response.data.message === "invalid email or password"
         ) {
-        setLoginError("invalid email or password");
+          setLoginError("invalid email or password");
         }
         setLoading(false);
       }
     },
     validationSchema: Yup.object({
-  email: Yup.string().email().required("email is required"),
-  password: Yup.string().required("password is required"),
-}),
+      email: Yup.string().email().required("email is required"),
+      password: Yup.string().required("password is required"),
+    }),
   });
 
-    return (
-         <div className="login-page-container">
+  return (
+    <div className="login-page-container">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -161,7 +159,6 @@ const Login = (props) => {
             >
               <p className="signup-with">Login with</p>
 
-             
               <p className="paragraph">
                 Don't have an account?
                 <Link
@@ -180,7 +177,7 @@ const Login = (props) => {
       </div>
       <div className="image-section"></div>
     </div>
-    )
-}
+  );
+};
 
-export default Login
+export default Login;

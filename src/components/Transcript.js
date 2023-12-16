@@ -4,11 +4,8 @@ import ReactToExcel from "react-html-table-to-excel";
 import styled from "styled-components";
 import qualifications from "../asset/qualification.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faLongArrowAltRight,
-  faLongArrowAltDown,
-} from "@fortawesome/free-solid-svg-icons";
-import { DatePicker, Space,Select } from "antd";
+import { faLongArrowAltRight } from "@fortawesome/free-solid-svg-icons";
+import { DatePicker, Space, Select } from "antd";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -18,7 +15,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const {Option} = Select
+const { Option } = Select;
 
 const Requests = ({ history }) => {
   const [activeTab, setActiveTab] = useState("pending");
@@ -34,11 +31,8 @@ const Requests = ({ history }) => {
 
   const user = JSON.parse(localStorage.getItem("admin"));
   const dispatch = useDispatch();
-  const {
-    pendingTranscripts,
-    completedTranscripts,
-    processingTranscripts,
-  } = useSelector((state) => state.transcripts);
+  const { pendingTranscripts, completedTranscripts, processingTranscripts } =
+    useSelector((state) => state.transcripts);
   const { RangePicker } = DatePicker;
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -50,8 +44,6 @@ const Requests = ({ history }) => {
       dispatch(getTranscriptsByStatus("completed"));
     }
   }, [dispatch, activeTab]);
-
- 
 
   const handleBackground = (background) => {
     setBackground(background);
@@ -65,19 +57,19 @@ const Requests = ({ history }) => {
       return toast.error("select an option");
     }
     setLoading(true);
-    const response = await updateTranscriptRequest(info?._id,info?.email, {
-      transcriptStatus,updated_by:`${user.firstName} ${user.lastName}`
+    const response = await updateTranscriptRequest(info?._id, info?.email, {
+      transcriptStatus,
+      updated_by: `${user.firstName} ${user.lastName}`,
     });
-   
+
     if (response.data.message === "transcript updated") {
       toast.success("update sucessful !!");
       setTranscriptStatus("");
       setLoading(false);
-      setInfo({})
-      setTimeout(()=>{
-         window.location.href = "/transcript"
-      },2000)
-      
+      setInfo({});
+      setTimeout(() => {
+        window.location.href = "/transcript";
+      }, 2000);
     } else {
       setLoading(false);
       toast.error("update Unsucessful. Try again !");
@@ -205,7 +197,7 @@ const Requests = ({ history }) => {
               <li
                 onClick={() => {
                   setActiveTab("pending");
-                  setInfo({})
+                  setInfo({});
                 }}
                 className={activeTab === "pending" ? "activeTab" : ""}
               >
@@ -215,7 +207,7 @@ const Requests = ({ history }) => {
               <li
                 onClick={() => {
                   setActiveTab("processing");
-                  setInfo({})
+                  setInfo({});
                 }}
                 className={activeTab === "processing" ? "activeTab" : ""}
               >
@@ -225,7 +217,7 @@ const Requests = ({ history }) => {
               <li
                 onClick={() => {
                   setActiveTab("completed");
-                  setInfo({})
+                  setInfo({});
                 }}
                 className={activeTab === "completed" ? "activeTab" : ""}
               >
@@ -333,25 +325,27 @@ const Requests = ({ history }) => {
                             <p>No pending verification requests</p>
                           </div>
                         )}
-                         {(searchParameter === "firstName"
+                        {(searchParameter === "firstName"
                           ? pendingFilterOrder
                           : pendingDateFilter
-                        ).length > 0 &&
-                        <tr>
-                          <td></td>
-                          <td></td>
-                         
-                          <td><ReactToExcel
-                      className="excel-sheet"
-                      table="table-to-xls"
-                      filename="excelFile"
-                      sheet="sheet 1"
-                      buttonText="EXPORT"
-                    /></td>
-                        </tr>}
+                        ).length > 0 && (
+                          <tr>
+                            <td></td>
+                            <td></td>
+
+                            <td>
+                              <ReactToExcel
+                                className="excel-sheet"
+                                table="table-to-xls"
+                                filename="excelFile"
+                                sheet="sheet 1"
+                                buttonText="EXPORT"
+                              />
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
-                    
                   </div>
                 ) : (
                   ""
@@ -406,22 +400,24 @@ const Requests = ({ history }) => {
                       {(searchParameter === "firstName"
                         ? processingFilterOrder
                         : processingDateFilter
-                      ).length > 0 &&
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td> <ReactToExcel
-                    className="excel-sheet"
-                    table="table-to-xls"
-                    filename="excelFile"
-                    sheet="sheet 1"
-                    buttonText="EXPORT"
-                  /></td>
-                      </tr>
-}
+                      ).length > 0 && (
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td>
+                            {" "}
+                            <ReactToExcel
+                              className="excel-sheet"
+                              table="table-to-xls"
+                              filename="excelFile"
+                              sheet="sheet 1"
+                              buttonText="EXPORT"
+                            />
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
-                 
                 </div>
               ) : (
                 ""
@@ -473,25 +469,27 @@ const Requests = ({ history }) => {
                           <p>No completed verifications</p>
                         </div>
                       )}
-                      {
-                        (searchParameter === "firstName"
+                      {(searchParameter === "firstName"
                         ? completedFilterOrder
                         : completedDateFilter
-                      ).length > 0 &&
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td>  <ReactToExcel
-                    className="excel-sheet"
-                    table="table-to-xls"
-                    filename="excelFile"
-                    sheet="sheet 1"
-                    buttonText="EXPORT"
-                  /></td>
-                      </tr>}
+                      ).length > 0 && (
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td>
+                            {" "}
+                            <ReactToExcel
+                              className="excel-sheet"
+                              table="table-to-xls"
+                              filename="excelFile"
+                              sheet="sheet 1"
+                              buttonText="EXPORT"
+                            />
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
-                
                 </div>
               ) : (
                 ""
@@ -531,22 +529,28 @@ const Requests = ({ history }) => {
                       </p>
                       <p className="p5">city: {info?.city}</p>
                     </div>
-                      
                   </div>
-                   {info?.updated_by &&<><br/><br/> <div className="para">
-                      <p>Updated by : {info?.updated_by}</p>
-                    </div></>}
-                 {info.status !=='completed' && <div className="comment-section">
-                    <div className="field">
-                      <label htmlFor="message">comments</label>
-                      <textarea
-                        name="message"
-                        type="text"
-                        className="message"
-                      />
-                    </div>
-                    <div className="select">
-                    <Select
+                  {info?.updated_by && (
+                    <>
+                      <br />
+                      <br />{" "}
+                      <div className="para">
+                        <p>Updated by : {info?.updated_by}</p>
+                      </div>
+                    </>
+                  )}
+                  {info.status !== "completed" && (
+                    <div className="comment-section">
+                      <div className="field">
+                        <label htmlFor="message">comments</label>
+                        <textarea
+                          name="message"
+                          type="text"
+                          className="message"
+                        />
+                      </div>
+                      <div className="select">
+                        <Select
                           style={{ height: "40px" }}
                           showSearch
                           placeholder="Select status"
@@ -555,22 +559,23 @@ const Requests = ({ history }) => {
                           <Option value="processing">processing</Option>
                           <Option value="completed">completed</Option>
                         </Select>
-                      <button
-                        onClick={handleUpdateTranscript}
-                        className="finish"
-                      >
-                        {loading ? "updating" : "submit"}{" "}
-                        <FontAwesomeIcon
-                          icon={faLongArrowAltRight}
-                          style={{
-                            marginLeft: "10px",
-                            fontSize: "20px",
-                            paddingTop: "0.3rem",
-                          }}
-                        />
-                      </button>
+                        <button
+                          onClick={handleUpdateTranscript}
+                          className="finish"
+                        >
+                          {loading ? "updating" : "submit"}{" "}
+                          <FontAwesomeIcon
+                            icon={faLongArrowAltRight}
+                            style={{
+                              marginLeft: "10px",
+                              fontSize: "20px",
+                              paddingTop: "0.3rem",
+                            }}
+                          />
+                        </button>
+                      </div>
                     </div>
-                  </div>}
+                  )}
                 </div>
               )}
               {display === "empty" && (
@@ -922,7 +927,7 @@ const RequestWrapper = styled.div`
       padding: 10px;
     }
     .excel-sheet {
-    margin-top:20px;
+      margin-top: 20px;
       padding: 0.3rem;
       border: none;
       color: #ffffff;

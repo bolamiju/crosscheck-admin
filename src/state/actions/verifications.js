@@ -99,7 +99,7 @@ export const getVerificationsByStatus = (status) => async (dispatch) => {
       }
     })
     .catch((err) => {
-      return err
+      return err;
     });
 };
 
@@ -107,7 +107,6 @@ export const getTranscriptsByStatus = (status) => async (dispatch) => {
   await axios
     .get(`${BASE_URL}/api/v1/transcript/status/${status}`)
     .then(({ data }) => {
-     
       if (status === "pending") {
         dispatch(pendingTranscripts(data.transcripts));
       } else if (status === "processing") {
@@ -117,16 +116,20 @@ export const getTranscriptsByStatus = (status) => async (dispatch) => {
       }
     })
     .catch((err) => {
-      return err
+      return err;
     });
 };
 
-export const updateTranscriptRequest = (id,email, data) =>
-  axios.put(`https://crosschek.herokuapp.com/api/v1/transcript/${id}/${email}`, data, {
-    headers: {
-      "content-type": "application/json",
-    },
-  });
+export const updateTranscriptRequest = (id, email, data) =>
+  axios.put(
+    `https://crosscheck-be-dev.onrender.com/api/v1/transcript/${id}/${email}`,
+    data,
+    {
+      headers: {
+        "content-type": "application/json",
+      },
+    }
+  );
 
 export const getMessages = () => async (dispatch) => {
   const res = axios
@@ -135,7 +138,7 @@ export const getMessages = () => async (dispatch) => {
       dispatch(messages(data.message));
     })
     .catch((err) => {
-     return err
+      return err;
     });
 };
 
@@ -143,11 +146,10 @@ export const deleteMessages = (id) => async (dispatch) => {
   await axios
     .delete(`${BASE_URL}/api/v1/message/${id}`)
     .then(({ data }) => {
-     
       dispatch(delMessages(data.message));
     })
     .catch((err) => {
-      return err
+      return err;
     });
 };
 
@@ -155,21 +157,19 @@ export const getUserVerification = (email) => async (dispatch) => {
   await axios
     .get(`${BASE_URL}/api/v1/verifications/byemail/${email}`)
     .then(({ data }) => {
-     
       dispatch(getOneUserVerifications(data.verifications));
     })
     .catch((err) => {
-      return err
+      return err;
     });
 };
 export const getUserTranscript = (email) => async (dispatch) => {
   await axios
     .get(`${BASE_URL}/api/v1/transcript/byemail/${email}`)
     .then(({ data }) => {
-      
       dispatch(getOneUserTranscript(data.transcripts));
     })
     .catch((err) => {
-      return err
+      return err;
     });
 };
