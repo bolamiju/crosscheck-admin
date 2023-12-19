@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import {useDispatch} from 'react-redux'
+import { useDispatch } from "react-redux";
 import Axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faCheck, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { BASE_URL } from "../../state/constant/constants";
 import { toast, ToastContainer } from "react-toastify";
-import {deleteInstitution,removeInstitution} from '../../state/actions/Institutions'
+import {
+  deleteInstitution,
+  removeInstitution,
+} from "../../state/actions/Institutions";
 
 const Institution = ({ institute }) => {
   const initialState = {
@@ -18,7 +21,7 @@ const Institution = ({ institute }) => {
   const [school, setSchool] = useState(initialState);
   const [disable, setDisable] = useState(true);
   const [schoolName, setSchoolName] = useState("");
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const editInstitution = async (name, data) => {
     await Axios.put(`${BASE_URL}/api/v1/institutions/name/${name}`, data, {
@@ -33,17 +36,16 @@ const Institution = ({ institute }) => {
       });
   };
 
-  const deleteInstitute =async(id)=>{
-    const res = await removeInstitution(id)
-    if(res?.status === 200){
-      dispatch(deleteInstitution(id))
-      return toast.success('school deleted')
+  const deleteInstitute = async (id) => {
+    const res = await removeInstitution(id);
+    if (res?.status === 200) {
+      dispatch(deleteInstitution(id));
+      return toast.success("school deleted");
+    } else {
+      toast.error("something went wrong");
     }
-    else{
-      toast.error('something went wrong')
-    }
-  }
- 
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSchool((prevState) => ({ ...prevState, [name]: value }));
@@ -137,9 +139,9 @@ const Institution = ({ institute }) => {
             />
           ) : (
             <FontAwesomeIcon
-              onClick={() => {
-                editInstitution(schoolName, school);
-              }}
+              // onClick={() => {
+              //   editInstitution(schoolName, school);
+              // }}
               className="icon"
               icon={faCheck}
               style={{ fontSize: "15px" }}
@@ -152,7 +154,7 @@ const Institution = ({ institute }) => {
             }}
             className="icon"
             icon={faTrashAlt}
-            style={{ fontSize: "15px",color:'red' }}
+            style={{ fontSize: "15px", color: "red" }}
           />
         </td>
       </tr>

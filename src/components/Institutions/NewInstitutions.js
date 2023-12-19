@@ -49,16 +49,16 @@ const NewInstitution = () => {
     setFormValues(vals);
   };
   const addSchool = async () => {
-    const res = await Promise.allSettled(
-      formValues.map((value) => request(value))
-    );
-    res.map((response) => {
-      if (response.status === "rejected") {
-        toast.error(response?.reason?.response?.data?.message);
-      } else if (response.status === "fulfilled") {
-        toast.success("school uploaded");
-      }
-    });
+    // const res = await Promise.allSettled(
+    //   formValues.map((value) => request(value))
+    // );
+    // res.map((response) => {
+    //   if (response.status === "rejected") {
+    //     toast.error(response?.reason?.response?.data?.message);
+    //   } else if (response.status === "fulfilled") {
+    //     toast.success("school uploaded");
+    //   }
+    // });
   };
   return (
     <>
